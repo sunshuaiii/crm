@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('failed_jobs', function (Blueprint $table) {
-            $table->id();
-            $table->string('uuid')->unique();
-            $table->text('connection');
-            $table->text('queue');
-            $table->longText('payload');
-            $table->longText('exception');
-            $table->timestamp('failed_at')->useCurrent();
+        Schema::create('checkout_products', function (Blueprint $table) {
+            $table->foreignId('checkout_id')->constrained('checkouts', 'id')->onDelete('cascade');
+            $table->foreignId('product_id')->constrained('products', 'id')->onDelete('cascade');
+            $table->integer('quantity');
+            $table->timestamps();
         });
     }
 
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('failed_jobs');
+        Schema::dropIfExists('checkout_products');
     }
 };
