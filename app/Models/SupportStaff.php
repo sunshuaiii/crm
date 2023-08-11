@@ -12,6 +12,8 @@ class SupportStaff extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $guard = 'supportStaff';
+
     // public $timestamps = false;
 
     /**

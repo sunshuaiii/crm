@@ -12,6 +12,8 @@ class MarketingStaff extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $guard = 'marketingStaff';
+
     // public $timestamps = false;
 
     /**

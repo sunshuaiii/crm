@@ -12,6 +12,8 @@ class Customer extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $guard = 'customer';
+
     // public $timestamps = false;
 
     /**

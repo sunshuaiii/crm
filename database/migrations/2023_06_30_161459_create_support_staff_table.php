@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('support_staffs')) {
-            Schema::create('support_staffs', function (Blueprint $table) {
+        if (!Schema::hasTable('support_staff')) {
+            Schema::create('support_staff', function (Blueprint $table) {
                 $table->id();
                 $table->string('username');
                 $table->string('email')->unique();
