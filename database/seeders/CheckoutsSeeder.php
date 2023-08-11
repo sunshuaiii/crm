@@ -18,11 +18,11 @@ class CheckoutsSeeder extends Seeder
     {
         $faker = Faker::create();
         $methods = ['Credit Card', 'Debit Card', 'Cash', 'E-wallet'];
-        $numberOfCustomers = DB::table('customers')->count();
+        $customerIDs = DB::table('customers')->pluck('id');
         $redeemed = DB::table('customer_coupons')->where('status', 'Redeemed')->get();
 
-        for ($i = 1; $i <= 100; $i++) {
-            $customerId = $faker->numberBetween(1, $numberOfCustomers);
+        for ($i = 1; $i <= 18532; $i++) {
+            $customerId = $faker->randomElement($customerIDs);
             if ($redeemed->contains('customer_id', $customerId)) {
                 $firstRedeemed = $redeemed->first(function ($coupon) use ($customerId) {
                     return $coupon->customer_id == $customerId;

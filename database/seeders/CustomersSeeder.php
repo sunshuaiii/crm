@@ -31,7 +31,7 @@ class CustomersSeeder extends Seeder
             'points' => 1000,
         ]);
 
-        for ($i = 1; $i <= 30; $i++) {
+        for ($i = 1; $i <= 4338; $i++) {
             DB::table('customers')->insert([
                 'username' => $faker->userName,
                 'email' => $faker->unique()->safeEmail(),
@@ -42,7 +42,6 @@ class CustomersSeeder extends Seeder
                 'gender' => $faker->randomElement(['Female', 'Male']),
                 'dob' => $faker->dateTimeBetween('-53 years', '-18 years')->format('Y-m-d'),
                 'points' => $faker->numberBetween(1, 10000),
-                'spending_score' => $faker->numberBetween(1, 100),
             ]);
         }
     }

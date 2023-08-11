@@ -17,7 +17,6 @@ return new class extends Migration
             $table->foreignId('checkout_id')->constrained('checkouts', 'id')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products', 'id')->onDelete('cascade');
             $table->integer('quantity');
-            $table->timestamps();
         });
     }
 

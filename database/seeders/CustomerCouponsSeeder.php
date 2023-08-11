@@ -19,10 +19,10 @@ class CustomerCouponsSeeder extends Seeder
     {
         $faker = Faker::create();
         $status = ['Claimed', 'Redeemed'];
-        $numberOfCustomers = DB::table('customers')->count();
+        $customerIDs = DB::table('customers')->pluck('id');
         $numberOfCoupons = DB::table('coupons')->count();
 
-        for ($i = 1; $i <= 20; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $code = '';
             for ($j = 0; $j < 5; $j++) {
                 $code .= $faker->randomNumber(4, true);
@@ -32,7 +32,7 @@ class CustomerCouponsSeeder extends Seeder
                 'code' => $code,
                 'start_date' => Carbon::now(),
                 'end_date' => Carbon::now()->addDays(30),
-                'customer_id' => $faker->numberBetween(1, $numberOfCustomers),
+                'customer_id' => $faker->randomElement($customerIDs),
                 'coupon_id' => $faker->numberBetween(1, $numberOfCoupons),
             ]);
         }
