@@ -40,7 +40,7 @@ Route::post('/register/supportStaff', [RegisterController::class, 'createSupport
 
 Route::group(['middleware' => 'auth:customer'], function () {
     Route::view('/customer', 'customer.customerHome');
-    Route::view('/customer/membership', 'customer.membership');
+    Route::get('/customer/membership', [CustomerController::class, 'showQRandBarCode'])->name('customer.membership');
     Route::view('/customer/coupons', 'customer.coupons');
     Route::view('/customer/support', 'customer.support');
     Route::view('/customer/support/contactUs', 'customer.contactUs');

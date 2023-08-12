@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Milon\Barcode\Facades\DNS1DFacade;
 
 class CustomerController extends Controller
 {
@@ -21,5 +23,14 @@ class CustomerController extends Controller
         $user->save();
 
         return redirect()->route('customer.profile')->with('success', 'Profile updated successfully!');
+    }
+
+    public function showQRandBarCode()
+    {
+        $user = Auth::user();
+        $qrCode = QrCode::size(100)->generate($user->id)->toHtml();
+        $barCode = DNS1DFacade::getBarcodeHTML($user->id, 'C39');
+
+        return view('customer.membership', compact('qrCode', 'barCode'));
     }
 }
