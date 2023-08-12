@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    {{ __('Welcome to CRM') }}
+                    {{ __('Welcome to Customer Loyalty Program') }}
                 </div>
             </div>
         </div>

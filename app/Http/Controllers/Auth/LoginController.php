@@ -55,10 +55,14 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8'
         ]);
+
         if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->intended('/customer');
+            // Login successful
+            return redirect()->intended('/customer')->with('success', 'Login successful.');
         }
-        return back()->withInput($request->only('email'));
+
+        // Login failed
+        return back()->withInput($request->only('email'))->withErrors(['login' => 'Login failed.']);
     }
 
     public function showAdminLoginForm()

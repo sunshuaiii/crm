@@ -7,7 +7,12 @@
             <div class="card">
                 <div class="card-header">Dashboard</div>
                 <div class="card-body">
-                    Hi there, awesome support staff for this site!
+                    @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                    @endif
+                    Hi there, awesome marketing staff for this site!
                 </div>
             </div>
         </div>

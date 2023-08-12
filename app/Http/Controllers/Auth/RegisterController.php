@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Illuminate\Database\QueryException;
+use Illuminate\Validation\ValidationException;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -118,20 +120,37 @@ class RegisterController extends Controller
      */
     protected function createCustomer(Request $request)
     {
-        $this->validator($request->all())->validate();
-        Customer::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'contact' => $request->contact,
-            'gender' => $request->gender,
-            'dob' => $request->dob,
-        ]);
-        return redirect()->intended('login/customer');
+        try {
+            // Validate the incoming data
+            $this->validator($request->all())->validate();
+
+            // Attempt to create a new customer
+            Customer::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'contact' => $request->contact,
+                'gender' => $request->gender,
+                'dob' => $request->dob,
+            ]);
+
+            return redirect()->intended('login/customer');
+        } catch (QueryException $e) {
+            // Handle database integrity constraint violation
+            if ($e->getCode() == 23000) { // Integrity constraint violation error code
+                $errorMessage = "The email address is already registered.";
+                return redirect()->back()->withInput()->withErrors([$errorMessage]);
+            }
+            // If the exception is not due to a duplicate email, re-throw it
+            throw $e;
+        } catch (ValidationException $e) {
+            // If validation fails, redirect back with validation errors
+            return redirect()->back()->withInput()->withErrors($e->errors());
+        }
     }
-    
+
     /**
      * @param Request $request
      *
@@ -139,13 +158,26 @@ class RegisterController extends Controller
      */
     protected function createAdmin(Request $request)
     {
-        $this->validator($request->all())->validate();
-        Admin::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-        return redirect()->intended('login/admin');
+        try {
+            $this->validator($request->all())->validate();
+            Admin::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+            return redirect()->intended('login/admin');
+        } catch (QueryException $e) {
+            // Handle database integrity constraint violation
+            if ($e->getCode() == 23000) { // Integrity constraint violation error code
+                $errorMessage = "The email address is already registered.";
+                return redirect()->back()->withInput()->withErrors([$errorMessage]);
+            }
+            // If the exception is not due to a duplicate email, re-throw it
+            throw $e;
+        } catch (ValidationException $e) {
+            // If validation fails, redirect back with validation errors
+            return redirect()->back()->withInput()->withErrors($e->errors());
+        }
     }
 
     /**
@@ -155,13 +187,26 @@ class RegisterController extends Controller
      */
     protected function createMarketingStaff(Request $request)
     {
-        $this->validator($request->all())->validate();
-        MarketingStaff::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-        return redirect()->intended('login/marketingStaff');
+        try {
+            $this->validator($request->all())->validate();
+            MarketingStaff::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+            return redirect()->intended('login/marketingStaff');
+        } catch (QueryException $e) {
+            // Handle database integrity constraint violation
+            if ($e->getCode() == 23000) { // Integrity constraint violation error code
+                $errorMessage = "The email address is already registered.";
+                return redirect()->back()->withInput()->withErrors([$errorMessage]);
+            }
+            // If the exception is not due to a duplicate email, re-throw it
+            throw $e;
+        } catch (ValidationException $e) {
+            // If validation fails, redirect back with validation errors
+            return redirect()->back()->withInput()->withErrors($e->errors());
+        }
     }
 
     /**
@@ -171,12 +216,25 @@ class RegisterController extends Controller
      */
     protected function createSupportStaff(Request $request)
     {
-        $this->validator($request->all())->validate();
-        SupportStaff::create([
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
-        return redirect()->intended('login/supportStaff');
+        try {
+            $this->validator($request->all())->validate();
+            SupportStaff::create([
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
+            return redirect()->intended('login/supportStaff');
+        } catch (QueryException $e) {
+            // Handle database integrity constraint violation
+            if ($e->getCode() == 23000) { // Integrity constraint violation error code
+                $errorMessage = "The email address is already registered.";
+                return redirect()->back()->withInput()->withErrors([$errorMessage]);
+            }
+            // If the exception is not due to a duplicate email, re-throw it
+            throw $e;
+        } catch (ValidationException $e) {
+            // If validation fails, redirect back with validation errors
+            return redirect()->back()->withInput()->withErrors($e->errors());
+        }
     }
 }

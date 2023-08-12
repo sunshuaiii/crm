@@ -39,19 +39,24 @@ Route::post('/register/marketingStaff', [RegisterController::class, 'createMarke
 Route::post('/register/supportStaff', [RegisterController::class, 'createSupportStaff']);
 
 Route::group(['middleware' => 'auth:customer'], function () {
-    Route::view('/customer', 'customer');
+    Route::view('/customer', 'customer.customerHome');
+    Route::view('/customer/membership', 'customer.membership');
+    Route::view('/customer/coupons', 'customer.coupons');
+    Route::view('/customer/support', 'customer.support');
+    Route::view('/customer/support/contactUs', 'customer.contactUs');
+    Route::view('/customer/profile', 'customer.profile')->name('customer.profile');
 });
 
 Route::group(['middleware' => 'auth:admin'], function () {
-    Route::view('/admin', 'admin');
+    Route::view('/admin', 'customer.adminHome');
 });
 
 Route::group(['middleware' => 'auth:marketingStaff'], function () {
-    Route::view('/marketingStaff', 'marketingStaff');
+    Route::view('/marketingStaff', 'customer.marketingStaffHome');
 });
 
 Route::group(['middleware' => 'auth:supportStaff'], function () {
-    Route::view('/supportStaff', 'supportStaff');
+    Route::view('/supportStaff', 'customer.supportStaffHome');
 });
 
 Route::get('logout', [LoginController::class, 'logout']);
