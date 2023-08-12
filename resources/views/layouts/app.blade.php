@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Customer Relationship System') }}</title>
+    <title>{{'Customer Loyalty Program'}}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -25,6 +25,24 @@
     <style>
         body {
             background-color: #f4f1de;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .footer {
+            background-color: #f4f1de;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
 
         .card {
@@ -42,7 +60,7 @@
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light fixed-top shadow-sm">
             <div class="container">
                 <!-- Brand Link -->
                 @if (Route::has('login') && !Auth::user())
@@ -120,6 +138,10 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <footer class="footer py-3">
+            &copy; {{ date('Y') }} {{ 'Customer Relationship System for Retail Store' }}. All rights reserved.
+        </footer>
     </div>
 </body>
 

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-content">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -9,8 +9,24 @@
 
                 <div class="card-body">
                     <form method="POST" action='{{ url("login/$url") }}' aria-label="{{ __('Login') }}">
-
                         @csrf
+
+                        @if($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        @endif
+
+                        @if(session('success'))
+                        <div class="alert alert-success mt-3">
+                            {{ session('success') }}
+                        </div>
+                        @endif
+
                         <div class="row mb-3">
                             <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
 

@@ -44,7 +44,8 @@ Route::group(['middleware' => 'auth:customer'], function () {
     Route::view('/customer/coupons', 'customer.coupons');
     Route::view('/customer/support', 'customer.support');
     Route::view('/customer/support/contactUs', 'customer.contactUs');
-    Route::view('/customer/profile', 'customer.profile')->name('customer.profile');
+    Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
+    Route::post('/customer/profile/update', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
 });
 
 Route::group(['middleware' => 'auth:admin'], function () {

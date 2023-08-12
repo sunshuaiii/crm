@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-content">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -81,7 +81,7 @@
                             <label for="dob" class="col-md-4 col-form-label text-md-end">{{ __('Date of Birth') }}</label>
 
                             <div class="col-md-6">
-                                <input id="dob" type="date" class="form-control @error('dob') is-invalid @enderror" name="dob" value="{{ old('dob') }}" required autocomplete="bday">
+                                <input id="dob" type="date" class="form-control @error('dob') is-invalid @enderror" name="dob" value="{{ old('dob') }}" max="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required autocomplete="bday">
 
                                 @error('dob')
                                 <span class="invalid-feedback" role="alert">
@@ -96,14 +96,14 @@
 
                             <div class="col-md-6">
                                 <div class="form-check">
-                                    <input class="form-check-input @error('gender') is-invalid @enderror" type="radio" name="gender" id="gender-male" value="Male" {{ old('gender') === 'male' ? 'checked' : '' }}>
+                                    <input class="form-check-input @error('gender') is-invalid @enderror" type="radio" name="gender" id="gender-male" value="Male">
                                     <label class="form-check-label" for="gender-male">
                                         {{ __('Male') }}
                                     </label>
                                 </div>
 
                                 <div class="form-check">
-                                    <input class="form-check-input @error('gender') is-invalid @enderror" type="radio" name="gender" id="gender-female" value="Female" {{ old('gender') === 'female' ? 'checked' : '' }}>
+                                    <input class="form-check-input @error('gender') is-invalid @enderror" type="radio" name="gender" id="gender-female" value="Female">
                                     <label class="form-check-label" for="gender-female">
                                         {{ __('Female') }}
                                     </label>
@@ -157,7 +157,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn btn-primary" onclick="showConfirmation()">
                                     {{ __('Register') }}
                                 </button>
                             </div>
@@ -168,4 +168,13 @@
         </div>
     </div>
 </div>
+
+<!-- JavaScript for Confirmation Pop-up -->
+<script>
+    function showConfirmation() {
+        if (confirm('Are you sure you want to submit the registration?')) {
+            document.querySelector('form').submit();
+        }
+    }
+</script>
 @endsection

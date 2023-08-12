@@ -1,21 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container-content">
     <div class="row justify-content-center align-items-center">
-        @if(session('success'))
-        <div class="alert alert-success mt-3">
-            {{ session('success') }}
+        <div class="col-md-8">
+            @if(session('success'))
+            <div class="alert alert-success mt-3">
+                {{ session('success') }}
+            </div>
+            @endif
+            <h3 class="mt-4">Hi, {{ Auth::user()->username }}!</h3>
         </div>
-        @endif
-
-        <h3 class="mt-4">Hi, {{ Auth::user()->username }}!</h3>
 
         <div class="col-md-5 mt-6">
             <div class="card">
-                <div class="card-body d-flex align-items-center">
+                <div class="card-body d-flex align-items-center justify-content-center">
                     <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 40px; height: 40px;">
-                    <h4 class="m-2">You have {{ Auth::user()->points }} points now!</h4>
+                    <h4 class="m-2 text-center">You have <span class="highlight">{{ Auth::user()->points }}</span> points now!</h4>
                 </div>
             </div>
         </div>

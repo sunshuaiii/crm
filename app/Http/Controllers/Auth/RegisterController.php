@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\Admin;
 use App\Models\MarketingStaff;
 use App\Models\SupportStaff;
+use App\Rules\AboveEighteen;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -124,6 +125,14 @@ class RegisterController extends Controller
             // Validate the incoming data
             $this->validator($request->all())->validate();
 
+            $this->validate($request, [
+                'first_name' => 'required|string|max:255',
+                'last_name' => 'required|string|max:255',
+                'contact' => 'required|string|max:255',
+                'gender' => 'required|string|in:Male,Female,',
+                'dob' => ['required', 'date', new AboveEighteen],
+            ]);
+
             // Attempt to create a new customer
             Customer::create([
                 'username' => $request->username,
@@ -136,7 +145,8 @@ class RegisterController extends Controller
                 'dob' => $request->dob,
             ]);
 
-            return redirect()->intended('login/customer');
+            // Add a success message to the session
+            return redirect()->intended('login/customer')->with('success', 'Registration successful! You can now log in.');
         } catch (QueryException $e) {
             // Handle database integrity constraint violation
             if ($e->getCode() == 23000) { // Integrity constraint violation error code
@@ -150,6 +160,7 @@ class RegisterController extends Controller
             return redirect()->back()->withInput()->withErrors($e->errors());
         }
     }
+
 
     /**
      * @param Request $request
