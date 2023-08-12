@@ -112,12 +112,23 @@ class LoginController extends Controller
         return back()->withInput($request->only('email', 'remember'));
     }
 
-    public function logout(Request $request) {
-		Auth::logout(); // will remove the authentication information from the user's session
-		$request->session()->invalidate(); //  invalidate the user's session
-		$request->session()->regenerateToken(); // regenerate their CSRF token
-		// session(['role' => 'guest']);
-		// session()->forget('role');
+    public function logout(Request $request)
+    {
+        // Invalidate regular session
+        Auth::logout();
+
+        // Get the currently logged-in user
+        $user = Auth::user();
+
+        // Invalidate "remember me" token for the logged-out user
+        if ($user) {
+            $user->update(['remember_token' => null]);
+        }
+
+        $request->session()->invalidate(); //  invalidate the user's session
+        $request->session()->regenerateToken(); // regenerate their CSRF token
+        // session(['role' => 'guest']);
+        session()->forget('role');
         return redirect()->intended('/');
-	}
+    }
 }

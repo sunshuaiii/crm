@@ -118,7 +118,7 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
         Admin::create([
-            'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -134,7 +134,7 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
         MarketingStaff::create([
-            'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
@@ -150,7 +150,7 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
         SupportStaff::create([
-            'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
