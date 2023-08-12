@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Models\User;
 use App\Models\Customer;
 use App\Models\Admin;
 use App\Models\MarketingStaff;
@@ -58,7 +59,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -103,12 +104,34 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return Customer::create([
-            'name' => $data['name'],
+        return User::create([
+            'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function createCustomer(Request $request)
+    {
+        $this->validator($request->all())->validate();
+        Customer::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'contact' => $request->contact,
+            'gender' => $request->gender,
+            'dob' => $request->dob,
+        ]);
+        return redirect()->intended('login/customer');
+    }
+    
     /**
      * @param Request $request
      *

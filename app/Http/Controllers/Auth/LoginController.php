@@ -55,10 +55,10 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8'
         ]);
-        if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+        if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->intended('/customer');
         }
-        return back()->withInput($request->only('email', 'remember'));
+        return back()->withInput($request->only('email'));
     }
 
     public function showAdminLoginForm()
@@ -72,10 +72,10 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8'
         ]);
-        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->intended('/admin');
         }
-        return back()->withInput($request->only('email', 'remember'));
+        return back()->withInput($request->only('email'));
     }
 
     public function showMarketingStaffLoginForm()
@@ -89,10 +89,10 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8'
         ]);
-        if (Auth::guard('marketingStaff')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+        if (Auth::guard('marketingStaff')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->intended('/marketingStaff');
         }
-        return back()->withInput($request->only('email', 'remember'));
+        return back()->withInput($request->only('email'));
     }
 
     public function showSupportStaffLoginForm()
@@ -106,29 +106,20 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8'
         ]);
-        if (Auth::guard('supportStaff')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+        if (Auth::guard('supportStaff')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->intended('/supportStaff');
         }
-        return back()->withInput($request->only('email', 'remember'));
+        return back()->withInput($request->only('email'));
     }
 
     public function logout(Request $request)
     {
         // Invalidate regular session
         Auth::logout();
-
-        // Get the currently logged-in user
-        $user = Auth::user();
-
-        // Invalidate "remember me" token for the logged-out user
-        if ($user) {
-            $user->update(['remember_token' => null]);
-        }
-
         $request->session()->invalidate(); //  invalidate the user's session
         $request->session()->regenerateToken(); // regenerate their CSRF token
         // session(['role' => 'guest']);
-        session()->forget('role');
+        // session()->forget('role');
         return redirect()->intended('/');
     }
 }
