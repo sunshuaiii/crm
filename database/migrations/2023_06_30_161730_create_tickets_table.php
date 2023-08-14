@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('query_type')->enum('Feedback', 'Complaint', 'Query', 'Issue');
+            $table->string('query_type')->enum('Feedback', 'Complaint', 'Query', 'Issue', '');
             $table->text('message');
-            $table->string('status')->enum('New', 'Open', 'Pending', 'Solved', 'Closed');
+            $table->string('status')->enum('New', 'Open', 'Pending', 'Solved', 'Closed')->default('New');
             $table->foreignId('support_staff_id')->constrained('support_staffs', 'id');
             $table->foreignId('customer_id')->constrained('customers', 'id');
             $table->timestamps();

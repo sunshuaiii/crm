@@ -12,7 +12,7 @@
             <h3 class="mt-4">Hi, {{ Auth::user()->username }}!</h3>
         </div>
 
-        <div class="col-md-5 mt-6">
+        <div class="col-md-5 mt-3">
             <div class="card">
                 <div class="card-body d-flex align-items-center justify-content-center">
                     <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 40px; height: 40px;">
@@ -42,7 +42,7 @@
                     </div>
 
                     @if(Auth::user()->created_at)
-                    <div>
+                    <div class="text-center mb-4">
                         <h6>Member Since {{ Auth::user()->created_at->format('F Y') }}</h6>
                     </div>
                     @endif

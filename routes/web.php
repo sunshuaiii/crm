@@ -43,7 +43,8 @@ Route::group(['middleware' => 'auth:customer'], function () {
     Route::get('/customer/membership', [CustomerController::class, 'showQRandBarCode'])->name('customer.membership');
     Route::view('/customer/coupons', 'customer.coupons');
     Route::view('/customer/support', 'customer.support');
-    Route::view('/customer/support/contactUs', 'customer.contactUs');
+    Route::view('/customer/support/contactUs', 'customer.contactUs')->name('customer.support.contactUs');
+    Route::post('/customer/support/contactUs', [CustomerController::class, 'submitContactForm'])->name('customer.support.contactUs.submit');
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::post('/customer/profile/update', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
 });

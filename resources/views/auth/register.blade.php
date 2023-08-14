@@ -172,9 +172,29 @@
 <!-- JavaScript for Confirmation Pop-up -->
 <script>
     function showConfirmation() {
-        if (confirm('Are you sure you want to submit the registration?')) {
-            document.querySelector('form').submit();
+        // Check if all required fields are entered
+        if (areRequiredFieldsFilled()) {
+            if (confirm('Are you sure you want to submit the registration?')) {
+                document.querySelector('form').submit();
+            }
+        } else {
+            alert('Please fill in all required fields before submitting.');
         }
+    }
+
+    function areRequiredFieldsFilled() {
+        // List of required field IDs
+        var requiredFields = ['username', 'first_name', 'last_name', 'contact', 'dob', 'gender', 'email', 'password', 'password-confirm'];
+
+        // Check if each required field is filled
+        for (var i = 0; i < requiredFields.length; i++) {
+            var field = document.getElementById(requiredFields[i]);
+            if (field && field.value.trim() === '') {
+                return false;
+            }
+        }
+
+        return true;
     }
 </script>
 @endsection

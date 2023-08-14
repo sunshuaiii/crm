@@ -13,8 +13,11 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script> -->
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <!-- public/css/styles.css -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
@@ -53,6 +56,7 @@
 
         .card-header {
             font-size: large;
+            font-weight: bold;
         }
     </style>
 
@@ -90,12 +94,16 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url('/customer/coupons') }}">Coupons</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/customer/support') }}">Support</a>
+                        <li class="nav-item dropdown"> <!-- Modified Support tab to a dropdown -->
+                            <a class="nav-link dropdown-toggle" href="#" id="supportDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Support
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="supportDropdown">
+                                <a class="dropdown-item" href="{{ url('/customer/support') }}">Help & Support</a>
+                                <a class="dropdown-item" href="{{ url('/customer/support/contactUs') }}">Contact Us</a>
+                            </div>
                         </li>
                     </ul>
-
-
                     @endif
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
@@ -134,6 +142,7 @@
                 </div>
             </div>
         </nav>
+
 
         <main class="py-4">
             @yield('content')

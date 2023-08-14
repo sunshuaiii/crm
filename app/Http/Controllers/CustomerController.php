@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
+use App\Models\SupportStaff;
+use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -32,5 +35,30 @@ class CustomerController extends Controller
         $barCode = DNS1DFacade::getBarcodeHTML($user->id, 'C39');
 
         return view('customer.membership', compact('qrCode', 'barCode'));
+    }
+
+    public function submitContactForm(Request $request)
+    {
+        // Create a new ticket
+        $ticket = new Ticket();
+        $ticket->customer_id = Auth::user()->id;
+        $ticket->status = 'New';
+        $ticket->message = $request->input('message');
+        $ticket->query_type = $request->input('query_type');
+
+        // Find the support staff with the least number of assigned tickets
+        $leastAssignedSupportStaff = Ticket::select('support_staff_id', DB::raw('COUNT(*) as ticket_count'))
+            ->where('status', '<>', 'Closed')
+            ->groupBy('support_staff_id')
+            ->orderBy('ticket_count', 'asc')
+            ->first();
+
+        if ($leastAssignedSupportStaff) {
+            $ticket->support_staff_id = $leastAssignedSupportStaff->support_staff_id;
+        }
+
+        $ticket->save();
+
+        return redirect()->route('customer.support.contactUs')->with('success', 'Your message has been sent. Our team will get back to you shortly.');
     }
 }
