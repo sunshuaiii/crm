@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Checkout;
+use App\Models\CheckoutProduct;
 use App\Models\Coupon;
 use App\Models\CustomerCoupon;
+use App\Models\Product;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -162,22 +165,22 @@ class CustomerController extends Controller
         return $couponCode;
     }
 
-    public function getCouponDetails($couponId, $customerId)
+    public function getCouponDetails($couponCode)
     {
         $couponDetails = CustomerCoupon::select(
             'coupons.name',
             'coupons.discount',
             'coupons.conditions',
             'coupons.redemption_points',
-            // 'customer_coupons.status',
+            'customer_coupons.id',
+            'customer_coupons.status',
             'customer_coupons.start_date',
             'customer_coupons.end_date',
             'customer_coupons.code',
-            // 'customer_coupons.coupon_id'
+            'customer_coupons.coupon_id'
         )
             ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
-            ->where('customer_coupons.coupon_id', $couponId)
-            ->where('customer_coupons.customer_id', $customerId)
+            ->where('customer_coupons.code', $couponCode)
             ->first(); // Use first() instead of get() to retrieve a single result
 
 
@@ -188,5 +191,74 @@ class CustomerController extends Controller
         $barCode = DNS1DFacade::getBarcodeHTML($couponDetails->code, 'C39');
 
         return view('customer.couponDetails', ['couponDetails' => $couponDetails, 'barCode' => $barCode]);
+    }
+
+    public function redeemCoupon(Request $request, $couponCode)
+    {
+        // Get the authenticated customer
+        $customer = Auth::user();
+
+        // Find the coupon details using the coupon code
+        $couponDetails = CustomerCoupon::where('code', $couponCode)->first();
+
+        if (!$couponDetails) {
+            return redirect()->route('customer.coupons')->with('error', 'Coupon not found.');
+        }
+
+        // Generate random payment method
+        $paymentMethods = ['Credit card', 'Debit Card', 'Cash', 'E-wallet'];
+        $randomPaymentMethod = $paymentMethods[array_rand($paymentMethods)];
+
+        // Create a new checkout record
+        $checkout = new Checkout();
+        $checkout->date = Carbon::now();
+        $checkout->payment_method = $randomPaymentMethod;
+        $checkout->customer_id = $customer->id;
+        $checkout->customer_coupon_id = $couponDetails->id;
+        $checkout->save();
+
+        // Generate random number of checkout_products records
+        $numProducts = rand(1, 20);
+
+        // Get random product IDs
+        $productIds = Product::pluck('id')->toArray();
+
+        // Insert checkout_products records
+        for ($i = 0; $i < $numProducts; $i++) {
+            $productId = $productIds[array_rand($productIds)];
+            $quantity = rand(1, 50);
+
+            $checkoutProduct = new CheckoutProduct();
+            $checkoutProduct->checkout_id = $checkout->id;
+            $checkoutProduct->product_id = $productId;
+            $checkoutProduct->quantity = $quantity;
+            $checkoutProduct->save();
+        }
+
+        // Update the status of the claimed coupon to "Redeemed"
+        $customerCoupon = CustomerCoupon::where('code', $couponCode)->first();
+        if ($customerCoupon) {
+            $customerCoupon->status = 'Redeemed';
+            $customerCoupon->save();
+        }
+
+        return redirect()->route('customer.checkout', ['id' => $checkout->id])->with('success', 'Coupon claimed successfully! Thank you for shopping with us!');
+    }
+
+    public function getCheckoutDetails($id)
+    {
+        $checkout = Checkout::with('checkoutProducts.product')->find($id);
+
+        if (!$checkout) {
+            return redirect()->route('customer.coupons')->with('error', 'Checkout details not found.');
+        }
+
+        $totalAmount = 0;
+
+        foreach ($checkout->checkoutProducts as $checkoutProduct) {
+            $totalAmount += ($checkoutProduct->product->unit_price * $checkoutProduct->quantity);
+        }
+
+        return view('customer.checkout', ['checkout' => $checkout, 'totalAmount' => $totalAmount]);
     }
 }

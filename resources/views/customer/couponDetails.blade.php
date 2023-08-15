@@ -48,9 +48,12 @@
                     </div>
 
                     <div class="m-4">
-                        <button class="btn btn-primary claim-btn" data-coupon-id="{{ $couponDetails->id }}">
-                            Redeem This Coupon</button>
+                        <form action="{{ route('customer.coupons.redeem', ['couponCode' => $couponDetails->code]) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary">Redeem This Coupon</button>
+                        </form>
                     </div>
+
                 </div>
             </div>
         </div>

@@ -15,15 +15,24 @@ class Checkout extends Model
 
     public $timestamps = false;
 
-    public function getCustomer(){
+    public function getCustomer()
+    {
         return $this->belongsTo(Customer::class);
     }
 
-    public function getCustomerCoupon(){
+    public function getCustomerCoupon()
+    {
         return $this->hasOne(CustomerCoupon::class);
     }
 
-    public function getProducts(){
+    public function getProducts()
+    {
         return $this->belongsToMany(Product::class);
+    }
+
+    // Define the relationship to CheckoutProduct
+    public function checkoutProducts()
+    {
+        return $this->hasMany(CheckoutProduct::class);
     }
 }

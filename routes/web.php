@@ -44,7 +44,9 @@ Route::group(['middleware' => 'auth:customer'], function () {
     Route::view('/customer/coupons', 'customer.coupons')->name('customer.coupons');
     Route::get('/customer/coupons', [CustomerController::class, 'getCouponsInfo'])->name('customer.coupons');
     Route::post('/customer/coupons/claim', [CustomerController::class, 'claimCoupon'])->name('customer.coupons.claim');
-    Route::get('/customer/coupons/details/{couponId}/{customerId}', [CustomerController::class, 'getCouponDetails'])->name('customer.coupons.details');
+    Route::get('/customer/coupons/details/{couponCode}', [CustomerController::class, 'getCouponDetails'])->name('customer.coupons.details');
+    Route::post('/customer/coupons/redeem/{couponCode}', [CustomerController::class, 'redeemCoupon'])->name('customer.coupons.redeem');
+    Route::get('/customer/checkout/{id}', [CustomerController::class, 'getCheckoutDetails'])->name('customer.checkout');
     Route::view('/customer/support', 'customer.support');
     Route::view('/customer/support/contactUs', 'customer.contactUs')->name('customer.support.contactUs');
     Route::post('/customer/support/contactUs', [CustomerController::class, 'submitContactForm'])->name('customer.support.contactUs.submit');

@@ -9,15 +9,23 @@ class CheckoutProduct extends Model
 {
     use HasFactory;
 
-    protected $hidden= ['checkout_id', 'product_id'];
-    
+    protected $hidden = ['checkout_id', 'product_id'];
+
     public $timestamps = false;
 
-    public function getCheckouts(){
+    public function getCheckouts()
+    {
         return $this->hasMany(Checkout::class);
     }
 
-    public function getProducts(){
+    public function getProducts()
+    {
         return $this->hasMany(Product::class);
+    }
+
+    // Define the relationship to Product
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

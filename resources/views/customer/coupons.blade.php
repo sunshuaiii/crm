@@ -32,7 +32,7 @@
                 @foreach($customerCouponsInfo as $coupon)
                 <div class="col-md-4 m-5">
                     <div class="card-container">
-                        <a href="{{ route('customer.coupons.details', ['couponId' => $coupon->coupon_id, 'customerId' => Auth::user()->id]) }}" class="card-link">
+                        <a href="{{ route('customer.coupons.details', ['couponCode' => $coupon->code]) }}" class="card-link">
                             <div class="card" style="background:none; border:none; background-image: url('{{ asset('images/icon/coupon-bg.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; min-height: 280px; min-width: 350px;">
                                 <div class="card-body m-5" style="padding-left:25%">
                                     <h5 class="card-title heading">{{ $coupon->name }}</h5>
