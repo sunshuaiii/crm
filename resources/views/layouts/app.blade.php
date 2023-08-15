@@ -16,9 +16,7 @@
 
     <!-- Include jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- Include Bootstrap JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    
     <!-- public/css/styles.css -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 

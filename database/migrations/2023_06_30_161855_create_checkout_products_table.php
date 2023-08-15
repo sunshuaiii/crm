@@ -14,8 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('checkout_products', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('checkout_id')->constrained('checkouts', 'id')->onDelete('cascade');
-            $table->foreignId('product_id')->constrained('products', 'id')->onDelete('cascade');
+            $table->string('product_id');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->integer('quantity');
         });
     }

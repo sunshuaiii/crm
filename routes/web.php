@@ -41,7 +41,9 @@ Route::post('/register/supportStaff', [RegisterController::class, 'createSupport
 Route::group(['middleware' => 'auth:customer'], function () {
     Route::view('/customer', 'customer.customerHome');
     Route::get('/customer/membership', [CustomerController::class, 'showQRandBarCode'])->name('customer.membership');
-    Route::view('/customer/coupons', 'customer.coupons');
+    Route::view('/customer/coupons', 'customer.coupons')->name('customer.coupons');
+    Route::get('/customer/coupons', [CustomerController::class, 'getCouponsInfo'])->name('customer.coupons');
+    Route::post('/customer/coupons/claim', [CustomerController::class, 'claimCoupon'])->name('customer.coupons.claim');
     Route::view('/customer/support', 'customer.support');
     Route::view('/customer/support/contactUs', 'customer.contactUs')->name('customer.support.contactUs');
     Route::post('/customer/support/contactUs', [CustomerController::class, 'submitContactForm'])->name('customer.support.contactUs.submit');
