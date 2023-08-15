@@ -28,7 +28,7 @@
                         <div class="d-flex justify-content-center align-items-center">
                             <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-2" style="width: 20px; height: 20px;">
                             <h5 class="m-2 card-text highlight text-center">
-                                {{ $couponDetails->redemption_points }} points
+                                You claimed this coupon with {{ $couponDetails->redemption_points }} points
                             </h5>
                         </div>
                     </div>
@@ -48,9 +48,9 @@
                     </div>
 
                     <div class="m-4">
-                        <form action="{{ route('customer.coupons.redeem', ['couponCode' => $couponDetails->code]) }}" method="POST">
+                        <form id="redeemForm" action="{{ route('customer.coupons.redeem', ['couponCode' => $couponDetails->code]) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-primary">Checkout and Redeem This Coupon</button>
+                            <button type="button" class="btn btn-primary" onclick="showConfirmation()">Checkout and Redeem This Coupon</button>
                         </form>
                     </div>
 
@@ -60,4 +60,12 @@
 
     </div>
 </div>
+
+<script>
+    function showConfirmation() {
+        if (confirm("Are you sure you want to proceed to checkout and redeem this coupon?")) {
+            document.getElementById('redeemForm').submit();
+        }
+    }
+</script>
 @endsection

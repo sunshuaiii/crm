@@ -324,10 +324,46 @@ class CustomerController extends Controller
     {
         $customer = Auth::user();
         $checkoutHistory = Checkout::where('customer_id', $customer->id)
-            ->with('checkoutProducts.product')
+            ->with('checkoutProducts.product', 'customerCoupon.coupon')
             ->orderBy('date', 'desc')
             ->get();
 
-        return view('customer.checkoutHistory', ['checkoutHistory' => $checkoutHistory]);
+        $checkoutSummaries = [];
+
+        foreach ($checkoutHistory as $checkout) {
+            $totalAmount = 0;
+
+            foreach ($checkout->checkoutProducts as $checkoutProduct) {
+                $totalAmount += ($checkoutProduct->product->unit_price * $checkoutProduct->quantity);
+            }
+
+            $couponDiscount = 0;
+
+            if ($checkout->customerCoupon) {
+                $couponDiscount = $checkout->customerCoupon->coupon->discount;
+            }
+
+            $finalAmount = $totalAmount - $couponDiscount;
+
+            // Calculate points to be credited (1 point per RM 1 spent)
+            if ($finalAmount <= 0) {
+                $pointsToCredit = 0;
+                $finalAmount = 0;
+            } else {
+                $pointsToCredit = floor($finalAmount);
+            }
+
+            $checkoutSummary = [
+                'checkout' => $checkout,
+                'totalAmount' => $totalAmount,
+                'couponDiscount' => $couponDiscount,
+                'finalAmount' => $finalAmount,
+                'pointsToCredit' => $pointsToCredit,
+            ];
+
+            $checkoutSummaries[] = $checkoutSummary;
+        }
+
+        return view('customer.checkoutHistory', ['checkoutSummaries' => $checkoutSummaries]);
     }
 }
