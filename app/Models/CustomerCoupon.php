@@ -14,7 +14,13 @@ class CustomerCoupon extends Model
         'end_date' => 'datetime',
     ];
 
-    public function getCheckout(){
+    public function getCheckout()
+    {
         return $this->belongsTo(Checkout::class);
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
     }
 }

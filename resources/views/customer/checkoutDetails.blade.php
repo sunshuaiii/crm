@@ -17,6 +17,8 @@
             @endif
         </div>
 
+        <h3> You have earned {{ $pointsToCredit}} points</h3>
+
         <h2>Checkout Details</h2>
 
         <!-- Display checkout details -->
@@ -42,20 +44,29 @@
                 </tr>
                 @endforeach
 
+                <tr>
+                    <td colspan="3" class="text-right">Total Amount:</td>
+                    <td>RM {{ $totalAmount }}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3" class="text-right">Coupon Discount:</td>
+                    <td>RM {{ $couponDiscount }}</td>
+                </tr>
+
+                <tr>
+                    <td colspan="3" class="text-right">Final Amount:</td>
+                    <td>RM {{ $finalAmount }}</td>
+                </tr>
             </tbody>
         </table>
-
-        <div class="card-text mt-3 text-center">
-            <!-- Other details here -->
-            <h6>Total Amount: RM {{ $totalAmount }}</h6>
-        </div>
 
         <div class="row justify-content-center align-items-center mt-3">
             <div class="col-md-6 text-center">
                 <a href="{{ route('customer.coupons') }}" class="btn btn-secondary">Back to Coupons</a>
             </div>
             <div class="col-md-6 text-center">
-                <a href="{{ route('customer.profile') }}" class="btn btn-secondary">Go to Checkout History</a>
+                <a href="{{ route('customer.checkout.history') }}" class="btn btn-secondary">Go to Checkout History</a>
             </div>
         </div>
 

@@ -131,7 +131,7 @@ class CustomerController extends Controller
             return redirect()->route('customer.coupons')->with('success', '' . $coupon->name . ' claimed successfully.');
             // return response()->json(['message' => 'Coupon claimed successfully.'], 200);
         } else {
-            return redirect()->route('customer.coupons')->with('error', 'Insufficient points to claim the ' . $coupon->name . '.');
+            return redirect()->route('customer.coupons')->with('error', 'You have insufficient points to claim the ' . $coupon->name . '.');
             // return response()->json(['message' => 'Insufficient points to claim this coupon.'], 403);
         }
     }
@@ -228,11 +228,18 @@ class CustomerController extends Controller
             $productId = $productIds[array_rand($productIds)];
             $quantity = rand(1, 50);
 
-            $checkoutProduct = new CheckoutProduct();
-            $checkoutProduct->checkout_id = $checkout->id;
-            $checkoutProduct->product_id = $productId;
-            $checkoutProduct->quantity = $quantity;
-            $checkoutProduct->save();
+            $product = Product::find($productId);
+
+            if ($product) {
+                $checkoutProduct = new CheckoutProduct();
+                $checkoutProduct->checkout_id = $checkout->id;
+                $checkoutProduct->product_id = $productId;
+                $checkoutProduct->quantity = $quantity;
+                $checkoutProduct->save();
+            } else {
+                // Handle the case when the product is not found
+                // For example, you could log an error message or skip the iteration
+            }
         }
 
         // Update the status of the claimed coupon to "Redeemed"
@@ -242,23 +249,85 @@ class CustomerController extends Controller
             $customerCoupon->save();
         }
 
-        return redirect()->route('customer.checkout', ['id' => $checkout->id])->with('success', 'Coupon claimed successfully! Thank you for shopping with us!');
+        $checkouts = Checkout::with('checkoutProducts.product')->find($checkout->id);
+
+        // Calculate the total amount spent for the checkout
+        $totalAmount = $checkouts->checkoutProducts->sum(function ($item) {
+            return $item->quantity * $item->product->unit_price;
+        });
+
+        // Deduct the coupon discount from the total amount
+        $totalAmount -= $couponDetails->coupon->discount;
+
+        if (!$couponDetails) {
+            return redirect()->route('customer.coupons')->with('error', 'Coupon not found.');
+        }
+
+        // dd($couponDetails->toArray());
+
+        // Calculate points to be credited (1 point per RM 1 spent)
+        if ($totalAmount <= 0) {
+            $pointsToCredit = 0;
+            $totalAmount = 0;
+        } else {
+            $pointsToCredit = floor($totalAmount);
+        }
+
+        // Update the customer's points
+        $customer->updatePoints($pointsToCredit);
+
+        return redirect()->route('customer.checkoutDetails', ['id' => $checkout->id])->with('success', 'Coupon claimed successfully! Thank you for shopping with us!');
     }
 
     public function getCheckoutDetails($id)
     {
-        $checkout = Checkout::with('checkoutProducts.product')->find($id);
+        $checkout = Checkout::with('checkoutProducts.product', 'customerCoupon.coupon')->find($id);
 
         if (!$checkout) {
             return redirect()->route('customer.coupons')->with('error', 'Checkout details not found.');
         }
 
+        // Calculate the total amount spent for the checkout
         $totalAmount = 0;
 
         foreach ($checkout->checkoutProducts as $checkoutProduct) {
             $totalAmount += ($checkoutProduct->product->unit_price * $checkoutProduct->quantity);
         }
 
-        return view('customer.checkout', ['checkout' => $checkout, 'totalAmount' => $totalAmount]);
+        // Calculate the coupon discount
+        $couponDiscount = 0;
+
+        if ($checkout->customerCoupon) {
+            $couponDiscount = $checkout->customerCoupon->coupon->discount;
+        }
+
+        $finalAmount = $totalAmount - $couponDiscount;
+
+        // Calculate points to be credited (1 point per RM 1 spent)
+        if ($totalAmount - $couponDiscount <= 0) {
+            $pointsToCredit = 0;
+            $finalAmount = 0;
+        } else {
+            $pointsToCredit = floor($totalAmount - $couponDiscount);
+        }
+
+        return view('customer.checkoutDetails', [
+            'checkout' => $checkout,
+            'totalAmount' => $totalAmount,
+            'finalAmount' => $finalAmount,
+            'couponDiscount' => $couponDiscount,
+            'pointsToCredit' => $pointsToCredit,
+        ]);
+    }
+
+    public function getCheckoutHistory()
+    {
+        $customer = Auth::user();
+        $checkoutHistory = Checkout::where('customer_id', $customer->id)
+            ->with('checkoutProducts.product')
+            ->orderBy('date', 'desc')
+            ->get();
+
+        return view('customer.checkoutHistory', ['checkoutHistory' => $checkoutHistory]);
     }
 }

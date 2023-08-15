@@ -50,7 +50,7 @@
                     <div class="m-4">
                         <form action="{{ route('customer.coupons.redeem', ['couponCode' => $couponDetails->code]) }}" method="POST">
                             @csrf
-                            <button type="submit" class="btn btn-primary">Redeem This Coupon</button>
+                            <button type="submit" class="btn btn-primary">Checkout and Redeem This Coupon</button>
                         </form>
                     </div>
 

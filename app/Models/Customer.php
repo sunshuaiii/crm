@@ -52,15 +52,24 @@ class Customer extends Authenticatable
         'dob' => 'datetime',
     ];
 
-    public function getTickets(){
+    public function getTickets()
+    {
         return $this->hasMany(Tickets::class);
     }
 
-    public function getCheckouts(){
+    public function getCheckouts()
+    {
         return $this->hasMany(Checkout::class);
     }
 
-    public function getCoupons(){
+    public function getCoupons()
+    {
         return $this->belongsToMany(Coupon::class);
+    }
+
+    public function updatePoints($pointsToAdd)
+    {
+        $this->points += $pointsToAdd;
+        $this->save();
     }
 }

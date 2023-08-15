@@ -35,4 +35,9 @@ class Checkout extends Model
     {
         return $this->hasMany(CheckoutProduct::class);
     }
+
+    public function customerCoupon()
+    {
+        return $this->belongsTo(CustomerCoupon::class, 'customer_coupon_id');
+    }
 }
