@@ -24,8 +24,9 @@ class CustomerCouponsSeeder extends Seeder
 
         for ($i = 1; $i <= 100; $i++) {
             $code = '';
-            for ($j = 0; $j < 5; $j++) {
-                $code .= $faker->randomNumber(4, true);
+            // to generate random 15-digit code
+            for ($j = 0; $j < 3; $j++) {
+                $code .= (string) $faker->randomNumber(5, true);
             }
             DB::table('customer_coupons')->insert([
                 'status' => $faker->randomElement($status),

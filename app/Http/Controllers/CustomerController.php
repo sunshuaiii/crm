@@ -81,7 +81,7 @@ class CustomerController extends Controller
     {
         $customer = Auth::user();
 
-        $customerCouponsInfo = CustomerCoupon::select('coupons.name', 'coupons.discount', 'coupons.conditions', 'customer_coupons.end_date', 'customer_coupons.code')
+        $customerCouponsInfo = CustomerCoupon::select('coupons.name', 'coupons.discount', 'coupons.conditions', 'customer_coupons.end_date', 'customer_coupons.code', 'customer_coupons.coupon_id')
             ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
             ->where('customer_coupons.customer_id', $customer->id)
             ->where('customer_coupons.status', 'Claimed')
@@ -160,5 +160,33 @@ class CustomerController extends Controller
         }
 
         return $couponCode;
+    }
+
+    public function getCouponDetails($couponId, $customerId)
+    {
+        $couponDetails = CustomerCoupon::select(
+            'coupons.name',
+            'coupons.discount',
+            'coupons.conditions',
+            'coupons.redemption_points',
+            // 'customer_coupons.status',
+            'customer_coupons.start_date',
+            'customer_coupons.end_date',
+            'customer_coupons.code',
+            // 'customer_coupons.coupon_id'
+        )
+            ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
+            ->where('customer_coupons.coupon_id', $couponId)
+            ->where('customer_coupons.customer_id', $customerId)
+            ->first(); // Use first() instead of get() to retrieve a single result
+
+
+        if (!$couponDetails) {
+            return redirect()->route('customer.coupons')->with('error', 'Coupon details not found.');
+        }
+
+        $barCode = DNS1DFacade::getBarcodeHTML($couponDetails->code, 'C39');
+
+        return view('customer.couponDetails', ['couponDetails' => $couponDetails, 'barCode' => $barCode]);
     }
 }

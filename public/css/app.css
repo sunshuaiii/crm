@@ -7,6 +7,26 @@
     margin-top: 4%;
 }
 
+.card-container {
+    transition: transform 0.2s; /* Apply a smooth transition on hover */
+}
+
+.card-container:hover {
+    transform: scale(1.05); /* Enlarge the card slightly on hover */
+    cursor: pointer; /* Change cursor to a pointer on hover */
+}
+
+/* Remove hyperlink underline */
+.card-link {
+    text-decoration: none;
+}
+
+/* Adjust color and style on hover */
+.card-link:hover {
+    color: #333; /* Change the color to your preferred link color */
+    text-decoration: none;
+}
+
 .navbar {
     background-color: #f2cc8f;
 }
