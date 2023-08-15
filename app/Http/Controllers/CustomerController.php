@@ -100,7 +100,8 @@ class CustomerController extends Controller
         $coupon = Coupon::find($couponId);
 
         if (!$coupon) {
-            return response()->json(['message' => 'Coupon not found.'], 404);
+            // return response()->json(['message' => 'Sorry, coupon not found.'], 404);
+            return redirect()->route('customer.coupons')->with('error', 'Sorry, coupon not found.');
         }
 
         if ($customer->points >= $coupon->redemption_points) {
@@ -124,11 +125,11 @@ class CustomerController extends Controller
             $customer->points -= $coupon->redemption_points;
             $customer->save();
 
-            // return redirect()->route('customer.coupons')->with('success', 'Coupon claimed successfully.');
-            return response()->json(['message' => 'Coupon claimed successfully.'], 200);
+            return redirect()->route('customer.coupons')->with('success', '' . $coupon->name . ' claimed successfully.');
+            // return response()->json(['message' => 'Coupon claimed successfully.'], 200);
         } else {
-            // return redirect()->route('customer.coupons')->with('error', 'Insufficient points to claim this coupon.');
-            return response()->json(['message' => 'Insufficient points to claim this coupon.'], 403);
+            return redirect()->route('customer.coupons')->with('error', 'Insufficient points to claim the ' . $coupon->name . '.');
+            // return response()->json(['message' => 'Insufficient points to claim this coupon.'], 403);
         }
     }
 

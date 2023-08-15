@@ -15,7 +15,6 @@
                 {{ session('error') }}
             </div>
             @endif
-
         </div>
 
         <div class="col-md-8 mt-3">
@@ -86,6 +85,11 @@
                                 <a href="#" class="read-more-btn">Read More</a>
                             </div>
 
+                            <form action="{{ route('customer.coupons.claim') }}" method="POST" class="claim-form" data-coupon-id="{{ $coupon->id }}">
+                                @csrf
+                                <input type="hidden" name="coupon_id" value="{{ $coupon->id }}">
+                            </form>
+
                             <div class="mt-3">
                                 <button class="btn btn-primary claim-btn" data-coupon-id="{{ $coupon->id }}">Claim This Coupon</button>
                             </div>
@@ -134,6 +138,21 @@
             e.preventDefault();
 
             var couponId = $(this).data('coupon-id');
+            var form = $('.claim-form[data-coupon-id="' + couponId + '"]');
+
+            if (confirm('Are you sure you want to claim this coupon?')) {
+                form.submit();
+            }
+        });
+    });
+</script>
+
+<!-- <script>
+    $(document).ready(function() {
+        $('.claim-btn').click(function(e) {
+            e.preventDefault();
+
+            var couponId = $(this).data('coupon-id');
 
             if (confirm('Are you sure you want to claim this coupon?')) {
                 $.ajax({
@@ -154,6 +173,6 @@
             }
         });
     });
-</script>
+</script> -->
 
 @endsection
