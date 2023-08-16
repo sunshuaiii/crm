@@ -35,7 +35,13 @@
                         <a href="{{ route('customer.coupons.details', ['couponCode' => $coupon->code]) }}" class="card-link">
                             <div class="card" style="background:none; border:none; background-image: url('{{ asset('images/icon/coupon-bg.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; min-height: 280px; min-width: 350px;">
                                 <div class="card-body m-5" style="padding-left:25%">
-                                    <h5 class="card-title heading">{{ $coupon->name }}</h5>
+                                    <div class="text-left md-5">
+                                        @if($coupon->end_date < \Carbon\Carbon::now()) <p class="expired">Expired</p>
+                                            @else
+                                            <p>{{ $coupon->end_date->diffInDays(\Carbon\Carbon::now()) }} days left</p>
+                                            @endif
+                                    </div>
+                                    <h4 class="card-title heading">{{ $coupon->name }}</h4>
                                     <br>
                                     <br>
                                     <h5 class="card-text">

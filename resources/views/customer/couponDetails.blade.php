@@ -30,6 +30,10 @@
                             <h5 class="m-2 card-text highlight text-center">
                                 You claimed this coupon with {{ $couponDetails->redemption_points }} points
                             </h5>
+                            @if($couponDetails->end_date < \Carbon\Carbon::now()) <p class="expired">Expired</p>
+                                @else
+                                <p>{{ $couponDetails->end_date->diffInDays(\Carbon\Carbon::now()) }} days left</p>
+                                @endif
                         </div>
                     </div>
 
