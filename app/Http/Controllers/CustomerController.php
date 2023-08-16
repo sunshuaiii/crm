@@ -75,6 +75,7 @@ class CustomerController extends Controller
             ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
             ->where('customer_coupons.customer_id', $customer->id)
             ->where('customer_coupons.status', 'Claimed')
+            ->whereDate('customer_coupons.end_date', '>=', now())
             ->get();
 
         return view('customer.coupons', ['couponsInfo' => $couponsInfo]);
@@ -88,6 +89,7 @@ class CustomerController extends Controller
             ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
             ->where('customer_coupons.customer_id', $customer->id)
             ->where('customer_coupons.status', 'Claimed')
+            ->whereDate('customer_coupons.end_date', '>=', now())
             ->get();
 
         $allCouponsInfo = Coupon::all(); // Fetch all available coupons
