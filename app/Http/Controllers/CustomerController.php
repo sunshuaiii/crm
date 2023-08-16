@@ -75,7 +75,7 @@ class CustomerController extends Controller
             ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
             ->where('customer_coupons.customer_id', $customer->id)
             ->where('customer_coupons.status', 'Claimed')
-            ->whereDate('customer_coupons.end_date', '>=', now())
+            // ->whereDate('customer_coupons.end_date', '>=', now())
             ->get();
 
         return view('customer.coupons', ['couponsInfo' => $couponsInfo]);
@@ -89,7 +89,7 @@ class CustomerController extends Controller
             ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
             ->where('customer_coupons.customer_id', $customer->id)
             ->where('customer_coupons.status', 'Claimed')
-            ->whereDate('customer_coupons.end_date', '>=', now())
+            // ->whereDate('customer_coupons.end_date', '>=', now())
             ->get();
 
         $allCouponsInfo = Coupon::all(); // Fetch all available coupons
@@ -201,10 +201,10 @@ class CustomerController extends Controller
         $customer = Auth::user();
 
         // Find the coupon details using the coupon code
-        $couponDetails = CustomerCoupon::where('code', $couponCode)->first();
+        $couponDetails = CustomerCoupon::where('code', $couponCode)->whereDate('customer_coupons.end_date', '>=', now())->first();
 
         if (!$couponDetails) {
-            return redirect()->route('customer.coupons')->with('error', 'Coupon not found.');
+            return redirect()->route('customer.coupons')->with('error', 'Coupon not found. The coupon is expired.');
         }
 
         // Generate random payment method

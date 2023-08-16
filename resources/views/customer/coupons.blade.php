@@ -21,7 +21,7 @@
             <div class="d-flex ">
                 <img src="{{ asset('images/icon/coupon-color.png') }}" alt="Coupon Image" class="mr-3" style="width: 40px; height: 40px;">
                 <h4 class="m-2 text-center">Your coupons | <span class="highlight">{{ \App\Models\CustomerCoupon::where('customer_id', Auth::user()->id)
-    ->where('status', 'Claimed') ->whereDate('customer_coupons.end_date', '>=', now())
+    ->where('status', 'Claimed')
     ->count() }}</span> coupon(s)</h4>
             </div>
         </div>
