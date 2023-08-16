@@ -48,6 +48,7 @@ Route::group(['middleware' => 'auth:customer'], function () {
     Route::post('/customer/coupons/redeem/{couponCode}', [CustomerController::class, 'redeemCoupon'])->name('customer.coupons.redeem');
     Route::get('/customer/checkout/history', [CustomerController::class, 'getCheckoutHistory'])->name('customer.checkout.history');
     Route::get('/customer/checkout/{id}', [CustomerController::class, 'getCheckoutDetails'])->name('customer.checkoutDetails');
+    Route::post('/customer/checkout/membership', [CustomerController::class, 'membershipCheckout'])->name('customer.checkout.membership');
     Route::view('/customer/support', 'customer.support');
     Route::view('/customer/support/contactUs', 'customer.contactUs')->name('customer.support.contactUs');
     Route::post('/customer/support/contactUs', [CustomerController::class, 'submitContactForm'])->name('customer.support.contactUs.submit');

@@ -5,10 +5,17 @@
     <div class="row justify-content-center align-items-center">
         <div class="col-md-8">
             @if(session('success'))
-            <div class="alert alert-success mt-3">
+            <div class="alert alert-success">
                 {{ session('success') }}
             </div>
             @endif
+
+            @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
+
             <h3 class="mt-4">Hi, {{ Auth::user()->username }}!</h3>
         </div>
 
@@ -49,6 +56,13 @@
 
                 </div>
             </div>
+        </div>
+
+        <div class="text-center m-4">
+            <form id="redeemForm" action="{{ route('customer.checkout.membership') }}" method="POST">
+                @csrf
+                <button type="button" class="btn btn-primary" onclick="submit()">Checkout With Membership</button>
+            </form>
         </div>
 
     </div>

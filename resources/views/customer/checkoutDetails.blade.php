@@ -17,7 +17,7 @@
             @endif
         </div>
 
-        <h3> You have earned {{ $pointsToCredit}} points</h3>
+        <h3 class="m-4"> You have earned <span class="highlight">{{ $pointsToCredit}} </span> points with this checkout.</h3>
 
         <h2>Checkout Details</h2>
 
@@ -49,15 +49,17 @@
                     <td>RM {{ $totalAmount }}</td>
                 </tr>
 
+                @if($couponDiscount)
                 <tr>
                     <td colspan="3" class="text-right">Coupon Discount:</td>
                     <td>RM {{ $couponDiscount }}</td>
                 </tr>
-
                 <tr>
                     <td colspan="3" class="text-right">Final Amount:</td>
                     <td>RM {{ $finalAmount }}</td>
                 </tr>
+                @endif
+
             </tbody>
         </table>
 

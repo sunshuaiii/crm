@@ -11,6 +11,7 @@
                     <tr>
                         <th>Date</th>
                         <th>Payment Method</th>
+                        <th>Total Amount</th>
                         <th>Final Amount</th>
                         <th>Points Credited</th>
                         <th>Action</th>
@@ -21,6 +22,7 @@
                     <tr>
                         <td>{{ $checkoutSummary['checkout']->date->setTimezone('Asia/Kuala_Lumpur')->format('d M Y H:i:s') }}</td>
                         <td>{{ $checkoutSummary['checkout']->payment_method }}</td>
+                        <td>RM {{ $checkoutSummary['totalAmount'] }}</td>
                         <td>RM {{ $checkoutSummary['finalAmount'] }}</td>
                         <td>{{ $checkoutSummary['pointsToCredit'] }} points</td>
                         <td>

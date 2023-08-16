@@ -195,6 +195,64 @@ class CustomerController extends Controller
         return view('customer.couponDetails', ['couponDetails' => $couponDetails, 'barCode' => $barCode]);
     }
 
+    public function membershipCheckout(Request $request)
+    {
+        // Get the authenticated customer
+        $customer = Auth::user();
+
+        // Generate random payment method
+        $paymentMethods = ['Credit card', 'Debit Card', 'Cash', 'E-wallet'];
+        $randomPaymentMethod = $paymentMethods[array_rand($paymentMethods)];
+
+        // Create a new checkout record
+        $checkout = new Checkout();
+        $checkout->date = Carbon::now();
+        $checkout->payment_method = $randomPaymentMethod;
+        $checkout->customer_id = $customer->id;
+        $checkout->customer_coupon_id = null;
+        $checkout->save();
+
+        // Generate random number of checkout_products records
+        $numProducts = rand(1, 20);
+
+        // Get random product IDs
+        $productIds = Product::pluck('id')->toArray();
+
+        // Insert checkout_products records
+        for ($i = 0; $i < $numProducts; $i++) {
+            $productId = $productIds[array_rand($productIds)];
+            $quantity = rand(1, 50);
+
+            $product = Product::find($productId);
+
+            if ($product) {
+                $checkoutProduct = new CheckoutProduct();
+                $checkoutProduct->checkout_id = $checkout->id;
+                $checkoutProduct->product_id = $productId;
+                $checkoutProduct->quantity = $quantity;
+                $checkoutProduct->save();
+            } else {
+                // Handle the case when the product is not found
+                // For example, you could log an error message or skip the iteration
+            }
+        }
+
+        $checkouts = Checkout::with('checkoutProducts.product')->find($checkout->id);
+
+        // Calculate the total amount spent for the checkout
+        $totalAmount = $checkouts->checkoutProducts->sum(function ($item) {
+            return $item->quantity * $item->product->unit_price;
+        });
+
+        // Calculate points to be credited (1 point per RM 1 spent)
+        $pointsToCredit = floor($totalAmount);
+
+        // Update the customer's points
+        $customer->updatePoints($pointsToCredit);
+
+        return redirect()->route('customer.checkoutDetails', ['id' => $checkout->id])->with('success', 'Membership scanned successfully! Thank you for shopping with us!');
+    }
+
     public function redeemCoupon(Request $request, $couponCode)
     {
         // Get the authenticated customer

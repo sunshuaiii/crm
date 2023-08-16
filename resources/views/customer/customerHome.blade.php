@@ -9,7 +9,7 @@
                 {{ session('success') }}
             </div>
             @endif
-            <h3 class="mt-4">Hi, {{ Auth::user()->username }}!</h3>
+            <h3 class="mt-4">Hi, {{ Auth::user()->username }}! Welcome back! </h3>
         </div>
 
         <div class="col-md-5 mt-3">
