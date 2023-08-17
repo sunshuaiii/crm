@@ -21,36 +21,40 @@
             <div class="d-flex ">
                 <img src="{{ asset('images/icon/coupon-color.png') }}" alt="Coupon Image" class="mr-3" style="width: 40px; height: 40px;">
                 <h4 class="m-2 text-center">Your coupons | <span class="highlight">{{ \App\Models\CustomerCoupon::where('customer_id', Auth::user()->id)
-    ->where('status', 'Claimed')
-    ->count() }}</span> coupon(s)</h4>
+    ->where('status', 'Claimed')->whereDate('end_date', '>=', now())
+    ->count() }}</span> coupon(s) available</h4>
             </div>
         </div>
 
         @if ($customerCouponsInfo->count() > 0)
-        <div class="col-md-12 mt-1">
+        <div class="col-md-10 m-3">
             <div class="row justify-content-center align-items-center">
                 @foreach($customerCouponsInfo as $coupon)
-                <div class="col-md-4 m-5">
+                <div class="col-md-4">
                     <div class="card-container">
-                        <a href="{{ route('customer.coupons.details', ['couponCode' => $coupon->code]) }}" class="card-link">
-                            <div class="card" style="background:none; border:none; background-image: url('{{ asset('images/icon/coupon-bg.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; min-height: 280px; min-width: 350px;">
-                                <div class="card-body m-5" style="padding-left:25%">
-                                    <div class="text-left md-5">
-                                        @if($coupon->end_date < \Carbon\Carbon::now()) <p class="expired">Expired</p>
-                                            @else
-                                            <p>{{ $coupon->end_date->diffInDays(\Carbon\Carbon::now()) }} days left</p>
-                                            @endif
+                        @if($coupon->end_date < \Carbon\Carbon::now()) <div class="card" style="background:none; border:none; opacity: 0.5; background-image: url('{{ asset('images/icon/coupon-bg.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; min-height: 280px; min-width: 350px;">
+                            @else
+                            <a href="{{ route('customer.coupons.details', ['couponCode' => $coupon->code]) }}" class="card-link">
+                                <div class="card" style="background:none; border:none; background-image: url('{{ asset('images/icon/coupon-bg.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; min-height: 280px; min-width: 350px;">
+                                    @endif
+
+                                    <div class="card-body m-5" style="padding-left:25%">
+                                        <div class="text-left md-5">
+                                            @if($coupon->end_date < \Carbon\Carbon::now()) <p class="expired">Expired</p>
+                                                @else
+                                                <p>{{ $coupon->end_date->diffInDays(\Carbon\Carbon::now()) }} days left</p>
+                                                @endif
+                                        </div>
+                                        <h4 class="card-title heading">{{ $coupon->name }}</h4>
+                                        <br>
+                                        <br>
+                                        <h5 class="card-text">
+                                            Discount: RM {{ $coupon->discount }}<br>
+                                            Expiry Date: {{ \Carbon\Carbon::parse($coupon->end_date)->format('d M Y') }}
+                                        </h5>
                                     </div>
-                                    <h4 class="card-title heading">{{ $coupon->name }}</h4>
-                                    <br>
-                                    <br>
-                                    <h5 class="card-text">
-                                        Discount: RM {{ $coupon->discount }}<br>
-                                        Expiry Date: {{ \Carbon\Carbon::parse($coupon->end_date)->format('d M Y') }}
-                                    </h5>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
                     </div>
                 </div>
                 @endforeach

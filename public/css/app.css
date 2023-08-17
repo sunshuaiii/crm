@@ -81,4 +81,5 @@
 
 .expired {
     color: red;
+    font-weight: bold;
 }
