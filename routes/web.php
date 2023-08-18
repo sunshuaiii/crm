@@ -19,11 +19,8 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::view('/', 'home');
-Auth::routes();
 
-Route::get('/customer', function () {
-    return view('customer.customerHome');
-});
+Auth::routes();
 
 Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
 Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
@@ -33,18 +30,12 @@ Route::get('/login/admin', [LoginController::class, 'showAdminLoginForm']);
 Route::get('/login/marketingStaff', [LoginController::class, 'showMarketingStaffLoginForm']);
 Route::get('/login/supportStaff', [LoginController::class, 'showSupportStaffLoginForm']);
 Route::get('/register/customer', [RegisterController::class, 'showCustomerRegisterForm'])->name('register.customer');
-Route::get('/register/admin', [RegisterController::class, 'showAdminRegisterForm']);
-Route::get('/register/marketingStaff', [RegisterController::class, 'showMarketingStaffRegisterForm']);
-Route::get('/register/supportStaff', [RegisterController::class, 'showSupportStaffRegisterForm']);
 
 Route::post('/login/customer', [LoginController::class, 'customerLogin'])->name('customerLogin');
 Route::post('/login/admin', [LoginController::class, 'adminLogin']);
 Route::post('/login/marketingStaff', [LoginController::class, 'marketingStaffLogin']);
 Route::post('/login/supportStaff', [LoginController::class, 'supportStaffLogin']);
 Route::post('/register/customer', [RegisterController::class, 'createCustomer']);
-Route::post('/register/admin', [RegisterController::class, 'createAdmin']);
-Route::post('/register/marketingStaff', [RegisterController::class, 'createMarketingStaff']);
-Route::post('/register/supportStaff', [RegisterController::class, 'createSupportStaff']);
 
 Route::group(['middleware' => 'auth:customer'], function () {
     Route::view('/customer', 'customer.customerHome');
@@ -65,17 +56,21 @@ Route::group(['middleware' => 'auth:customer'], function () {
 });
 
 Route::group(['middleware' => 'auth:admin'], function () {
-    Route::view('/admin', 'customer.adminHome');
+    Route::view('/admin', 'admin.adminHome');
+    Route::get('/register/admin', [RegisterController::class, 'showAdminRegisterForm']);
+    Route::get('/register/marketingStaff', [RegisterController::class, 'showMarketingStaffRegisterForm']);
+    Route::get('/register/supportStaff', [RegisterController::class, 'showSupportStaffRegisterForm']);
+    Route::post('/register/admin', [RegisterController::class, 'createAdmin']);
+    Route::post('/register/marketingStaff', [RegisterController::class, 'createMarketingStaff']);
+    Route::post('/register/supportStaff', [RegisterController::class, 'createSupportStaff']);
 });
 
 Route::group(['middleware' => 'auth:marketingStaff'], function () {
-    Route::view('/marketingStaff', 'customer.marketingStaffHome');
+    Route::view('/marketingStaff', 'marketingStaff.marketingStaffHome');
 });
 
 Route::group(['middleware' => 'auth:supportStaff'], function () {
-    Route::view('/supportStaff', 'customer.supportStaffHome');
+    Route::view('/supportStaff', 'supportStaff.supportStaffHome');
 });
 
 Route::get('logout', [LoginController::class, 'logout']);
-
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

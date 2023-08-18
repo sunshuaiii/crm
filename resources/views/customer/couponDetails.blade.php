@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('title', 'Coupon Details')
+
 @section('content')
 <div class="container-content">
     <div class="row justify-content-center align-items-center">
