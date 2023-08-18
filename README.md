@@ -15,6 +15,7 @@ The customer loyalty program for the CRM system.
 2. Migrate all migration files `php artisan migrate`
 3. Seed all seeder files `php artisan db:seed`
 4. Rollback, migrate, and seed `php artisan migrate:refresh --seed`
+5. Update all migration files `php artisan migrate:fresh`
 
 # # Misc
 

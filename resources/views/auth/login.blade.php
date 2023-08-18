@@ -8,7 +8,7 @@
                 <div class="card-header"> {{ isset($url) ? ucwords($url) : ""}} {{ __('Login') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action='{{ url("login/$url") }}' aria-label="{{ __('Login') }}">
+                    <form method="POST" action="{{ route('customerLogin') }}" aria-label="{{ __('Login') }}">
                         @csrf
 
                         @if($errors->any())
@@ -28,7 +28,7 @@
                         @endif
 
                         <div class="row mb-3">
-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }} *</label>
 
                             <div class="col-md-6">
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
@@ -42,7 +42,7 @@
                         </div>
 
                         <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }} *</label>
 
                             <div class="col-md-6">
                                 <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
@@ -69,6 +69,12 @@
                             </div>
                         </div>
                     </form>
+
+                    <div class="text-center m-4">
+                        <a href="{{ route('google.auth') }}" class="btn btn-primary btn-google">
+                            <i class="fab fa-google mr-2"></i> {{ __('Continue with Google') }}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

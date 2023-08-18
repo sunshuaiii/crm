@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\GoogleAuthController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -20,6 +21,13 @@ use Illuminate\Support\Facades\Auth;
 Route::view('/', 'home');
 Auth::routes();
 
+Route::get('/customer', function () {
+    return view('customer.customerHome');
+});
+
+Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
+Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
+
 Route::get('/login/customer', [LoginController::class, 'showCustomerLoginForm'])->name('login.customer');
 Route::get('/login/admin', [LoginController::class, 'showAdminLoginForm']);
 Route::get('/login/marketingStaff', [LoginController::class, 'showMarketingStaffLoginForm']);
@@ -29,7 +37,7 @@ Route::get('/register/admin', [RegisterController::class, 'showAdminRegisterForm
 Route::get('/register/marketingStaff', [RegisterController::class, 'showMarketingStaffRegisterForm']);
 Route::get('/register/supportStaff', [RegisterController::class, 'showSupportStaffRegisterForm']);
 
-Route::post('/login/customer', [LoginController::class, 'customerLogin']);
+Route::post('/login/customer', [LoginController::class, 'customerLogin'])->name('customerLogin');
 Route::post('/login/admin', [LoginController::class, 'adminLogin']);
 Route::post('/login/marketingStaff', [LoginController::class, 'marketingStaffLogin']);
 Route::post('/login/supportStaff', [LoginController::class, 'supportStaffLogin']);

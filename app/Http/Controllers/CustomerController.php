@@ -8,7 +8,9 @@ use App\Models\Coupon;
 use App\Models\CustomerCoupon;
 use App\Models\Product;
 use App\Models\Ticket;
+use App\Rules\AboveEighteen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
@@ -24,13 +26,33 @@ class CustomerController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $user = Auth::user();
-        $user->first_name = $request->input('first_name');
-        $user->last_name = $request->input('last_name');
-        $user->gender = $request->input('gender');
-        $user->save();
+        try {
+            $user = Auth::user();
+            $user->username = $request->input('username');
+            $user->first_name = $request->input('first_name');
+            $user->last_name = $request->input('last_name');
+            $user->gender = $request->input('gender');
 
-        return redirect()->route('customer.profile')->with('success', 'Profile updated successfully!');
+            // Additional fields as you've done
+
+            if ($request->input('dob')) {
+                $user->dob = $request->input('dob');
+
+                $validator = Validator::make($request->all(), [
+                    'dob' => new AboveEighteen, // Assuming you have a custom validation rule AboveEighteen
+                ]);
+
+                if ($validator->fails()) {
+                    return redirect()->back()->withErrors($validator)->withInput();
+                }
+            }
+
+            $user->save();
+
+            return redirect()->route('customer.profile')->with('success', 'Profile updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while updating the profile.');
+        }
     }
 
     public function showQRandBarCode()

@@ -9,10 +9,21 @@
                 {{ session('success') }}
             </div>
             @endif
+
+            @if(Auth::user()->created_at->isToday())
+            <h3 class="mt-4">Hi, {{ Auth::user()->username }}!</h3>
+            <h4 class="mt-3">We're excited to have you join us today. Feel free to explore and get started!</h4>
+            @else
             <h3 class="mt-4">Hi, {{ Auth::user()->username }}! Welcome back! </h3>
+            @endif
+
+            @if(!Auth::user()->username || !Auth::user()->dob || !Auth::user()->first_name || !Auth::user()->last_name || !Auth::user()->contact || !Auth::user()->gender)
+            <h5 class="mt-3">Your profile is incomplete. Please complete your profile details to make the most of our services.</h5>
+            @endif
+
         </div>
 
-        <div class="col-md-5 mt-3">
+        <div class="col-md-5 mt-4">
             <div class="card">
                 <div class="card-body d-flex align-items-center justify-content-center">
                     <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 40px; height: 40px;">

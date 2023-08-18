@@ -18,7 +18,7 @@ class LeadsSeeder extends Seeder
     {
         $faker = Faker::create();
         $status = ['New', 'Contacted', 'Interested', 'Not interested'];
-        $numberOfStaffs = DB::table('marketing_staffs')->count();
+        $numberOfStaffs = DB::table('marketing_staff')->count();
 
         for ($i = 1; $i <= 10; $i++) {
             DB::table('leads')->insert([

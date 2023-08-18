@@ -25,6 +25,7 @@ class Customer extends Authenticatable
         'username',
         'email',
         'password',
+        'google_id',
         'first_name',
         'last_name',
         'contact',

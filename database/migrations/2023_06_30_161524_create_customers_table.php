@@ -16,12 +16,13 @@ return new class extends Migration
         if (!Schema::hasTable('customers')) {
             Schema::create('customers', function (Blueprint $table) {
                 $table->id();
-                $table->string('username');
+                $table->string('username')->nullable();
                 $table->string('email')->unique();
                 $table->timestamp('email_verified_at')->nullable();
-                $table->string('password');
-                $table->string('first_name');
-                $table->string('last_name');
+                $table->string('password')->nullable();
+                $table->string('google_id')->nullable();
+                $table->string('first_name')->nullable();
+                $table->string('last_name')->nullable();
                 $table->string('contact')->unique();
                 $table->string('gender')->enum('Female', 'Male', '');
                 $table->timestamp('dob');

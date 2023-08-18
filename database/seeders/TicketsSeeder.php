@@ -19,7 +19,7 @@ class TicketsSeeder extends Seeder
         $faker = Faker::create();
         $q_types = ['Feedback', 'Complaint', 'Query', 'Issue'];
         $status = ['New', 'Open', 'Pending', 'Solved', 'Closed'];
-        $numberOfStaffs = DB::table('support_staffs')->count();
+        $numberOfStaffs = DB::table('support_staff')->count();
         $numberOfCustomers = DB::table('customers')->count();
        
         for ($i = 1; $i <= 20; $i++) {
