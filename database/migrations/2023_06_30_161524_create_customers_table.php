@@ -23,9 +23,9 @@ return new class extends Migration
                 $table->string('google_id')->nullable();
                 $table->string('first_name')->nullable();
                 $table->string('last_name')->nullable();
-                $table->string('contact')->unique();
-                $table->string('gender')->enum('Female', 'Male', '');
-                $table->timestamp('dob');
+                $table->string('contact')->unique()->nullable();
+                $table->string('gender')->enum('Female', 'Male', '')->nullable();
+                $table->timestamp('dob')->nullable();
                 $table->integer('points')->default(0);
                 $table->integer('m_score')->default(0);
                 $table->integer('r_score')->default(0);

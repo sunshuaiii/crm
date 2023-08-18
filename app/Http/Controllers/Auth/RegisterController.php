@@ -9,6 +9,7 @@ use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\Customer;
 use App\Models\Admin;
+use App\Models\CustomerCoupon;
 use App\Models\MarketingStaff;
 use App\Models\SupportStaff;
 use App\Rules\AboveEighteen;
@@ -16,6 +17,7 @@ use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class RegisterController extends Controller
 {
@@ -134,7 +136,7 @@ class RegisterController extends Controller
             ]);
 
             // Attempt to create a new customer
-            Customer::create([
+            $customer = Customer::create([
                 'username' => $request->username,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
@@ -144,6 +146,24 @@ class RegisterController extends Controller
                 'gender' => $request->gender,
                 'dob' => $request->dob,
             ]);
+
+            $customer->points = 300;
+            $customer->save();
+
+            $couponCode = $this->generateCouponCode();
+
+            // Calculate end date (30 days from now)
+            $endDate = Carbon::now()->addDays(30);
+
+            // Create a new customer_coupon record
+            $customerCoupon = new CustomerCoupon();
+            $customerCoupon->customer_id = $customer->id;
+            $customerCoupon->coupon_id = 8;
+            $customerCoupon->status = 'Claimed';
+            $customerCoupon->code = $couponCode;
+            $customerCoupon->start_date = Carbon::now();
+            $customerCoupon->end_date = $endDate;
+            $customerCoupon->save();
 
             // Add a success message to the session
             return redirect()->intended('login/customer')->with('success', 'Registration successful! You can now log in.');
@@ -159,6 +179,35 @@ class RegisterController extends Controller
             // If validation fails, redirect back with validation errors
             return redirect()->back()->withInput()->withErrors($e->errors());
         }
+    }
+
+    // Helper function to generate a unique coupon code using a combination of random numbers and timestamp
+    private function generateCouponCode()
+    {
+        $timestamp = now()->timestamp; // Get current timestamp
+        $randomDigits = '';
+
+        // Generate random digits
+        for ($i = 0; $i < 5; $i++) {
+            $randomDigits .= rand(0, 9);
+        }
+
+        // Combine timestamp and random digits to create a unique code
+        $couponCode = $timestamp . $randomDigits;
+
+        // Check if the coupon code already exists
+        while (CustomerCoupon::where('code', $couponCode)->exists()) {
+            // If it exists, regenerate the random digits
+            $randomDigits = '';
+            for ($i = 0; $i < 5; $i++) {
+                $randomDigits .= rand(0, 9);
+            }
+
+            // Combine timestamp and new random digits
+            $couponCode = $timestamp . $randomDigits;
+        }
+
+        return $couponCode;
     }
 
 

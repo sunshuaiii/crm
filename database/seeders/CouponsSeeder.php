@@ -23,6 +23,13 @@ class CouponsSeeder extends Seeder
         5. Applicable for in-store redemption only and cannot be redeemed via online purchase.
         6. This voucher is not transferable and cannot be exchanged for cash in part or in full.
         7. We reserves the right to alter or suspend any terms and conditions with or without prior notice.';
+        
+        DB::table('coupons')->insert([
+            'name' => 'RM2 OFF In-Store Coupon',
+            'discount' => 2,
+            'redemption_points' => 500,
+            'conditions' => $conditions,
+        ]);
 
         DB::table('coupons')->insert([
             'name' => 'RM5 OFF In-Store Coupon',
@@ -63,6 +70,13 @@ class CouponsSeeder extends Seeder
             'name' => 'RM50 OFF In-Store Coupon',
             'discount' => 50,
             'redemption_points' => 10000,
+            'conditions' => $conditions,
+        ]);
+
+        DB::table('coupons')->insert([
+            'name' => 'New Member Coupon',
+            'discount' => 10,
+            'redemption_points' => 0,
             'conditions' => $conditions,
         ]);
     }

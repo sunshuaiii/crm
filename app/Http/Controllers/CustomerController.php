@@ -39,7 +39,7 @@ class CustomerController extends Controller
                 $user->dob = $request->input('dob');
 
                 $validator = Validator::make($request->all(), [
-                    'dob' => new AboveEighteen, // Assuming you have a custom validation rule AboveEighteen
+                    'dob' => new AboveEighteen,
                 ]);
 
                 if ($validator->fails()) {
@@ -89,33 +89,21 @@ class CustomerController extends Controller
         return redirect()->route('customer.support.contactUs')->with('success', 'Your message has been sent. Our team will get back to you shortly.');
     }
 
-    public function getCustomerCouponsInfo()
-    {
-        $customer = Auth::user();
-
-        $couponsInfo = CustomerCoupon::select('coupons.name', 'coupons.discount', 'coupons.conditions', 'customer_coupons.end_date', 'customer_coupons.code')
-            ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
-            ->where('customer_coupons.customer_id', $customer->id)
-            ->where('customer_coupons.status', 'Claimed')
-            // ->whereDate('customer_coupons.end_date', '>=', now())
-            ->get();
-
-        return view('customer.coupons', ['couponsInfo' => $couponsInfo]);
-    }
-
     public function getCouponsInfo()
     {
         $customer = Auth::user();
 
+        // coupons that the customer claimed
         $customerCouponsInfo = CustomerCoupon::select('coupons.name', 'coupons.discount', 'coupons.conditions', 'customer_coupons.end_date', 'customer_coupons.code', 'customer_coupons.coupon_id')
             ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
             ->where('customer_coupons.customer_id', $customer->id)
             ->where('customer_coupons.status', 'Claimed')
+            ->orderBy('customer_coupons.end_date', 'asc')
             // ->whereDate('customer_coupons.end_date', '>=', now())
             ->get();
 
-        $allCouponsInfo = Coupon::all(); // Fetch all available coupons
-
+        // all available coupons for that customer
+        $allCouponsInfo = Coupon::where('id', '!=', 8)->get(); // Fetch all available coupons except for new member coupon
 
         return view('customer.coupons', ['customerCouponsInfo' => $customerCouponsInfo, 'allCouponsInfo' => $allCouponsInfo]);
     }

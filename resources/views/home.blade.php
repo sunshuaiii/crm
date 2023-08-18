@@ -18,6 +18,7 @@
                 <div class="card-body justify-content-center align-items-center">
                     <div class="text-center m-4">
                         <h5>We are excited to have you join us. Sign in or create an account to start enjoying the benefits.</h5>
+                        <h5 class="highlight">Register now to get a RM10 off New Member Coupon and 300 points for free!</h5>
                     </div>
                     <div class="text-center mb-4">
                         <a href="{{ route('login.customer') }}" class="btn btn-primary">
