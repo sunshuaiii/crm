@@ -27,11 +27,11 @@
                     <h5 class="card-title highlight"> RM {{ $couponDetails->discount }} Coupon</h5>
 
                     <div class="m-4">
-                        <div class="d-flex justify-content-center align-items-center">
-                            <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-2" style="width: 20px; height: 20px;">
-                            <h5 class="m-2 card-text highlight text-center">
+                        <div class="d-flex justify-content-center align-items-center highlight">
+                            <!-- <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-2" style="width: 20px; height: 20px;"> -->
+                            <!-- <h5 class="m-2 card-text highlight text-center">
                                 You claimed this coupon with {{ $couponDetails->redemption_points }} points
-                            </h5>
+                            </h5> -->
                             @if($couponDetails->end_date < \Carbon\Carbon::now()) <p class="expired">Expired</p>
                                 @else
                                 <p>{{ $couponDetails->end_date->diffInDays(\Carbon\Carbon::now()) }} days left</p>

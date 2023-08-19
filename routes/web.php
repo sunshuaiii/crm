@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\Auth\LoginController;
@@ -60,7 +61,11 @@ Route::group(['middleware' => 'auth:customer'], function () {
 
 Route::group(['middleware' => 'auth:admin'], function () {
     Route::view('/admin', 'admin.adminHome');
-    Route::view('/admin/couponManagement', 'admin.couponManagement')->name('admin.couponManagement');
+    Route::get('/admin/couponManagement', [AdminController::class, 'getAllCoupons'])->name('admin.couponManagement');
+    Route::get('/admin/couponManagement/addCoupon', [AdminController::class, 'addCoupon'])->name('admin.addCoupon');
+    Route::get('/admin/couponManagement/editCoupon/{id}', [AdminController::class, 'editCoupon'])->name('admin.editCoupon');
+    Route::put('/admin/couponManagement/updateCoupon/{id}', [AdminController::class, 'updateCoupon'])->name('admin.updateCoupon');
+    Route::post('/admin/couponManagement/storeCoupon', [AdminController::class, 'storeCoupon'])->name('admin.storeCoupon');
     Route::view('/admin/staffRegistration', 'admin.staffRegistration')->name('admin.staffRegistration');
     Route::view('/admin/searchCustomer', 'admin.searchCustomer')->name('admin.searchCustomer');
     Route::get('/register/admin', [RegisterController::class, 'showAdminRegisterForm']);
