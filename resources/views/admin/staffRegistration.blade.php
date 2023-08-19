@@ -17,6 +17,17 @@
     </div>
     @endif
 
-    You must be the priviledged administrator of this site!
+    <div class="register-options">
+        <a href="{{ route('admin.register.marketingStaff') }}" class="btn btn-primary">
+            <i class="bx bxs-user-plus"></i> Register Marketing Staff
+        </a>
+        <a href="{{ route('admin.register.supportStaff') }}" class="btn btn-primary">
+            <i class="bx bxs-user-plus"></i> Register Support Staff
+        </a>
+        <a href="{{ route('admin.register.admin') }}" class="btn btn-primary">
+            <i class="bx bxs-user-plus"></i> Register Admin
+        </a>
+    </div>
+
 </div>
 @endsection

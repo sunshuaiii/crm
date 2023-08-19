@@ -98,7 +98,7 @@
 
                                 <div class="card-text">
                                     <p>Terms & Conditions:</p>
-                                    <span class="coupon-conditions">{{ substr($coupon->conditions, 0, 300) }}</span>
+                                    <span class="coupon-conditions">{{ substr($coupon->conditions, 0, 180) }}</span>
                                     <span class="read-more" style="display:none;">{{ substr($coupon->conditions, 0) }}</span>
                                     <a href="#" class="read-more-btn">Read More</a>
                                 </div>

@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::view('/', 'home');
+Route::view('/', 'home')->name('home');
 
 // Route::get('/', function () {
 //     return view('customer.customerHome');
@@ -66,15 +66,19 @@ Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin/couponManagement/editCoupon/{id}', [AdminController::class, 'editCoupon'])->name('admin.editCoupon');
     Route::put('/admin/couponManagement/updateCoupon/{id}', [AdminController::class, 'updateCoupon'])->name('admin.updateCoupon');
     Route::post('/admin/couponManagement/storeCoupon', [AdminController::class, 'storeCoupon'])->name('admin.storeCoupon');
+
     Route::view('/admin/staffRegistration', 'admin.staffRegistration')->name('admin.staffRegistration');
+
+    Route::get('/admin/register/admin', [AdminController::class, 'showAdminRegisterForm'])->name('admin.register.admin');
+    Route::get('/admin/register/marketingStaff', [AdminController::class, 'showMarketingStaffRegisterForm'])->name('admin.register.marketingStaff');
+    Route::get('/admin/register/supportStaff', [AdminController::class, 'showSupportStaffRegisterForm'])->name('admin.register.supportStaff');
+    Route::post('/admin/register/admin', [AdminController::class, 'createAdmin'])->name('admin.register.admin.submit');
+    Route::post('/admin/register/marketingStaff', [AdminController::class, 'createMarketingStaff'])->name('admin.register.marketingStaff.submit');
+    Route::post('/admin/register/supportStaff', [AdminController::class, 'createSupportStaff'])->name('admin.register.supportStaff.submit');
+
     Route::view('/admin/searchCustomer', 'admin.searchCustomer')->name('admin.searchCustomer');
-    Route::get('/register/admin', [RegisterController::class, 'showAdminRegisterForm']);
-    Route::get('/register/marketingStaff', [RegisterController::class, 'showMarketingStaffRegisterForm']);
-    Route::get('/register/supportStaff', [RegisterController::class, 'showSupportStaffRegisterForm']);
-    Route::post('/register/admin', [RegisterController::class, 'createAdmin']);
-    Route::post('/register/marketingStaff', [RegisterController::class, 'createMarketingStaff']);
-    Route::post('/register/supportStaff', [RegisterController::class, 'createSupportStaff']);
 });
+
 
 Route::group(['middleware' => 'auth:marketingStaff'], function () {
     Route::view('/marketingStaff', 'marketingStaff.marketingStaffHome');

@@ -8,10 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use App\Models\Customer;
-use App\Models\Admin;
 use App\Models\CustomerCoupon;
-use App\Models\MarketingStaff;
-use App\Models\SupportStaff;
 use App\Rules\AboveEighteen;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -50,9 +47,6 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
         $this->middleware('guest:customer');
-        $this->middleware('guest:admin');
-        $this->middleware('guest:marketingStaff');
-        $this->middleware('guest:supportStaff');
     }
 
     /**
@@ -76,30 +70,6 @@ class RegisterController extends Controller
     public function showCustomerRegisterForm()
     {
         return view('auth.register', ['url' => 'customer']);
-    }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function showAdminRegisterForm()
-    {
-        return view('auth.register', ['url' => 'admin']);
-    }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function showMarketingStaffRegisterForm()
-    {
-        return view('auth.register', ['url' => 'marketingStaff']);
-    }
-
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function showSupportStaffRegisterForm()
-    {
-        return view('auth.register', ['url' => 'supportStaff']);
     }
 
     /**
@@ -208,93 +178,5 @@ class RegisterController extends Controller
         }
 
         return $couponCode;
-    }
-
-
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function createAdmin(Request $request)
-    {
-        try {
-            $this->validator($request->all())->validate();
-            Admin::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-            return redirect()->intended('login/admin')->with('success', 'Login successful.');
-        } catch (QueryException $e) {
-            // Handle database integrity constraint violation
-            if ($e->getCode() == 23000) { // Integrity constraint violation error code
-                $errorMessage = "The email address is already registered.";
-                return redirect()->back()->withInput()->withErrors([$errorMessage]);
-            }
-            // If the exception is not due to a duplicate email, re-throw it
-            throw $e;
-        } catch (ValidationException $e) {
-            // If validation fails, redirect back with validation errors
-            return redirect()->back()->withInput()->withErrors($e->errors());
-        }
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function createMarketingStaff(Request $request)
-    {
-        try {
-            $this->validator($request->all())->validate();
-            MarketingStaff::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-            return redirect()->intended('login/marketingStaff')->with('success', 'Login successful.');
-        } catch (QueryException $e) {
-            // Handle database integrity constraint violation
-            if ($e->getCode() == 23000) { // Integrity constraint violation error code
-                $errorMessage = "The email address is already registered.";
-                return redirect()->back()->withInput()->withErrors([$errorMessage]);
-            }
-            // If the exception is not due to a duplicate email, re-throw it
-            throw $e;
-        } catch (ValidationException $e) {
-            // If validation fails, redirect back with validation errors
-            return redirect()->back()->withInput()->withErrors($e->errors());
-        }
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function createSupportStaff(Request $request)
-    {
-        try {
-            $this->validator($request->all())->validate();
-            SupportStaff::create([
-                'username' => $request->username,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-            return redirect()->intended('login/supportStaff')->with('success', 'Login successful.');
-        } catch (QueryException $e) {
-            // Handle database integrity constraint violation
-            if ($e->getCode() == 23000) { // Integrity constraint violation error code
-                $errorMessage = "The email address is already registered.";
-                return redirect()->back()->withInput()->withErrors([$errorMessage]);
-            }
-            // If the exception is not due to a duplicate email, re-throw it
-            throw $e;
-        } catch (ValidationException $e) {
-            // If validation fails, redirect back with validation errors
-            return redirect()->back()->withInput()->withErrors($e->errors());
-        }
     }
 }

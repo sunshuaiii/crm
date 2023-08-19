@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title', ucfirst($url) . ' Login')
+@section('title', isset($url) ? ucfirst($url) . ' Login' : 'Login')
 
 @section('content')
 <div class="container-content">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @if(isset($url))
             <div class="card">
                 <div class="card-header"> {{ isset($url) ? ucwords($url) : ""}} {{ __('Login') }}</div>
-
                 <div class="card-body">
                     <form method="POST" action='{{ url("login/$url") }}' aria-label="{{ __('Login') }}">
                         @csrf
@@ -81,6 +81,9 @@
                     @endif
                 </div>
             </div>
+            @else
+            You are not authorised to do so!
+            @endif
         </div>
     </div>
 </div>
