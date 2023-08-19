@@ -32,6 +32,11 @@
                             {{ __('Register') }}
                         </a>
                     </div>
+                    <div class="text-center mb-4">
+                        <a href="{{ route('login.admin') }}" class="btn btn-primary">
+                            {{ __('Admin Login') }}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Login')
+@section('title', ucfirst($url) . ' Login')
 
 @section('content')
 <div class="container-content">
@@ -10,7 +10,7 @@
                 <div class="card-header"> {{ isset($url) ? ucwords($url) : ""}} {{ __('Login') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('customerLogin') }}" aria-label="{{ __('Login') }}">
+                    <form method="POST" action='{{ url("login/$url") }}' aria-label="{{ __('Login') }}">
                         @csrf
 
                         @if($errors->any())
@@ -72,11 +72,13 @@
                         </div>
                     </form>
 
+                    @if(isset($url) && $url == 'customer')
                     <div class="text-center m-4">
                         <a href="{{ route('google.auth') }}" class="btn btn-primary btn-google">
                             <i class="fab fa-google mr-2"></i> {{ __('Continue with Google') }}
                         </a>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>

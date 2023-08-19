@@ -21,7 +21,7 @@
     <!-- Include Bootstrap JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <!-- public/css/styles.css -->
+    <!-- public/css/app.css -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="https://kit.fontawesome.com/3f39673dbb.js" crossorigin="anonymous"></script>
 

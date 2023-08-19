@@ -20,13 +20,17 @@ use Illuminate\Support\Facades\Auth;
 
 Route::view('/', 'home');
 
+// Route::get('/', function () {
+//     return view('customer.customerHome');
+// });
+
 Auth::routes();
 
 Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
 Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
 
 Route::get('/login/customer', [LoginController::class, 'showCustomerLoginForm'])->name('login.customer');
-Route::get('/login/admin', [LoginController::class, 'showAdminLoginForm']);
+Route::get('/login/admin', [LoginController::class, 'showAdminLoginForm'])->name('login.admin');
 Route::get('/login/marketingStaff', [LoginController::class, 'showMarketingStaffLoginForm']);
 Route::get('/login/supportStaff', [LoginController::class, 'showSupportStaffLoginForm']);
 Route::get('/register/customer', [RegisterController::class, 'showCustomerRegisterForm'])->name('register.customer');

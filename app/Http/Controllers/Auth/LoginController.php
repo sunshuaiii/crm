@@ -79,7 +79,7 @@ class LoginController extends Controller
         if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->intended('/admin');
         }
-        return back()->withInput($request->only('email'));
+        return back()->withInput($request->only('email'))->withErrors(['login' => 'Login failed.']);
     }
 
     public function showMarketingStaffLoginForm()
@@ -96,7 +96,7 @@ class LoginController extends Controller
         if (Auth::guard('marketingStaff')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->intended('/marketingStaff');
         }
-        return back()->withInput($request->only('email'));
+        return back()->withInput($request->only('email'))->withErrors(['login' => 'Login failed.']);
     }
 
     public function showSupportStaffLoginForm()
@@ -113,7 +113,7 @@ class LoginController extends Controller
         if (Auth::guard('supportStaff')->attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->intended('/supportStaff');
         }
-        return back()->withInput($request->only('email'));
+        return back()->withInput($request->only('email'))->withErrors(['login' => 'Login failed.']);
     }
 
     public function logout(Request $request)
