@@ -7,6 +7,7 @@ use App\Models\Coupon;
 use App\Models\MarketingStaff;
 use App\Models\SupportStaff;
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -203,5 +204,28 @@ class AdminController extends Controller
             // If validation fails, redirect back with validation errors
             return redirect()->back()->withInput()->withErrors($e->errors());
         }
+    }
+
+    public function searchCustomers(Request $request)
+    {
+        $keyword = $request->input('keyword', '');
+        $filterBy = $request->input('filterBy', 'first_name'); // Default filter
+
+        $query = Customer::query();
+
+        if (!empty($keyword)) {
+            $query->where($filterBy, 'LIKE', "%$keyword%");
+        }
+
+        $customers = $query->get(); // Retrieve the customers that match the search criteria
+
+        return view('searchCustomer', compact('customers', 'keyword', 'filterBy'));
+    }
+
+    public function viewCustomer($id)
+    {
+        $customer = Customer::findOrFail($id); // Retrieve the customer by ID
+
+        return view('customerDetails', compact('customer'));
     }
 }
