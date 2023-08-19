@@ -225,7 +225,7 @@ class RegisterController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-            return redirect()->intended('login/admin');
+            return redirect()->intended('login/admin')->with('success', 'Login successful.');
         } catch (QueryException $e) {
             // Handle database integrity constraint violation
             if ($e->getCode() == 23000) { // Integrity constraint violation error code
@@ -254,7 +254,7 @@ class RegisterController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-            return redirect()->intended('login/marketingStaff');
+            return redirect()->intended('login/marketingStaff')->with('success', 'Login successful.');
         } catch (QueryException $e) {
             // Handle database integrity constraint violation
             if ($e->getCode() == 23000) { // Integrity constraint violation error code
@@ -283,7 +283,7 @@ class RegisterController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
             ]);
-            return redirect()->intended('login/supportStaff');
+            return redirect()->intended('login/supportStaff')->with('success', 'Login successful.');
         } catch (QueryException $e) {
             // Handle database integrity constraint violation
             if ($e->getCode() == 23000) { // Integrity constraint violation error code

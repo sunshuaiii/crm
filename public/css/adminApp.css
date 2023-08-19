@@ -184,6 +184,11 @@
 .sidebar.open li.profile {
     width: 250px;
 }
+.sidebar li.profile a:hover .links_name,
+.sidebar li.profile a:hover i {
+    transition: all 0.5s ease;
+    color: red;
+}
 .sidebar li .profile-details {
     display: flex;
     align-items: center;
@@ -247,4 +252,21 @@
     .sidebar li .tooltip {
         display: none;
     }
+}
+.highlight {
+    font-weight: bold;
+}
+.container-content {
+    padding: 5%;
+    padding-top: 5%;
+}
+.top-navbar {
+    background-color: #454343; /* Set your desired background color */
+    color: #fff; /* Set your desired text color */
+    padding: 10px;
+    text-align: center;
+}
+.logo {
+    font-size: 24px;
+    font-weight: bold;
 }

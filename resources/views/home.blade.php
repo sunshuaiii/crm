@@ -37,6 +37,16 @@
                             {{ __('Admin Login') }}
                         </a>
                     </div>
+                    <div class="text-center mb-4">
+                        <a href="{{ route('login.marketingStaff') }}" class="btn btn-primary">
+                            {{ __('Marketing Staff Login') }}
+                        </a>
+                    </div>
+                    <div class="text-center mb-4">
+                        <a href="{{ route('login.supportStaff') }}" class="btn btn-primary">
+                            {{ __('Support Staff Login') }}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

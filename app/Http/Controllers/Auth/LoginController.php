@@ -77,7 +77,7 @@ class LoginController extends Controller
             'password' => 'required|min:8'
         ]);
         if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->intended('/admin');
+            return redirect()->intended('/admin')->with('success', 'Login successful.');
         }
         return back()->withInput($request->only('email'))->withErrors(['login' => 'Login failed.']);
     }
@@ -94,7 +94,7 @@ class LoginController extends Controller
             'password' => 'required|min:8'
         ]);
         if (Auth::guard('marketingStaff')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->intended('/marketingStaff');
+            return redirect()->intended('/marketingStaff')->with('success', 'Login successful.');
         }
         return back()->withInput($request->only('email'))->withErrors(['login' => 'Login failed.']);
     }
@@ -111,7 +111,7 @@ class LoginController extends Controller
             'password' => 'required|min:8'
         ]);
         if (Auth::guard('supportStaff')->attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->intended('/supportStaff');
+            return redirect()->intended('/supportStaff')->with('success', 'Login successful.');
         }
         return back()->withInput($request->only('email'))->withErrors(['login' => 'Login failed.']);
     }

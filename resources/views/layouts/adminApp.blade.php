@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<!-- Created by CodingLab |www.youtube.com/CodingLabYT-->
-<html lang="en" dir="ltr">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="UTF-8">
@@ -10,10 +9,17 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>CRM - @yield('title')</title>
+    <title>Admin - @yield('title')</title>
 
     <!-- public/css/adminApp.css -->
     <link rel="stylesheet" href="{{ asset('css/adminApp.css') }}">
+
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Include Bootstrap JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
@@ -23,65 +29,68 @@
 <body>
     <div class="sidebar">
         <div class="logo-details">
-            <i class='bx bxl-c-plus-plus icon'></i>
+            <i class='fas fa-star icon'></i>
             <div class="logo_name">CRM</div>
             <i class='bx bx-menu' id="btn"></i>
         </div>
         <ul class="nav-list">
             <li>
-                <i class='bx bx-search'></i>
-                <input type="text" placeholder="Search...">
-                <span class="tooltip">Search</span>
-            </li>
-            <li>
                 <a href="{{ url('/admin') }}">
-                    <i class='bx bx-grid-alt'></i>
-                    <span class="links_name">Dashboard</span>
+                    <i class='bx bx-home'></i>
+                    <span class="links_name">Home</span>
                 </a>
-                <span class="tooltip">Dashboard</span>
+                <span class="tooltip">Home</span>
             </li>
             <li>
-                <a href="{{ url('/admin/coupon-management') }}">
-                    <i class='bx bx-coupon'></i>
+                <a href="{{ route('admin.couponManagement') }}">
+                    <i class='bx bx-gift'></i>
                     <span class="links_name">Coupon Management</span>
                 </a>
                 <span class="tooltip">Coupon Management</span>
             </li>
             <li>
-                <a href="{{ url('/admin/search-customer') }}">
-                    <i class='bx bx-user'></i>
+                <a href="{{ route('admin.staffRegistration') }}">
+                    <i class='bx bx-user-plus'></i>
+                    <span class="links_name">Staff Registration</span>
+                </a>
+                <span class="tooltip">Staff Registration</span>
+            </li>
+            <li>
+                <a href="{{ route('admin.searchCustomer') }}">
+                    <i class='bx bx-search-alt'></i>
                     <span class="links_name">Search Customer</span>
                 </a>
                 <span class="tooltip">Search Customer</span>
-            </li>
-            <li>
-                <a href="{{ url('/admin/new-staff-registration') }}">
-                    <i class='bx bx-user-plus'></i>
-                    <span class="links_name">New Staff Registration</span>
-                </a>
-                <span class="tooltip">New Staff Registration</span>
             </li>
             <!-- More tabs can be added here -->
             <li class="profile">
                 <div class="profile-details">
                     <img src="{{ asset('images/icon/profile.png') }}" alt="profileImg">
                     <div class="name_job">
-                        <div class="name">Prem Shahi</div>
-                        <div class="job">Web designer</div>
+                        <div class="name">{{ Auth::user()->username }}</div>
+                        <div class="job">Admin</div>
                     </div>
                 </div>
-                <i class='bx bx-log-out' id="log_out"></i>
+                <a href="{{ route('logout') }}">
+                    <i class='bx bx-log-out' id="log_out"></i>
+                    <span class="links_name">Logout</span>
+                </a>
+                <span class="tooltip">Logout</span>
             </li>
         </ul>
     </div>
 
     <section class="home-section">
+        <header class="top-navbar navbar navbar-dark bg-dark">
+            <div class="container">
+                <div class="navbar-brand logo highlight mx-auto">
+                    <span class="logo-text" style="font-size: 28px;">Management Dashboard</span>
+                </div>
+            </div>
+        </header>
         @yield('content')
     </section>
 
-    <footer class="footer py-3">
-        &copy; {{ date('Y') }} {{ 'Customer Relationship System for Retail Store' }}. All rights reserved.
-    </footer>
 
     <script>
         let sidebar = document.querySelector(".sidebar");
@@ -93,10 +102,10 @@
             menuBtnChange(); //calling the function(optional)
         });
 
-        searchBtn.addEventListener("click", () => { // Sidebar open when you click on the search iocn
-            sidebar.classList.toggle("open");
-            menuBtnChange(); //calling the function(optional)
-        });
+        // searchBtn.addEventListener("click", () => { // Sidebar open when you click on the search iocn
+        //     sidebar.classList.toggle("open");
+        //     menuBtnChange(); //calling the function(optional)
+        // });
 
         // following are the code to change sidebar button(optional)
         function menuBtnChange() {

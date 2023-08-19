@@ -26,13 +26,10 @@ Route::view('/', 'home');
 
 Auth::routes();
 
-Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
-Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
-
 Route::get('/login/customer', [LoginController::class, 'showCustomerLoginForm'])->name('login.customer');
 Route::get('/login/admin', [LoginController::class, 'showAdminLoginForm'])->name('login.admin');
-Route::get('/login/marketingStaff', [LoginController::class, 'showMarketingStaffLoginForm']);
-Route::get('/login/supportStaff', [LoginController::class, 'showSupportStaffLoginForm']);
+Route::get('/login/marketingStaff', [LoginController::class, 'showMarketingStaffLoginForm'])->name('login.marketingStaff');
+Route::get('/login/supportStaff', [LoginController::class, 'showSupportStaffLoginForm'])->name('login.supportStaff');
 Route::get('/register/customer', [RegisterController::class, 'showCustomerRegisterForm'])->name('register.customer');
 
 Route::post('/login/customer', [LoginController::class, 'customerLogin'])->name('customerLogin');
@@ -42,6 +39,8 @@ Route::post('/login/supportStaff', [LoginController::class, 'supportStaffLogin']
 Route::post('/register/customer', [RegisterController::class, 'createCustomer']);
 
 Route::group(['middleware' => 'auth:customer'], function () {
+    Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
+    Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
     Route::view('/customer', 'customer.customerHome');
     Route::get('/customer/membership', [CustomerController::class, 'showQRandBarCode'])->name('customer.membership');
     Route::view('/customer/coupons', 'customer.coupons')->name('customer.coupons');
@@ -61,6 +60,9 @@ Route::group(['middleware' => 'auth:customer'], function () {
 
 Route::group(['middleware' => 'auth:admin'], function () {
     Route::view('/admin', 'admin.adminHome');
+    Route::view('/admin/couponManagement', 'admin.couponManagement')->name('admin.couponManagement');
+    Route::view('/admin/staffRegistration', 'admin.staffRegistration')->name('admin.staffRegistration');
+    Route::view('/admin/searchCustomer', 'admin.searchCustomer')->name('admin.searchCustomer');
     Route::get('/register/admin', [RegisterController::class, 'showAdminRegisterForm']);
     Route::get('/register/marketingStaff', [RegisterController::class, 'showMarketingStaffRegisterForm']);
     Route::get('/register/supportStaff', [RegisterController::class, 'showSupportStaffRegisterForm']);
