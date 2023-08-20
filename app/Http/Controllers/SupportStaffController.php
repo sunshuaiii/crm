@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\SupportStaff;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,11 @@ class SupportStaffController extends Controller
     public function supportStaffHome()
     {
         $supportStaffId = Auth::user()->id;
+        $allTickets = Ticket::all();
         $tickets = Ticket::where('support_staff_id', $supportStaffId)->get();
+
+        $closedTickets = Ticket::where('support_staff_id', $supportStaffId)->where('status', 'Closed')->count();
+        $inProgressTickets = Ticket::where('support_staff_id', $supportStaffId)->where('status', '!=', 'Closed')->count();
 
         $totalTickets = $tickets->count();
 
@@ -43,7 +48,7 @@ class SupportStaffController extends Controller
         // Response Time Analysis
         $responseTimeData = [];
         foreach ($queryTypes as $queryType) {
-            $tickets = Ticket::where('query_type', $queryType)
+            $atickets = Ticket::where('query_type', $queryType)
                 ->where('support_staff_id', $supportStaffId)
                 ->whereNotNull('response_time')
                 ->get();
@@ -51,7 +56,7 @@ class SupportStaffController extends Controller
             $totalResponseTime = 0;
             $validTicketsCount = 0;
 
-            foreach ($tickets as $ticket) {
+            foreach ($atickets as $ticket) {
                 $totalResponseTime += $ticket->response_time;
                 $validTicketsCount++;
             }
@@ -64,7 +69,82 @@ class SupportStaffController extends Controller
             }
         }
 
+        // Resolution Time Analysis
+        $resolutionTimeData = [];
+
+        foreach ($queryTypes as $queryType) {
+            $btickets = Ticket::where('query_type', $queryType)
+                ->where('status', $status)
+                ->where('support_staff_id', $supportStaffId)
+                ->whereNotNull('resolution_time')
+                ->get();
+
+            $totalResolutionTime = 0;
+            $validTicketsCount = count($btickets);
+
+            foreach ($btickets as $ticket) {
+                $totalResolutionTime += $ticket->resolution_time;
+            }
+
+            if ($validTicketsCount > 0) {
+                $averageResolutionTime = $totalResolutionTime / $validTicketsCount;
+                $resolutionTimeData[$queryType] = $averageResolutionTime;
+            } else {
+                $resolutionTimeData[$queryType] = 0; // No valid tickets
+            }
+        }
+
+        // Time-Based Analysis
+        foreach ($allTickets as $ticket) {
+            $creationTime = $ticket->created_at;
+            $hour = $creationTime->hour;
+            $dayOfWeek = $creationTime->dayOfWeek;
+
+            if (!isset($ticketCreationDistribution[$hour])) {
+                $ticketCreationDistribution[$hour] = 0;
+            }
+
+            $ticketCreationDistribution[$hour]++;
+        }
+
+        // Ticket Aging Analysis
+        $ageIntervalData = [];
+        $ageIntervals  = [
+            '0-1 hours' => [],
+            '2-3 hours' => [],
+            '3-4 hours' => [],
+            '5-6 hours' => [],
+            '7-8 hours' => [],
+            // Add more status categories if needed
+        ];
+
+        foreach ($tickets as $ticket) {
+            if ($ticket->status == 'Open' || $ticket->status == 'Pending') {
+                $ageInSeconds = now()->diffInSeconds($ticket->created_at);
+                $ageInHours = round($ageInSeconds / 3600); // Convert age to hours
+
+                // Assign ticket to an appropriate age interval
+                foreach ($ageIntervals as $interval => $range) {
+                    $rangeParts = explode('-', $interval);
+                    $minAge = (int) $rangeParts[0];
+                    $maxAge = (int) $rangeParts[1];
+
+                    if ($ageInHours >= $minAge && $ageInHours <= $maxAge) {
+                        $ageIntervals[$interval][] = $ticket;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Populate $ageIntervalData with ticket counts for each age interval
+        foreach ($ageIntervals as $interval => $ticketsInInterval) {
+            $ageIntervalData[$interval] = count($ticketsInInterval);
+        }
+
         return view('supportStaff.supportStaffHome', compact(
+            'closedTickets',
+            'inProgressTickets',
             'totalTickets',
             'queryTypeCounts',
             'ticketStatusCounts',
@@ -72,7 +152,10 @@ class SupportStaffController extends Controller
             'customerSegments',
             'responseTimeData',
             'queryTypes',
-            'ticketStatuses'
+            'ticketStatuses',
+            'resolutionTimeData',
+            'ticketCreationDistribution',
+            'ageIntervalData'
         ));
     }
 
