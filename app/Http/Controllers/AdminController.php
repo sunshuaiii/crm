@@ -7,14 +7,89 @@ use App\Models\Coupon;
 use App\Models\MarketingStaff;
 use App\Models\SupportStaff;
 use App\Models\Customer;
+use App\Models\CustomerCoupon;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AdminController extends Controller
 {
+    public function adminHome()
+    {
+        $claimedCoupons = CustomerCoupon::where('status', "Claimed")->get()->count();
+        $redeemedCoupons = CustomerCoupon::where('status', "Redeemed")->get()->count();
+        $totalAvailableCoupons = CustomerCoupon::where('status', "Claimed")->whereDate('end_date', '>=', now())->count();
+        $expiredCoupons = CustomerCoupon::where('status', "Claimed")->whereDate('end_date', '<=', now())->count();
+
+        // Redemption Rate by Coupon
+        $redemptionRates = CustomerCoupon::select(
+            'coupons.name',
+            DB::raw('SUM(CASE WHEN customer_coupons.status = "Redeemed" THEN 1 ELSE 0 END) AS redeemed_count'),
+            DB::raw('SUM(CASE WHEN customer_coupons.status = "Claimed" THEN 1 ELSE 0 END) AS claimed_count')
+        )
+            ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
+            ->groupBy('coupons.name')
+            ->get();
+
+        // Top Redeemed Coupons
+        $topRedeemedCoupons = CustomerCoupon::select(
+            'coupons.name',
+            DB::raw('COUNT(*) AS redeemed_count')
+        )
+            ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
+            ->where('customer_coupons.status', 'Redeemed')
+            ->groupBy('coupons.name')
+            ->orderByDesc('redeemed_count')
+            ->limit(5) // You can change the limit as needed
+            ->get();
+
+        // Redemption Points vs. Discount
+        $redemptionVsDiscount = Coupon::select(
+            'name',
+            DB::raw('AVG(redemption_points) AS avg_redemption_points'),
+            DB::raw('AVG(discount) AS avg_discount')
+        )
+            ->groupBy('name')
+            ->get();
+
+        // Coupon Status Distribution
+        $couponStatusDistribution = CustomerCoupon::select(
+            'status',
+            DB::raw('COUNT(*) AS status_count')
+        )
+            ->groupBy('status')
+            ->get();
+
+        // Coupon Usage Over Time
+        $couponUsageOverTime = CustomerCoupon::select(
+            DB::raw('DATE(created_at) as date'),
+            DB::raw('COUNT(*) as coupon_count')
+        )
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        $totalMarketingStaff = MarketingStaff::all()->count();
+        $totalSupportStaff = SupportStaff::all()->count();
+
+        return view('admin.adminHome', compact(
+            'claimedCoupons',
+            'redeemedCoupons',
+            'totalAvailableCoupons',
+            'expiredCoupons',
+            'redemptionRates',
+            'topRedeemedCoupons',
+            'redemptionVsDiscount',
+            'couponStatusDistribution',
+            'couponUsageOverTime',
+            'totalMarketingStaff',
+            'totalSupportStaff'
+        ));
+    }
+
     public function getAllCoupons()
     {
         $coupons = Coupon::all(); // Retrieve all coupons from the database

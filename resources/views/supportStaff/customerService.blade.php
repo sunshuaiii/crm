@@ -19,7 +19,7 @@
 
     <div class="mt-4">
         <div id="status-update-message" class="alert alert-success" style="display: none;"></div>
-        
+
         <h4>Tickets Assigned:</h4>
         @if(isset($groupedTickets) && count($groupedTickets) > 0)
         @foreach ($groupedTickets as $queryType => $tickets)
@@ -54,6 +54,7 @@
                         <div class="d-flex justify-content-between">
                             <div class="text-end">
                                 <a href="{{ route('supportStaff.viewTicket', ['id' => $ticket->id]) }}" class="btn btn-primary">View Ticket Details</a>
+                                <a href="{{ route('supportStaff.viewCustomer', ['id' => $ticket->customer_id]) }}" class="btn btn-secondary">View Customer Details</a>
                             </div>
 
                             <div class="text-end">

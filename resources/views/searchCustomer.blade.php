@@ -26,9 +26,14 @@
                 @endif
                 @csrf
                 <div class="mb-3">
-                    <label for="keyword" class="form-label">Search Keywords</label>
-                    <input type="text" name="keyword" class="form-control" value="{{ $keyword ?? '' }}" required>
+                    <div class="input-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i> <!-- Font Awesome search icon -->
+                        </button>
+                        <input type="text" name="keyword" class="form-control" placeholder="Type to search..." value="{{ $keyword ?? '' }}" required>
+                    </div>
                 </div>
+
                 <div class="mb-3">
                     <label for="filterBy" class="form-label">Search By</label>
                     <select name="filterBy" class="form-select" required>
@@ -40,7 +45,6 @@
                         <!-- Add more options for filtering by other columns -->
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Search</button>
             </form>
 
             <div class="mt-4">

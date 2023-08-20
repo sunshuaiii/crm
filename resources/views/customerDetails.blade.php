@@ -99,15 +99,9 @@
     </div>
 
     <div class="mt-4">
-        @if(Auth::guard('admin')->check())
-        <a href="{{ route('admin.searchCustomer') }}" class="btn btn-secondary">
-            @elseif(Auth::guard('supportStaff')->check())
-            <a href="{{ route('supportStaff.searchCustomer') }}" class="btn btn-secondary">
-                @elseif(Auth::guard('marketingStaff')->check())
-                <a href="{{ route('marketingStaff.searchCustomer') }}" class="btn btn-secondary">
-                    @endif
-                    <i class="bx bx-arrow-back"></i> Back to Search
-                </a>
+        <a href="{{ url()->previous() }}" class="btn btn-secondary">
+            <i class="bx bx-arrow-back"></i> Back to Previous Page
+        </a>
     </div>
 </div>
 @endsection

@@ -62,7 +62,7 @@ Route::group(['middleware' => 'auth:customer'], function () {
 });
 
 Route::group(['middleware' => 'auth:admin'], function () {
-    Route::view('/admin', 'admin.adminHome');
+    Route::get('/admin', [AdminController::class, 'adminHome'])->name('admin.adminHome');
     Route::get('/admin/couponManagement', [AdminController::class, 'getAllCoupons'])->name('admin.couponManagement');
     Route::get('/admin/couponManagement/addCoupon', [AdminController::class, 'addCoupon'])->name('admin.addCoupon');
     Route::get('/admin/couponManagement/editCoupon/{id}', [AdminController::class, 'editCoupon'])->name('admin.editCoupon');

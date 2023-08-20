@@ -1,10 +1,10 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Support Staff Home')
+@section('title', 'Support Staff Dashboard')
 
 @section('content')
 <div class="container-content">
-    <div class="header">Home</div>
+    <div class="header">Support Staff Dashboard</div>
     @if(session('success'))
     <div class="alert alert-success">
         {{ session('success') }}

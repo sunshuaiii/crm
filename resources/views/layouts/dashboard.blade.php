@@ -23,11 +23,16 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 
     <script src="https://kit.fontawesome.com/3f39673dbb.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -37,6 +42,15 @@
             font-weight: bold;
             text-align: center;
             margin-bottom: 4%;
+        }
+        .sub-header {
+            text-align: center;
+            margin-bottom: 2%;
+            font-weight: bold;
+        }
+        .chart-title {
+            text-align: center;
+            margin-bottom: 2%;
         }
     </style>
 
@@ -53,10 +67,10 @@
             @if(Auth::guard('admin')->check())
             <li>
                 <a href="{{ url('/admin') }}">
-                    <i class='bx bx-home'></i>
-                    <span class="links_name">Home</span>
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name">Dashboard</span>
                 </a>
-                <span class="tooltip">Home</span>
+                <span class="tooltip">Dashboard</span>
             </li>
             <li>
                 <a href="{{ route('admin.couponManagement') }}">
@@ -113,10 +127,10 @@
             @elseif(Auth::guard('supportStaff')->check())
             <li>
                 <a href="{{ url('/supportStaff') }}">
-                    <i class='bx bx-home'></i>
-                    <span class="links_name">Home</span>
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name">Dashboard</span>
                 </a>
-                <span class="tooltip">Home</span>
+                <span class="tooltip">Dashboard</span>
             </li>
             <li>
                 <a href="{{ route('supportStaff.customerService') }}">
