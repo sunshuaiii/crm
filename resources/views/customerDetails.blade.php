@@ -79,19 +79,35 @@
             </tr>
             <tr>
                 <th>Created At</th>
-                <td>{{ $customer->created_at ?? 'NA' }}</td>
+                <td>@if ($customer->created_at)
+                    {{ $customer->created_at->setTimezone('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s') }}
+                    @else
+                    NA
+                    @endif
+                </td>
             </tr>
             <tr>
                 <th>Updated At</th>
-                <td>{{ $customer->updated_at ?? 'NA' }}</td>
+                <td>@if ($customer->updated_at)
+                    {{ $customer->updated_at->setTimezone('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s') }}
+                    @else
+                    NA
+                    @endif
+                </td>
             </tr>
         </table>
     </div>
 
     <div class="mt-4">
+        @if(Auth::guard('admin')->check())
         <a href="{{ route('admin.searchCustomer') }}" class="btn btn-secondary">
-            <i class="bx bx-arrow-back"></i> Back to Search
-        </a>
+            @elseif(Auth::guard('supportStaff')->check())
+            <a href="{{ route('supportStaff.searchCustomer') }}" class="btn btn-secondary">
+                @elseif(Auth::guard('marketingStaff')->check())
+                <a href="{{ route('marketingStaff.searchCustomer') }}" class="btn btn-secondary">
+                    @endif
+                    <i class="bx bx-arrow-back"></i> Back to Search
+                </a>
     </div>
 </div>
 @endsection

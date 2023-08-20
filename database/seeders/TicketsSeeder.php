@@ -20,7 +20,7 @@ class TicketsSeeder extends Seeder
         $q_types = ['Feedback', 'Complaint', 'Query', 'Issue'];
         $status = ['New', 'Open', 'Pending', 'Solved', 'Closed'];
         $numberOfStaffs = DB::table('support_staff')->count();
-        $numberOfCustomers = DB::table('customers')->count();
+        $customerIDs = DB::table('customers')->pluck('id');
        
         for ($i = 1; $i <= 20; $i++) {
             DB::table('tickets')->insert([
@@ -28,7 +28,7 @@ class TicketsSeeder extends Seeder
                 'message' => implode(' ', $faker->words(500)),
                 'status' => $faker->randomElement($status),
                 'support_staff_id' => $faker->numberBetween(1, $numberOfStaffs),
-                'customer_id' => $faker->numberBetween(1, $numberOfCustomers),
+                'customer_id' => $faker->randomElement($customerIDs),
             ]);
         }
     }

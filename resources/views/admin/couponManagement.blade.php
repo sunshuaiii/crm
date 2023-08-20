@@ -49,14 +49,14 @@
                     @if ($coupon->created_at)
                     {{ $coupon->created_at->setTimezone('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s') }}
                     @else
-                    N/A
+                    NA
                     @endif
                 </td>
                 <td>
                     @if ($coupon->updated_at)
                     {{ $coupon->updated_at->setTimezone('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s') }}
                     @else
-                    N/A
+                    NA
                     @endif
                 </td>
 

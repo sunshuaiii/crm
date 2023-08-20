@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SupportStaffController;
+use App\Http\Controllers\MarketingStaffController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\GoogleAuthController;
@@ -89,10 +91,12 @@ Route::group(['middleware' => 'auth:marketingStaff'], function () {
 
 Route::group(['middleware' => 'auth:supportStaff'], function () {
     Route::view('/supportStaff', 'supportStaff.supportStaffHome');
-
+    Route::get('/supportStaff/customerService', [SupportStaffController::class, 'getAllTicketsForSupportStaff'])->name('supportStaff.customerService');
+    Route::get('/supportStaff/ticketDetails/{id}', [SupportStaffController::class, 'viewTicketDetails'])->name('supportStaff.viewTicket');
+    Route::post('/supportStaff/updateTicketStatus', [SupportStaffController::class, 'updateTicketStatus'])->name('supportStaff.updateTicketStatus');
     Route::view('/supportStaff/searchCustomer', 'searchCustomer')->name('supportStaff.searchCustomer');
-    Route::post('/marketingStaff/searchCustomer', [SupportStaffController::class, 'searchCustomers'])->name('supportStaff.searchCustomer.submit');
-    Route::get('/marketingStaff/viewCustomer/{id}', [SupportStaffController::class, 'viewCustomer'])->name('supportStaff.viewCustomer');
+    Route::post('/supportStaff/searchCustomer', [SupportStaffController::class, 'searchCustomers'])->name('supportStaff.searchCustomer.submit');
+    Route::get('/supportStaff/viewCustomer/{id}', [SupportStaffController::class, 'viewCustomer'])->name('supportStaff.viewCustomer');
 });
 
 Route::get('logout', [LoginController::class, 'logout']);

@@ -18,7 +18,7 @@ class LeadsSeeder extends Seeder
     {
         $faker = Faker::create();
         $status = ['New', 'Contacted', 'Interested', 'Not interested'];
-        $numberOfStaffs = DB::table('marketing_staff')->count();
+        $mStaffIDs = DB::table('marketing_staff')->pluck('id');
 
         for ($i = 1; $i <= 10; $i++) {
             DB::table('leads')->insert([
@@ -29,7 +29,7 @@ class LeadsSeeder extends Seeder
                 'gender' => $faker->randomElement(['Female', 'Male']),
                 'status' => $faker->randomElement($status),
                 'activity' => implode(' ', $faker->words(500)),
-                'marketing_staff_id' => $faker->numberBetween(1, $numberOfStaffs),
+                'marketing_staff_id' => $faker->randomElement($mStaffIDs),
             ]);
         }
     }

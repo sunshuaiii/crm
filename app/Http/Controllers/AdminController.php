@@ -6,7 +6,6 @@ use App\Models\Admin;
 use App\Models\Coupon;
 use App\Models\MarketingStaff;
 use App\Models\SupportStaff;
-use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -209,7 +208,7 @@ class AdminController extends Controller
     public function searchCustomers(Request $request)
     {
         $keyword = $request->input('keyword', '');
-        $filterBy = $request->input('filterBy', 'first_name'); // Default filter
+        $filterBy = $request->input('filterBy', 'id'); // Default filter
 
         $query = Customer::query();
 

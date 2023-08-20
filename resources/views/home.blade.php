@@ -24,12 +24,12 @@
                     </div>
                     <div class="text-center mb-4">
                         <a href="{{ route('login.customer') }}" class="btn btn-primary">
-                            {{ __('Login') }}
+                            {{ __('Customer Login') }}
                         </a>
                     </div>
                     <div class="text-center mb-4">
                         <a href="{{ route('register.customer') }}" class="btn btn-primary">
-                            {{ __('Register') }}
+                            {{ __('Customer Register') }}
                         </a>
                     </div>
                     <div class="text-center mb-4">

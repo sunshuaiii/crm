@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 
@@ -13,7 +12,7 @@ class MarketingStaffController extends Controller
     public function searchCustomers(Request $request)
     {
         $keyword = $request->input('keyword', '');
-        $filterBy = $request->input('filterBy', 'first_name'); // Default filter
+        $filterBy = $request->input('filterBy', 'id'); // Default filter
 
         $query = Customer::query();
 
