@@ -65,12 +65,43 @@ class AdminController extends Controller
 
         // Coupon Usage Over Time
         $couponUsageOverTime = CustomerCoupon::select(
-            DB::raw('DATE(created_at) as date'),
+            DB::raw('DATE(updated_at) as date'),
             DB::raw('COUNT(*) as coupon_count')
         )
+            ->where('status', 'Redeemed')
             ->groupBy('date')
             ->orderBy('date')
             ->get();
+
+        // Coupon Expiry Analysis
+        $expiryAnalysis = CustomerCoupon::select(
+            DB::raw('DATEDIFF(end_date, NOW()) as remaining_days'),
+            DB::raw('COUNT(*) as coupon_count')
+        )
+            ->groupBy('remaining_days')
+            ->orderBy('remaining_days')
+            ->get();
+
+        // Query data for coupon usage by customer segments
+        $segmentLabels = ['Segment A', 'Segment B', 'Segment C', 'Segment D'];
+
+        $claimedCouponsBySegment = [];
+        $redeemedCouponsBySegment = [];
+
+        foreach ($segmentLabels as $segmentLabel) {
+            // Get claimed coupon count by segment
+            $claimedCount = CustomerCoupon::whereHas('customer', function ($query) use ($segmentLabel) {
+                $query->where('c_segment', $segmentLabel);
+            })->where('status', 'Claimed')->count();
+
+            // Get redeemed coupon count by segment
+            $redeemedCount = CustomerCoupon::whereHas('customer', function ($query) use ($segmentLabel) {
+                $query->where('c_segment', $segmentLabel);
+            })->where('status', 'Redeemed')->count();
+
+            $claimedCouponsBySegment[] = $claimedCount;
+            $redeemedCouponsBySegment[] = $redeemedCount;
+        }
 
         $totalMarketingStaff = MarketingStaff::all()->count();
         $totalSupportStaff = SupportStaff::all()->count();
@@ -85,6 +116,10 @@ class AdminController extends Controller
             'redemptionVsDiscount',
             'couponStatusDistribution',
             'couponUsageOverTime',
+            'expiryAnalysis',
+            'segmentLabels',
+            'claimedCouponsBySegment',
+            'redeemedCouponsBySegment',
             'totalMarketingStaff',
             'totalSupportStaff'
         ));
