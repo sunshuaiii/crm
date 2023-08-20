@@ -72,10 +72,12 @@
                 <!-- Brand Link -->
                 @if (Route::has('login') && !Auth::user())
                 <a class="navbar-brand" href="{{ url('/') }}">
+                <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 35px; height: 35px;">
                     {{ config('app.name', 'Customer Relationship System') }}
                 </a>
                 @else
                 <a class="navbar-brand" href="{{ url('/customer') }}">
+                <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 35px; height: 35px;">
                     {{ config('app.name', 'Customer Relationship System') }}
                 </a>
                 @endif

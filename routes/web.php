@@ -90,7 +90,7 @@ Route::group(['middleware' => 'auth:marketingStaff'], function () {
 });
 
 Route::group(['middleware' => 'auth:supportStaff'], function () {
-    Route::view('/supportStaff', 'supportStaff.supportStaffHome');
+    Route::get('/supportStaff', [SupportStaffController::class, 'supportStaffHome'])->name('supportStaff.supportStaffHome');
     Route::get('/supportStaff/customerService', [SupportStaffController::class, 'getAllTicketsForSupportStaff'])->name('supportStaff.customerService');
     Route::get('/supportStaff/ticketDetails/{id}', [SupportStaffController::class, 'viewTicketDetails'])->name('supportStaff.viewTicket');
     Route::post('/supportStaff/updateTicketStatus', [SupportStaffController::class, 'updateTicketStatus'])->name('supportStaff.updateTicketStatus');

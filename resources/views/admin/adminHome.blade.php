@@ -4,7 +4,19 @@
 
 @section('content')
 <div class="container-content">
+    @if(session('success'))
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+    @endif
+
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
     <div class="header">Admin Dashboard</div>
+    
     <div class="col-md-12 mb-4">
         <h4 class="sub-header">Coupon Insights</h4>
         <div class="card">
@@ -216,7 +228,8 @@
                 x: {
                     type: 'time',
                     time: {
-                        unit: 'day'
+                        unit: 'day',
+                        timezone: 'Asia/Kuala_Lumpur'
                     },
                     title: {
                         display: true,

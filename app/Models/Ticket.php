@@ -13,7 +13,7 @@ class Ticket extends Model
         return $this->belongsTo(SupportStaff::class);
     }
 
-    public function getCustomer(){
+    public function customer(){
         return $this->belongsTo(Customer::class);
     }
 }

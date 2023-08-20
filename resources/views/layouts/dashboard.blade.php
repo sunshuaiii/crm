@@ -26,7 +26,7 @@
     <!-- Include Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    
+
     <!-- Boxicons CDN Link -->
     <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
 
@@ -67,7 +67,7 @@
         <ul class="nav-list">
             @if(Auth::guard('admin')->check())
             <li>
-                <a href="{{ url('/admin') }}">
+                <a href="{{ route('admin.adminHome') }}">
                     <i class='bx bx-grid-alt'></i>
                     <span class="links_name">Dashboard</span>
                 </a>
@@ -127,7 +127,7 @@
             </li>
             @elseif(Auth::guard('supportStaff')->check())
             <li>
-                <a href="{{ url('/supportStaff') }}">
+                <a href="{{ route('supportStaff.supportStaffHome') }}">
                     <i class='bx bx-grid-alt'></i>
                     <span class="links_name">Dashboard</span>
                 </a>

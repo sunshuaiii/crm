@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Ticket;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -21,15 +22,24 @@ class TicketsSeeder extends Seeder
         $status = ['New', 'Open', 'Pending', 'Solved', 'Closed'];
         $numberOfStaffs = DB::table('support_staff')->count();
         $customerIDs = DB::table('customers')->pluck('id');
-       
-        for ($i = 1; $i <= 20; $i++) {
-            DB::table('tickets')->insert([
+
+        for ($i = 1; $i <= 50; $i++) {
+            $responseTime = $faker->numberBetween(1, 10000);
+            $resolutionTime = $faker->numberBetween($responseTime, 15000);
+            $ticketStatus = $faker->randomElement($status);
+
+            $ticketData = [
                 'query_type' => $faker->randomElement($q_types),
                 'message' => implode(' ', $faker->words(500)),
-                'status' => $faker->randomElement($status),
+                'status' => $ticketStatus,
                 'support_staff_id' => $faker->numberBetween(1, $numberOfStaffs),
                 'customer_id' => $faker->randomElement($customerIDs),
-            ]);
+                'response_time' => ($ticketStatus !== 'New') ? $responseTime : null, // Set response_time only for non-'New' tickets
+                'resolution_time' => ($ticketStatus == 'Closed') ? $resolutionTime : null, // Set resolution_time only for 'Closed' tickets
+                'created_at' => now(),
+            ];
+
+            DB::table('tickets')->insertGetId($ticketData); // Insert and get the inserted ID
         }
     }
 }

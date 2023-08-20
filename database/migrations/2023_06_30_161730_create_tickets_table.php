@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('status')->enum('New', 'Open', 'Pending', 'Solved', 'Closed')->default('New');
             $table->foreignId('support_staff_id')->constrained('support_staffs', 'id');
             $table->foreignId('customer_id')->constrained('customers', 'id');
+            $table->integer('response_time')->nullable();
+            $table->integer('resolution_time')->nullable();
             $table->timestamps();
         });
     }

@@ -270,3 +270,32 @@
     font-size: 24px;
     font-weight: bold;
 }
+
+.visualization {
+    border: 1px solid #ccc;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.breakdown-section,
+.distribution-section {
+    margin-top: 15px;
+}
+
+.breakdown-section h5,
+.distribution-section h5 {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.breakdown-section ul,
+.distribution-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.breakdown-section li,
+.distribution-section li {
+    font-size: 14px;
+    margin-bottom: 5px;
+}

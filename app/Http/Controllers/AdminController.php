@@ -78,6 +78,7 @@ class AdminController extends Controller
             DB::raw('DATEDIFF(end_date, NOW()) as remaining_days'),
             DB::raw('COUNT(*) as coupon_count')
         )
+            ->whereDate('customer_coupons.end_date', '>=', now())
             ->groupBy('remaining_days')
             ->orderBy('remaining_days')
             ->get();
