@@ -97,7 +97,7 @@
                             <a class="nav-link" href="{{ url('/customer/membership') }}">Membership</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/customer/coupons') }}">Coupons</a>
+                            <a class="nav-link" href="{{ url('/customer/coupons') }}">My Coupons</a>
                         </li>
                         <li class="nav-item dropdown"> <!-- Modified Support tab to a dropdown -->
                             <a class="nav-link dropdown-toggle" href="#" id="supportDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -112,7 +112,7 @@
                             </div>
                         </div>
                         <div class='col-md-6 mt-4'>
-                            <h4 class="chart-title">Ticket Aging Analysis</h4>
+                            <h4 class="chart-title">Open and Pending Ticket Aging Analysis</h4>
                             <div style="max-width: 600px; height: 300px; margin: auto;">
                                 <canvas id="ticketAgingChart"></canvas>
                             </div>

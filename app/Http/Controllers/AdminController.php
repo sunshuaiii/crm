@@ -34,7 +34,7 @@ class AdminController extends Controller
             ->groupBy('coupons.name')
             ->get();
 
-        // Top Redeemed Coupons
+        // Top 5 Redeemed Coupons
         $topRedeemedCoupons = CustomerCoupon::select(
             'coupons.name',
             DB::raw('COUNT(*) AS redeemed_count')
@@ -79,6 +79,7 @@ class AdminController extends Controller
             DB::raw('COUNT(*) as coupon_count')
         )
             ->whereDate('customer_coupons.end_date', '>=', now())
+            ->where('customer_coupons.status', 'Claimed')
             ->groupBy('remaining_days')
             ->orderBy('remaining_days')
             ->get();

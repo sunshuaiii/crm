@@ -118,6 +118,8 @@ class SupportStaffController extends Controller
             '9-13 hours' => [],
             '14-18 hours' => [],
             '19-24 hours' => [],
+            '25-48 hours' => [],
+            '49-72 hours' => [],
             // Define more age intervals if needed
         ];
 
@@ -127,13 +129,15 @@ class SupportStaffController extends Controller
 
             // Assign ticket to an appropriate age interval
             foreach ($ageIntervals as $interval => $range) {
-                $rangeParts = explode('-', $interval);
-                $minAge = (int) $rangeParts[0];
-                $maxAge = (int) $rangeParts[1];
+                if ($ticket->status == 'Open' || $ticket->status == 'Pending') {
+                    $rangeParts = explode('-', $interval);
+                    $minAge = (int) $rangeParts[0];
+                    $maxAge = (int) $rangeParts[1];
 
-                if ($ageInHours >= $minAge && $ageInHours <= $maxAge) {
-                    $ageIntervals[$interval][] = $ticket;
-                    break;
+                    if ($ageInHours >= $minAge && $ageInHours <= $maxAge) {
+                        $ageIntervals[$interval][] = $ticket;
+                        break;
+                    }
                 }
             }
         }

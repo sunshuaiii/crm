@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class='col-md-6 mt-4'>
-                        <h4 class="chart-title">Top Redeemed Coupons</h4>
+                        <h4 class="chart-title">Top 5 Redeemed Coupons</h4>
                         <div style="max-width: 400px; margin: auto;">
                             <canvas id="topRedeemedChart"></canvas>
                         </div>
@@ -103,13 +103,16 @@
         data: {
             labels: ['Claimed', 'Redeemed'],
             datasets: [{
-                label: 'Claimed',
+                label: ['Claimed'],
                 data: [{{ $totalAvailableCoupons }}, {{ $redeemedCoupons }}],
-                backgroundColor: '#36A2EB'
+                backgroundColor: ['#36A2EB', '#FF5733']
             }, {
                 label: 'Expired',
                 data: [{{ $expiredCoupons }}],
                 backgroundColor: 'red'
+            }, {
+                label: 'Redeemed',
+                backgroundColor: '#FF5733'
             }]
         },
         options: {
@@ -200,7 +203,7 @@
             labels: ['Claimed', 'Redeemed'],
             datasets: [{
                 data: [{{ $claimedCoupons }}, {{ $redeemedCoupons }}],
-                backgroundColor: ['#FF5733', '#36A2EB'],
+                backgroundColor: ['#36A2EB', '#FF5733'],
             }]
         },
         options: {
@@ -314,7 +317,7 @@
             labels: ['Marketing Staff', 'Support Staff'],
             datasets: [{
                 data: [{{ $totalMarketingStaff }}, {{ $totalSupportStaff }}],
-                backgroundColor: ['#FF5733', '#36A2EB'],
+                backgroundColor: ['Orange', 'Blue'],
             }]
         },
         options: {
