@@ -7,7 +7,29 @@ use Illuminate\Http\Request;
 
 class MarketingStaffController extends Controller
 {
+    public function marketingStaffHome(){
+        $data = '';
+        
+        return view('marketingStaff.marketingStaffHome', compact(
+            'data',
+        ));
+    }
 
+    public function reportGeneration(){
+        $data = '';
+        
+        return view('marketingStaff.reportGeneration', compact(
+            'data',
+        ));
+    }
+
+    public function leadManagement(){
+        $data = '';
+        
+        return view('marketingStaff.leadManagement', compact(
+            'data',
+        ));
+    }
 
     public function searchCustomers(Request $request)
     {

@@ -110,6 +110,34 @@
                 <span class="tooltip">Logout</span>
             </li>
             @elseif(Auth::guard('marketingStaff')->check())
+            <li>
+                <a href="{{ route('marketingStaff.marketingStaffHome') }}">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name">Dashboard</span>
+                </a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a href="{{ route('marketingStaff.reportGeneration') }}">
+                    <i class='bx bx-user-plus'></i>
+                    <span class="links_name">Report Generation</span>
+                </a>
+                <span class="tooltip">Report Generation</span>
+            </li>
+            <li>
+                <a href="{{ route('marketingStaff.leadManagement') }}">
+                    <i class='bx bx-gift'></i>
+                    <span class="links_name">Lead Management</span>
+                </a>
+                <span class="tooltip">Lead Management</span>
+            </li>
+            <li>
+                <a href="{{ route('marketingStaff.searchCustomer') }}">
+                    <i class='bx bx-search-alt'></i>
+                    <span class="links_name">Search Customer</span>
+                </a>
+                <span class="tooltip">Search Customer</span>
+            </li>
             <!-- More tabs can be added here -->
             <li class="profile">
                 <div class="profile-details">

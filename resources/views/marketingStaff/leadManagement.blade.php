@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Marketing Staff Dashboard')
+@section('title', 'Lead Management')
 
 @section('content')
 <div class="container-content">
@@ -15,15 +15,8 @@
         {{ session('error') }}
     </div>
     @endif
-    <div class="header">Marketing Staff Dashboard</div>
+    <div class="header">Lead Management</div>
 
-    <div class="col-md-12 mb-4">
-        <h4 class="sub-header">Customer Insights</h4>
-        <div class="card">
-            <div class="card-body">
-
-            </div>
-        </div>
-    </div>
+    Hi there, awesome marketing staff for this site!
 </div>
 @endsection

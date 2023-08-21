@@ -82,8 +82,9 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
 
 Route::group(['middleware' => 'auth:marketingStaff'], function () {
-    Route::view('/marketingStaff', 'marketingStaff.marketingStaffHome');
-
+    Route::get('/marketingStaff', [MarketingStaffController::class, 'marketingStaffHome'])->name('marketingStaff.marketingStaffHome');
+    Route::get('/marketingStaff/reportGeneration', [MarketingStaffController::class, 'reportGeneration'])->name('marketingStaff.reportGeneration');
+    Route::get('/marketingStaff/leadManagement', [MarketingStaffController::class, 'leadManagement'])->name('marketingStaff.leadManagement');
     Route::view('/marketingStaff/searchCustomer', 'searchCustomer')->name('marketingStaff.searchCustomer');
     Route::post('/marketingStaff/searchCustomer', [MarketingStaffController::class, 'searchCustomers'])->name('marketingStaff.searchCustomer.submit');
     Route::get('/marketingStaff/viewCustomer/{id}', [MarketingStaffController::class, 'viewCustomer'])->name('marketingStaff.viewCustomer');
