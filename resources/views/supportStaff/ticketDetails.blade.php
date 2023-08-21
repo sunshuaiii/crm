@@ -42,6 +42,18 @@
                         </div>
                     </div>
                     <h5 class="card-title">Customer ID: {{ $ticket->customer_id }}</h5>
+                    <p class="card-text">Response Time Used: @if ($ticket->response_time === null)
+                        NA
+                        @else
+                        {{ round($ticket->response_time / 60) }} minutes
+                        @endif
+                    </p>
+                    <p class="card-text">Resolution Time Used: @if ($ticket->resolution_time === null)
+                        NA
+                        @else
+                        {{ round($ticket->resolution_time / 60) }} minutes
+                        @endif
+                    </p>
                     <p class="card-text">Created At: @if ($ticket->created_at)
                         {{ $ticket->created_at->setTimezone('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s') }}
                         @else

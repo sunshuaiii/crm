@@ -61,6 +61,21 @@
 
                     <div class="row justify-content-center">
                         <div class='col-md-6 mt-4'>
+                            <h4 class="chart-title">Closed Ticket Rate Analysis</h4>
+                            <select id="queryTypeSelect">
+                                <option value="all">All Query Types</option>
+                                @foreach ($queryTypes as $queryType)
+                                    <option value="{{ $queryType }}">{{ $queryType }}</option>
+                                @endforeach
+                            </select>
+                            <div style="max-width: 400px; height: 280px; margin: auto;">
+                                <canvas id="closedRateChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center">
+                        <div class='col-md-6 mt-4'>
                             <h4 class="chart-title">Ticket Submitted by Customer Segments (Bar Chart)</h4>
                             <div style="max-width: 400px; height: 280px; margin: auto;">
                                 <canvas id="customerSegmentChart"></canvas>
@@ -392,5 +407,74 @@
             }
         }
     });
+
+    // Closed Rate Analysis
+    var closedRateData = {!! json_encode($closedRateData) !!};
+    var queryTypes = {!! json_encode($queryTypes) !!};
+
+    // Create the chart
+    var closedRateCtx = document.getElementById('closedRateChart').getContext('2d');
+    var closedRateChart;
+
+    function updateClosedRateChart(selectedQueryType) {
+        var labels = [];
+        var data = [];
+
+        if (selectedQueryType === 'all') {
+            labels = queryTypes;
+            data = Object.values(closedRateData);
+        } else {
+            labels.push(selectedQueryType);
+            data.push(closedRateData[selectedQueryType]);
+        }
+
+        if (closedRateChart) {
+            closedRateChart.destroy(); // Destroy existing chart if any
+        }
+
+        closedRateChart = new Chart(closedRateCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Closed Ticket Rate (%)',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)', // Customize bar color
+                }],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Query Type'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true, // Ensure y-axis starts from zero
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Closed Ticket Rate (%)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Listen for changes in the query type selection
+    var queryTypeSelect = document.getElementById('queryTypeSelect');
+    queryTypeSelect.addEventListener('change', function () {
+        var selectedQueryType = queryTypeSelect.value;
+        updateClosedRateChart(selectedQueryType);
+    });
+
+    // Initial chart update based on default selection
+    var defaultQueryType = queryTypeSelect.value;
+    updateClosedRateChart(defaultQueryType);
 </script>
 @endsection

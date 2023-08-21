@@ -20,13 +20,25 @@
     <div class="mt-4">
         <div id="status-update-message" class="alert alert-success" style="display: none;"></div>
 
+        <div class="mb-3">
+            <label for="ticketStatusFilter" class="form-label">Filter by Status:</label>
+            <select class="form-select" id="ticketStatusFilter">
+                <option value="all" selected>All Statuses</option>
+                <option value="New">New</option>
+                <option value="Open">Open</option>
+                <option value="Pending">Pending</option>
+                <option value="Solved">Solved</option>
+                <option value="Closed">Closed</option>
+            </select>
+        </div>
+
         <h4>Tickets Assigned:</h4>
         @if(isset($groupedTickets) && count($groupedTickets) > 0)
         @foreach ($groupedTickets as $queryType => $tickets)
         <h5>{{ $queryType }}</h5>
         <div class="row">
             @forelse ($tickets as $ticket)
-            <div class="col-md-12 mb-4">
+            <div class="col-md-12 mb-4 ticket-card" data-ticket-status="{{ $ticket->status }}">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between">
@@ -63,11 +75,11 @@
                                         Update Status
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="statusDropdown{{ $ticket->id }}">
-                                        <li><a class="dropdown-item status-update" data-ticket-id="{{ $ticket->id }}" data-new-status="New" href="#">New</a></li>
-                                        <li><a class="dropdown-item status-update" data-ticket-id="{{ $ticket->id }}" data-new-status="Open" href="#">Open</a></li>
-                                        <li><a class="dropdown-item status-update" data-ticket-id="{{ $ticket->id }}" data-new-status="Pending" href="#">Pending</a></li>
-                                        <li><a class="dropdown-item status-update" data-ticket-id="{{ $ticket->id }}" data-new-status="Solved" href="#">Solved</a></li>
-                                        <li><a class="dropdown-item status-update" data-ticket-id="{{ $ticket->id }}" data-new-status="Closed" href="#">Closed</a></li>
+                                        <li><a class="dropdown-item status-update" data-ticket-id="{{ $ticket->id }}" data-old-status="{{ $ticket->status }}" data-new-status="New" href="#">New</a></li>
+                                        <li><a class="dropdown-item status-update" data-ticket-id="{{ $ticket->id }}" data-old-status="{{ $ticket->status }}" data-new-status="Open" href="#">Open</a></li>
+                                        <li><a class="dropdown-item status-update" data-ticket-id="{{ $ticket->id }}" data-old-status="{{ $ticket->status }}" data-new-status="Pending" href="#">Pending</a></li>
+                                        <li><a class="dropdown-item status-update" data-ticket-id="{{ $ticket->id }}" data-old-status="{{ $ticket->status }}" data-new-status="Solved" href="#">Solved</a></li>
+                                        <li><a class="dropdown-item status-update" data-ticket-id="{{ $ticket->id }}" data-old-status="{{ $ticket->status }}" data-new-status="Closed" href="#">Closed</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -87,32 +99,61 @@
 </div>
 
 <script>
+    $('#ticketStatusFilter').on('change', function() {
+        const selectedStatus = $(this).val();
+
+        $('.ticket-card').each(function() {
+            const ticketStatus = $(this).data('ticket-status'); // Use .data() to access the data attribute
+
+            console.log(`Ticket status: ${ticketStatus}, Selected status: ${selectedStatus}`);
+
+            if (selectedStatus === 'all' || ticketStatus === selectedStatus) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
+
     $('.status-update').on('click', function(e) {
+        console.log('Status update clicked');
+
         e.preventDefault();
         const ticketId = $(this).data('ticket-id');
         const newStatus = $(this).data('new-status');
 
-        $.ajax({
-            url: "{{ route('supportStaff.updateTicketStatus') }}",
-            type: 'POST',
-            data: {
-                _token: '{{ csrf_token() }}',
-                ticket_id: ticketId,
-                new_status: newStatus
-            },
-            success: function(response) {
-                // Get the updated ticket details from the response
-                var updatedTicket = response.updatedTicket;
+        // Get the current status from the PHP variable
+        const currentStatus = $(this).data('old-status');
 
-                // Show success message with the old and new status
-                var message = "Status for Ticket ID: " + updatedTicket.id + " is updated from '" + updatedTicket.oldStatus + "' to '" + updatedTicket.newStatus + "'";
+        // Create a confirmation message
+        const confirmationMessage = `Confirm to change Ticket ID: "${ticketId}" from "${currentStatus}" to "${newStatus}"?`;
 
-                $('#status-update-message').text(message).fadeIn();
-            },
-            error: function() {
-                alert('An error occurred while updating the status.');
-            }
-        });
+        // Show the confirmation dialog
+        const isConfirmed = confirm(confirmationMessage);
+
+        if (isConfirmed) {
+            $.ajax({
+                url: "{{ route('supportStaff.updateTicketStatus') }}",
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    ticket_id: ticketId,
+                    new_status: newStatus,
+                },
+                success: function(response) {
+                    // Get the updated ticket details from the response
+                    var updatedTicket = response.updatedTicket;
+
+                    // Show success message with the old and new status
+                    var message = "Status for Ticket ID: " + updatedTicket.id + " is updated from '" + updatedTicket.oldStatus + "' to '" + updatedTicket.newStatus + "'";
+
+                    $('#status-update-message').text(message).fadeIn();
+                },
+                error: function() {
+                    alert('An error occurred while updating the status.');
+                }
+            });
+        }
     });
 </script>
 @endsection

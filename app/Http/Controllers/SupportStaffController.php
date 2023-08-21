@@ -108,31 +108,32 @@ class SupportStaffController extends Controller
         }
 
         // Ticket Aging Analysis
-        $ageIntervalData = [];
-        $ageIntervals  = [
+        $ageIntervalData = []; // Array to store ticket counts for each age interval
+
+        // Define your age intervals (e.g., 0-3 hours, 4-8 hours, etc.)
+        $ageIntervals = [
             '0-1 hours' => [],
             '2-3 hours' => [],
-            '3-4 hours' => [],
-            '5-6 hours' => [],
-            '7-8 hours' => [],
-            // Add more status categories if needed
+            '4-8 hours' => [],
+            '9-13 hours' => [],
+            '14-18 hours' => [],
+            '19-24 hours' => [],
+            // Define more age intervals if needed
         ];
 
         foreach ($tickets as $ticket) {
-            if ($ticket->status == 'Open' || $ticket->status == 'Pending') {
-                $ageInSeconds = now()->diffInSeconds($ticket->created_at);
-                $ageInHours = round($ageInSeconds / 3600); // Convert age to hours
+            $ageInSeconds = now()->diffInSeconds($ticket->created_at);
+            $ageInHours = round($ageInSeconds / 3600); // Convert age to hours
 
-                // Assign ticket to an appropriate age interval
-                foreach ($ageIntervals as $interval => $range) {
-                    $rangeParts = explode('-', $interval);
-                    $minAge = (int) $rangeParts[0];
-                    $maxAge = (int) $rangeParts[1];
+            // Assign ticket to an appropriate age interval
+            foreach ($ageIntervals as $interval => $range) {
+                $rangeParts = explode('-', $interval);
+                $minAge = (int) $rangeParts[0];
+                $maxAge = (int) $rangeParts[1];
 
-                    if ($ageInHours >= $minAge && $ageInHours <= $maxAge) {
-                        $ageIntervals[$interval][] = $ticket;
-                        break;
-                    }
+                if ($ageInHours >= $minAge && $ageInHours <= $maxAge) {
+                    $ageIntervals[$interval][] = $ticket;
+                    break;
                 }
             }
         }
@@ -140,6 +141,84 @@ class SupportStaffController extends Controller
         // Populate $ageIntervalData with ticket counts for each age interval
         foreach ($ageIntervals as $interval => $ticketsInInterval) {
             $ageIntervalData[$interval] = count($ticketsInInterval);
+        }
+
+        // $ageIntervalData = [];
+        // $ageIntervals = [];
+        // $maxAge = 0; // To track the longest ticket age
+
+        // // Define the interval boundaries based on your distribution
+        // $intervalBoundaries = [1, 3, 5, 8]; // Example boundaries, you can adjust these
+
+        // foreach ($tickets as $ticket) {
+        //     if ($ticket->status == 'Open' || $ticket->status == 'Pending') {
+        //         $ageInSeconds = now()->diffInSeconds($ticket->created_at);
+        //         $ageInHours = round($ageInSeconds / 3600); // Convert age to hours
+
+        //         if ($ageInHours > $maxAge) {
+        //             $maxAge = $ageInHours;
+        //         }
+
+        //         // Assign ticket to an appropriate interval based on boundaries
+        //         $assigned = false;
+        //         foreach ($intervalBoundaries as $index => $boundary) {
+        //             if ($ageInHours <= $boundary) {
+        //                 $ageIntervals[] = ($index === 0 ? "0-{$boundary} hours" : ($boundary + 1) . "-{$boundary} hours");
+        //                 $ageIntervalData[] = 0;
+        //                 $assigned = true;
+        //                 break;
+        //             }
+        //         }
+
+        //         if (!$assigned) {
+        //             $ageIntervals[] = ">{$intervalBoundaries[count($intervalBoundaries) - 1]} hours";
+        //             $ageIntervalData[] = 0;
+        //         }
+        //     }
+        // }
+
+        // foreach ($tickets as $ticket) {
+        //     if ($ticket->status == 'Open' || $ticket->status == 'Pending') {
+        //         $ageInSeconds = now()->diffInSeconds($ticket->created_at);
+        //         $ageInHours = round($ageInSeconds / 3600); // Convert age to hours
+
+        //         // Increment the count of the appropriate interval
+        //         foreach ($intervalBoundaries as $index => $boundary) {
+        //             if ($ageInHours <= $boundary) {
+        //                 $ageIntervalData[$index]++;
+        //                 break;
+        //             }
+        //         }
+
+        //         if ($ageInHours > $intervalBoundaries[count($intervalBoundaries) - 1]) {
+        //             $ageIntervalData[count($ageIntervalData) - 1]++;
+        //         }
+        //     }
+        // }
+
+
+
+        // Closed rate analysis
+        // Get closed and total ticket counts for each query type
+        $closedRateData = [];
+        foreach ($queryTypes as $queryType) {
+            $closedTicketsCount = Ticket::where('support_staff_id', $supportStaffId)
+                ->where('query_type', $queryType)
+                ->where('status', 'Closed')
+                ->count();
+
+            $totalTicketsCount = Ticket::where('support_staff_id', $supportStaffId)
+                ->where('query_type', $queryType)
+                ->count();
+
+            // Calculate closed rate (percentage)
+            if ($totalTicketsCount > 0) {
+                $closedRate = ($closedTicketsCount / $totalTicketsCount) * 100;
+            } else {
+                $closedRate = 0; // Avoid division by zero
+            }
+
+            $closedRateData[$queryType] = $closedRate;
         }
 
         return view('supportStaff.supportStaffHome', compact(
@@ -155,7 +234,8 @@ class SupportStaffController extends Controller
             'ticketStatuses',
             'resolutionTimeData',
             'ticketCreationDistribution',
-            'ageIntervalData'
+            'ageIntervalData',
+            'closedRateData'
         ));
     }
 
@@ -226,6 +306,15 @@ class SupportStaffController extends Controller
         $ticket = Ticket::findOrFail($ticketId);
         $oldStatus = $ticket->status; // Get the current status before updating
         $ticket->status = $newStatus;
+
+        // update response time or resolution time
+        if ($oldStatus == 'New' && $newStatus != 'New') {
+            $ticket->response_time = now()->diffInSeconds($ticket->created_at);
+        }
+        if ($oldStatus != 'Closed' && $newStatus == 'Closed') {
+            $ticket->resolution_time = now()->diffInSeconds($ticket->created_at);
+        }
+
         $ticket->save();
 
         return response()->json([
