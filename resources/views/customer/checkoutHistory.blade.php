@@ -6,19 +6,21 @@
 <div class="container-content">
     <div class="row justify-content-center align-items-center">
         <div class="col-md-12">
-            <h2>Checkout History</h2>
+            <h2><i class="fas fa-history"></i> Checkout History</h2>
 
+            @if(!empty($checkoutSummaries))
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Payment Method</th>
-                        <th>Total Amount</th>
-                        <th>Final Amount</th>
-                        <th>Points Credited</th>
-                        <th>Action</th>
+                        <th><i class="far fa-calendar-alt"></i> Date</th>
+                        <th><i class="far fa-credit-card"></i> Payment Method</th>
+                        <th><i class="fas fa-dollar-sign"></i> Total Amount</th>
+                        <th><i class="fas fa-money-bill-wave"></i> Final Amount</th>
+                        <th><i class="fas fa-star"></i> Points Credited</th>
+                        <th><i class="fas fa-cogs"></i> Action</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @foreach ($checkoutSummaries as $checkoutSummary)
                     <tr>
@@ -28,12 +30,24 @@
                         <td>RM {{ $checkoutSummary['finalAmount'] }}</td>
                         <td>{{ $checkoutSummary['pointsToCredit'] }} points</td>
                         <td>
-                            <a href="{{ route('customer.checkoutDetails', ['id' => $checkoutSummary['checkout']->id]) }}" class="btn btn-primary">View Details</a>
+                            <a href="{{ route('customer.checkoutDetails', ['id' => $checkoutSummary['checkout']->id]) }}" class="btn btn-primary">
+                                <i class="fas fa-info-circle"></i> View Details
+                            </a>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+            @else
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-8 m-5">
+                    <div class="text-center">
+                        <h5>You haven't made any checkouts or transactions yet. Start enjoying our exclusive offers and rewards by making your first purchase!</h5>
+                    </div>
+                </div>
+            </div>
+            @endif
+
         </div>
     </div>
 </div>

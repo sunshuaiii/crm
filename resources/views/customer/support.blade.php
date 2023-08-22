@@ -23,7 +23,7 @@
                     </div>
                     <div class="text-center mb-4">
                         <a href="{{ route('customer.support.contactUs') }}" class="btn btn-primary">
-                            {{ __('Contact Us') }}
+                            <i class="far fa-envelope"></i> {{ __('Contact Us') }}
                         </a>
                     </div>
                 </div>
@@ -31,12 +31,16 @@
         </div>
 
         <div class="col-md-8 mt-4">
-            <h2 class="heading">Help & Support</h2>
+            <h2 class="heading">
+                <i class="fas fa-life-ring"></i> Help & Support
+            </h2>
             <div id="listAccordion">
                 <div class="card m-2" style="border-width:3px">
                     <!-- Frequently Asked Questions -->
                     <div class="card-header d-flex justify-content-between align-items-center" id="listHeading_1">
-                        <h5 class="m-3 highlight">Frequently Asked Questions</h5>
+                        <h5 class="m-3 highlight">
+                            <i class="fas fa-question"></i> Frequently Asked Questions
+                        </h5>
                         <a class="collapse-link" data-toggle="collapse" data-target="#listCollapse_1" aria-expanded="true" aria-controls="listCollapse_1">
                             <img src="{{ asset('images/icon/view.png') }}" alt="Expand/Collapse" style="width: 20px; height: 20px;">
                         </a>
@@ -150,7 +154,9 @@
                 <!-- About Us -->
                 <div class="card m-2" style="border-width:3px">
                     <div class="card-header d-flex justify-content-between align-items-center" id="listHeading_2">
-                        <h5 class="m-3 highlight">About Us</h5>
+                        <h5 class="m-3 highlight">
+                            <i class="fas fa-info-circle"></i> About Us
+                        </h5>
                         <a class="collapse-link" data-toggle="collapse" data-target="#listCollapse_2" aria-expanded="true" aria-controls="listCollapse_2">
                             <img src="{{ asset('images/icon/view.png') }}" alt="Expand/Collapse" style="width: 20px; height: 20px;">
                         </a>
@@ -176,7 +182,9 @@
                 <!-- Terms and Conditions     -->
                 <div class="card m-2" style="border-width:3px">
                     <div class="card-header d-flex justify-content-between align-items-center" id="listHeading_3">
-                        <h5 class="m-3 highlight">Terms and Conditions</h5>
+                        <h5 class="m-3 highlight">
+                            <i class="fas fa-file-alt"></i> Terms and Conditions
+                        </h5>
                         <a class="collapse-link" data-toggle="collapse" data-target="#listCollapse_3" aria-expanded="true" aria-controls="listCollapse_3">
                             <img src="{{ asset('images/icon/view.png') }}" alt="Expand/Collapse" style="width: 20px; height: 20px;">
                         </a>
@@ -223,7 +231,9 @@
                 <!-- Privacy Policy -->
                 <div class="card m-2" style="border-width:3px">
                     <div class="card-header d-flex justify-content-between align-items-center" id="listHeading_4">
-                        <h5 class="m-3 highlight">Privacy Policy</h5>
+                        <h5 class="m-3 highlight">
+                            <i class="fas fa-shield-alt"></i> Privacy Policy
+                        </h5>
                         <a class="collapse-link" data-toggle="collapse" data-target="#listCollapse_4" aria-expanded="true" aria-controls="listCollapse_4">
                             <img src="{{ asset('images/icon/view.png') }}" alt="Expand/Collapse" style="width: 20px; height: 20px;">
                         </a>

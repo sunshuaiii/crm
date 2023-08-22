@@ -72,12 +72,12 @@
                 <!-- Brand Link -->
                 @if (Route::has('login') && !Auth::user())
                 <a class="navbar-brand" href="{{ url('/') }}">
-                <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 35px; height: 35px;">
+                    <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 35px; height: 35px;">
                     {{ config('app.name', 'Customer Relationship System') }}
                 </a>
                 @else
                 <a class="navbar-brand" href="{{ url('/customer') }}">
-                <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 35px; height: 35px;">
+                    <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 35px; height: 35px;">
                     {{ config('app.name', 'Customer Relationship System') }}
                 </a>
                 @endif
@@ -94,18 +94,26 @@
                     <ul class="navbar-nav me-auto">
                         <!-- Centered Tabs -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/customer/membership') }}">Membership</a>
+                            <a class="nav-link" href="{{ url('/customer/membership') }}">
+                                <i class="fas fa-gem"></i> Membership
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/customer/coupons') }}">My Coupons</a>
+                            <a class="nav-link" href="{{ url('/customer/coupons') }}">
+                                <i class="fas fa-ticket-alt"></i> My Coupons
+                            </a>
                         </li>
                         <li class="nav-item dropdown"> <!-- Modified Support tab to a dropdown -->
                             <a class="nav-link dropdown-toggle" href="#" id="supportDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Support
+                                <i class="fas fa-question-circle"></i> Support
                             </a>
                             <div class="dropdown-menu" aria-labelledby="supportDropdown">
-                                <a class="dropdown-item" href="{{ url('/customer/support') }}">Help & Support</a>
-                                <a class="dropdown-item" href="{{ url('/customer/support/contactUs') }}">Contact Us</a>
+                                <a class="dropdown-item" href="{{ url('/customer/support') }}">
+                                    <i class="fas fa-life-ring"></i> Help & Support
+                                </a>
+                                <a class="dropdown-item" href="{{ url('/customer/support/contactUs') }}">
+                                    <i class="fas fa-envelope"></i> Contact Us
+                                </a>
                             </div>
                         </li>
                     </ul>
@@ -116,27 +124,37 @@
                         @guest
                         @if (Route::has('login') && !Auth::user())
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login.customer') }}">{{ __('Login') }}</a>
+                            <a class="nav-link" href="{{ route('login.customer') }}">
+                                <i class="fas fa-sign-in-alt"></i> {{ __('Login') }}
+                            </a>
                         </li>
                         @endif
 
                         @if (Route::has('register') && !Auth::user())
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register.customer') }}">{{ __('Register') }}</a>
+                            <a class="nav-link" href="{{ route('register.customer') }}">
+                                <i class="fas fa-user-plus"></i> {{ __('Register') }}
+                            </a>
                         </li>
                         @endif
 
                         @elseif(Auth::user())
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->username }}
+                                <i class="fas fa-user-circle"></i> {{ Auth::user()->username }}
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('customer.profile') }}">Profile</a>
-                                <a class="dropdown-item" href="{{ route('customer.checkout.history') }}">Checkout History</a>
+                                <a class="dropdown-item" href="{{ route('customer.profile') }}">
+                                    <i class="fas fa-user"></i> Profile
+                                </a>
+
+                                <a class="dropdown-item" href="{{ route('customer.checkout.history') }}">
+                                    <i class="fas fa-history"></i> Checkout History
+                                </a>
+
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
+                                    <i class="fas fa-sign-out-alt"></i> {{ __('Logout') }}
                                 </a>
 
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

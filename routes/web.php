@@ -40,10 +40,10 @@ Route::post('/login/admin', [LoginController::class, 'adminLogin']);
 Route::post('/login/marketingStaff', [LoginController::class, 'marketingStaffLogin']);
 Route::post('/login/supportStaff', [LoginController::class, 'supportStaffLogin']);
 Route::post('/register/customer', [RegisterController::class, 'createCustomer']);
+Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
+Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
 
 Route::group(['middleware' => 'auth:customer'], function () {
-    Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
-    Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
     Route::view('/customer', 'customer.customerHome');
     Route::get('/customer/membership', [CustomerController::class, 'showQRandBarCode'])->name('customer.membership');
     Route::get('/customer/coupons', [CustomerController::class, 'getCouponsInfo'])->name('customer.coupons');

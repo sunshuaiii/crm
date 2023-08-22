@@ -61,7 +61,7 @@
 
                     @if(Auth::user()->created_at)
                     <div class="text-center mb-4">
-                        <h6>Member Since {{ Auth::user()->created_at->format('F Y') }}</h6>
+                        <h6><i class="far fa-calendar-alt"></i> Member Since {{ Auth::user()->created_at->format('F Y') }}</h6>
                     </div>
                     @endif
 
@@ -72,7 +72,9 @@
         <div class="text-center m-4">
             <form id="redeemForm" action="{{ route('customer.checkout.membership') }}" method="POST">
                 @csrf
-                <button type="button" class="btn btn-primary" onclick="submit()">Checkout With Membership</button>
+                <button type="button" class="btn btn-primary" onclick="submit()">
+                    <i class="fas fa-shopping-cart"></i> Checkout With Membership
+                </button>
             </form>
         </div>
 

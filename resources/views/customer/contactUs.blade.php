@@ -22,11 +22,13 @@
         <div class="row justify-content-center align-items-center">
             <div class="col-md-3">
                 <div class="card">
-                    <div class="card-header text-center"> Contacts </div>
+                    <div class="card-header text-center">
+                        <i class="far fa-address-book"></i> Contacts
+                    </div>
                     <div class="card-body justify-content-center align-items-center">
                         <div class="text-center">
-                            <h5>support@email.com</h5>
-                            <h5>012-3456789</h5>
+                            <h5><i class="far fa-envelope"></i> support@email.com</h5>
+                            <h5><i class="fas fa-phone"></i> 012-3456789</h5>
                         </div>
                     </div>
                 </div>
@@ -55,17 +57,28 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="email"> Email</label>
+                                <label for="email">
+                                    <i class="far fa-envelope"></i> Email
+                                </label>
                                 <input type="email" class="form-control" id="email" name="email" value="{{ Auth::user()->email }}" disabled>
                             </div>
 
                             <div class="form-group">
-                                <label for="contact">Phone</label>
+                                <label for="contact">
+                                    <i class="fas fa-phone"></i> Phone
+                                </label>
                                 <input type="tel" class="form-control" id="contact" name="contact" value="{{ Auth::user()->contact }}" disabled>
+                                @if(Auth::user()->contact == '')
+                                <span role="alert">
+                                    <strong> Please update your contact in your Profile!</strong>
+                                </span>
+                                @endif
                             </div>
 
                             <div class="form-group">
-                                <label for="query_type">Type of Query</label>
+                                <label for="query_type">
+                                    <i class="fas fa-question-circle"></i> Type of Query*
+                                </label>
                                 <select class="form-select" id="query_type" name="query_type" required>
                                     <option value="" selected disabled>Select a query type</option>
                                     <option value="Feedback">Feedback</option>
@@ -76,15 +89,15 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="message">Your Message</label>
+                                <label for="message">
+                                    <i class="fas fa-comment"></i> Your Message*
+                                </label>
                                 <textarea class="form-control" id="message" name="message" placeholder="Type your message here..." rows="4" required></textarea>
                             </div>
 
-
-
                             <div class="row m-3">
                                 <button type="submit" class="btn btn-primary" onclick="showConfirmation()">
-                                    Send
+                                    <i class="fas fa-paper-plane"></i> Send
                                 </button>
                             </div>
 

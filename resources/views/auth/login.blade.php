@@ -47,13 +47,17 @@
                             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }} *</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
+                                <div class='input-group'>
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
 
@@ -78,6 +82,9 @@
                             <i class="fab fa-google mr-2"></i> {{ __('Continue with Google') }}
                         </a>
                     </div>
+                    <div class="text-center mt-3">
+                        <p>Don't have an account? <a href="{{ route('register.customer') }}">Sign up now!</a></p>
+                    </div>
                     @endif
                 </div>
             </div>
@@ -87,4 +94,28 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleButtons = document.querySelectorAll('.toggle-password');
+
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const passwordField = this.parentNode.querySelector('input[id="password"]');
+                const icon = this.querySelector('i');
+                console.log(passwordField.type);
+
+                if (passwordField.type === 'password') {
+                    passwordField.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordField.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        });
+    });
+</script>
 @endsection

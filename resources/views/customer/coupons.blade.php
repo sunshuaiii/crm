@@ -30,8 +30,12 @@
 
         <div class="col-md-8 mb-4 mt-3">
             <div class="btn-group" role="group" aria-label="Coupon Filters">
-                <button type="button" class="btn btn-primary" id="validCouponsBtn">Valid Coupons</button>
-                <button type="button" class="btn btn-secondary" id="expiredCouponsBtn">Expired Coupons</button>
+                <button type="button" class="btn btn-primary" id="validCouponsBtn">
+                    <i class="fas fa-check-circle"></i> Valid Coupons
+                </button>
+                <button type="button" class="btn btn-secondary" id="expiredCouponsBtn">
+                    <i class="far fa-calendar-times"></i> Expired Coupons
+                </button>
             </div>
         </div>
 
@@ -123,7 +127,9 @@
             @endif
         </div>
 
-        <h2 class="heading"> Available Coupons</h2>
+        <h2 class="heading">
+            <i class="fas fa-ticket-alt"></i> Available Coupons
+        </h2>
 
         <div class="col-md-8 mt-3">
             <div class="d-flex ">
@@ -145,7 +151,9 @@
                                 <h5 class="card-title highlight"> RM {{ $coupon->discount }} Coupon</h5>
 
                                 <div class="card-text">
-                                    <p>Terms & Conditions:</p>
+                                    <p>
+                                        <i class="fas fa-file-alt"></i> Terms & Conditions:
+                                    </p>
                                     <span class="coupon-conditions">{{ substr($coupon->conditions, 0, 180) }}</span>
                                     <span class="read-more" style="display:none;">{{ substr($coupon->conditions, 0) }}</span>
                                     <a href="#" class="read-more-btn">Read More</a>
@@ -157,7 +165,9 @@
                                 </form>
 
                                 <div class="mt-3">
-                                    <button class="btn btn-primary claim-btn" data-coupon-id="{{ $coupon->id }}">Claim This Coupon</button>
+                                    <button class="btn btn-primary claim-btn" data-coupon-id="{{ $coupon->id }}">
+                                        <i class="fas fa-gift"></i> Claim This Coupon
+                                    </button>
                                 </div>
 
                                 <div class="m-4">
