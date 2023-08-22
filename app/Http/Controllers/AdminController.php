@@ -85,7 +85,7 @@ class AdminController extends Controller
             ->get();
 
         // Query data for coupon usage by customer segments
-        $segmentLabels = ['Segment A', 'Segment B', 'Segment C', 'Segment D'];
+        $segmentLabels = ['Platinum', 'Gold', 'Silver'];
 
         $claimedCouponsBySegment = [];
         $redeemedCouponsBySegment = [];

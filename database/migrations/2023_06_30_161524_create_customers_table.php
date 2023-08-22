@@ -27,9 +27,9 @@ return new class extends Migration
                 $table->string('gender')->enum('Female', 'Male', '')->nullable();
                 $table->timestamp('dob')->nullable();
                 $table->integer('points')->default(0);
-                $table->integer('m_score')->default(0);
                 $table->integer('r_score')->default(0);
                 $table->integer('f_score')->default(0);
+                $table->integer('m_score')->default(0);
                 $table->string('c_segment')->default("NA");
                 $table->rememberToken();
                 $table->timestamps();

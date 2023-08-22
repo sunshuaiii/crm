@@ -37,7 +37,7 @@ class SupportStaffController extends Controller
         }
 
         // Customer Segment Analysis
-        $customerSegments = ['Segment A', 'Segment B', 'Segment C', 'Segment D'];
+        $customerSegments = ['Platinum', 'Gold', 'Silver'];
         $segmentTicketCounts = [];
         foreach ($customerSegments as $segment) {
             $segmentTicketCounts[$segment] = Ticket::whereHas('customer', function ($query) use ($segment) {

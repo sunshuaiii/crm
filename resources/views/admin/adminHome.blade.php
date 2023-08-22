@@ -30,13 +30,13 @@
                 <div class="row justify-content-center">
                     <div class='col-md-6 mt-4'>
                         <h4 class="chart-title">Redemption Rate by Coupon</h4>
-                        <div style="max-width: 400px; margin: auto;">
+                        <div style="max-width: 500px; margin: auto;">
                             <canvas id="redemptionRateChart"></canvas>
                         </div>
                     </div>
                     <div class='col-md-6 mt-4'>
                         <h4 class="chart-title">Top 5 Redeemed Coupons</h4>
-                        <div style="max-width: 400px; margin: auto;">
+                        <div style="max-width: 500px; margin: auto;">
                             <canvas id="topRedeemedChart"></canvas>
                         </div>
                     </div>
@@ -158,6 +158,12 @@
         },
         options: {
             responsive: true,
+            scales: {
+            y: {
+                beginAtZero: true,
+                stepSize: 1, // Show only whole numbers on the y-axis
+            },
+        },
         }
     });
 
