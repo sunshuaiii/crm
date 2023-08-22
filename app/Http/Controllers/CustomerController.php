@@ -93,19 +93,28 @@ class CustomerController extends Controller
     {
         $customer = Auth::user();
 
-        // coupons that the customer claimed
-        $customerCouponsInfo = CustomerCoupon::select('coupons.name', 'coupons.discount', 'coupons.conditions', 'customer_coupons.end_date', 'customer_coupons.code', 'customer_coupons.coupon_id')
+        // valid coupons that the customer claimed
+        $validCustomerCouponsInfo = CustomerCoupon::select('coupons.name', 'coupons.discount', 'coupons.conditions', 'customer_coupons.end_date', 'customer_coupons.code', 'customer_coupons.coupon_id')
             ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
             ->where('customer_coupons.customer_id', $customer->id)
             ->where('customer_coupons.status', 'Claimed')
             ->orderBy('customer_coupons.end_date', 'asc')
-            // ->whereDate('customer_coupons.end_date', '>=', now())
+            ->whereDate('customer_coupons.end_date', '>=', now())
+            ->get();
+
+        // expired coupons that the customer claimed
+        $expiredCustomerCouponsInfo = CustomerCoupon::select('coupons.name', 'coupons.discount', 'coupons.conditions', 'customer_coupons.end_date', 'customer_coupons.code', 'customer_coupons.coupon_id')
+            ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
+            ->where('customer_coupons.customer_id', $customer->id)
+            ->where('customer_coupons.status', 'Claimed')
+            ->orderBy('customer_coupons.end_date', 'asc')
+            ->whereDate('customer_coupons.end_date', '<', now())
             ->get();
 
         // all available coupons for that customer
         $allCouponsInfo = Coupon::where('id', '!=', 8)->get(); // Fetch all available coupons except for new member coupon
 
-        return view('customer.coupons', ['customerCouponsInfo' => $customerCouponsInfo, 'allCouponsInfo' => $allCouponsInfo]);
+        return view('customer.coupons', ['validCustomerCouponsInfo' => $validCustomerCouponsInfo, 'expiredCustomerCouponsInfo' => $expiredCustomerCouponsInfo, 'allCouponsInfo' => $allCouponsInfo]);
     }
 
     public function claimCoupon(Request $request)

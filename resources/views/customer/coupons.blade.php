@@ -28,10 +28,17 @@
             </div>
         </div>
 
-        @if ($customerCouponsInfo->count() > 0)
-        <div class="col-md-10 m-3">
+        <div class="col-md-8 mb-4 mt-3">
+            <div class="btn-group" role="group" aria-label="Coupon Filters">
+                <button type="button" class="btn btn-primary" id="validCouponsBtn">Valid Coupons</button>
+                <button type="button" class="btn btn-secondary" id="expiredCouponsBtn">Expired Coupons</button>
+            </div>
+        </div>
+
+        <div class="col-md-10 m-3 expired coupon-card">
+            @if ($expiredCustomerCouponsInfo->count() > 0)
             <div class="row justify-content-center align-items-center">
-                @foreach($customerCouponsInfo as $coupon)
+                @foreach($expiredCustomerCouponsInfo as $coupon)
                 <div class="col-md-4">
                     <div class="card-container">
                         @if($coupon->end_date < \Carbon\Carbon::now()) <div class="card" style="background:none; border:none; opacity: 0.5; background-image: url('{{ asset('images/icon/coupon-bg.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; min-height: 280px; min-width: 350px;">
@@ -61,21 +68,62 @@
                 </div>
                 @endforeach
             </div>
-        </div>
-
-        @else
-        <div class="row justify-content-center align-items-center">
-            <div class="col-md-8 m-5">
-                <div class="text-center">
-                    <h5>You currently don't have any available coupons. Start collecting points to claim exciting discounts!</h5>
+            @else
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-8 m-5">
+                    <div class="text-center">
+                        <h5>You currently don't have any expired coupons. Start collecting points to claim exciting discounts!</h5>
+                    </div>
                 </div>
             </div>
+            @endif
         </div>
-        @endif
 
+        <div class="col-md-10 m-3 valid coupon-card">
+            @if ($validCustomerCouponsInfo->count() > 0)
+            <div class="row justify-content-center align-items-center">
+                @foreach($validCustomerCouponsInfo as $coupon)
+                <div class="col-md-4">
+                    <div class="card-container">
+                        @if($coupon->end_date < \Carbon\Carbon::now()) <div class="card" style="background:none; border:none; opacity: 0.5; background-image: url('{{ asset('images/icon/coupon-bg.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; min-height: 280px; min-width: 350px;">
+                            @else
+                            <a href="{{ route('customer.coupons.details', ['couponCode' => $coupon->code]) }}" class="card-link">
+                                <div class="card" style="background:none; border:none; background-image: url('{{ asset('images/icon/coupon-bg.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center; min-height: 280px; min-width: 350px;">
+                                    @endif
+
+                                    <div class="card-body m-5" style="padding-left:25%">
+                                        <div class="text-left md-5">
+                                            @if($coupon->end_date < \Carbon\Carbon::now()) <p class="expired">Expired</p>
+                                                @else
+                                                <p>{{ $coupon->end_date->diffInDays(\Carbon\Carbon::now()) }} days left</p>
+                                                @endif
+                                        </div>
+                                        <h4 class="card-title heading">{{ $coupon->name }}</h4>
+                                        <br>
+                                        <br>
+                                        <h5 class="card-text">
+                                            Discount: RM {{ $coupon->discount }}<br>
+                                            Expiry Date: {{ \Carbon\Carbon::parse($coupon->end_date)->format('d M Y') }}
+                                        </h5>
+                                    </div>
+                                </div>
+                            </a>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+            @else
+            <div class="row justify-content-center align-items-center">
+                <div class="col-md-8 m-5">
+                    <div class="text-center">
+                        <h5>You currently don't have any valid coupons. Start collecting points to claim exciting discounts!</h5>
+                    </div>
+                </div>
+            </div>
+            @endif
+        </div>
 
         <h2 class="heading"> Available Coupons</h2>
-
 
         <div class="col-md-8 mt-3">
             <div class="d-flex ">
@@ -148,10 +196,9 @@
                 }
             });
         });
-    });
-</script>
 
-<script>
+    });
+
     $(document).ready(function() {
         $('.claim-btn').click(function(e) {
             e.preventDefault();
@@ -164,34 +211,32 @@
             }
         });
     });
-</script>
 
-<!-- <script>
     $(document).ready(function() {
-        $('.claim-btn').click(function(e) {
-            e.preventDefault();
+        // Show valid coupon cards by default
+        toggleCouponCards('valid');
 
-            var couponId = $(this).data('coupon-id');
-
-            if (confirm('Are you sure you want to claim this coupon?')) {
-                $.ajax({
-                    type: 'POST',
-                    url: '{{ route('customer.coupons.claim') }}',
-                    data: {
-                        coupon_id: couponId,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(response) {
-                        alert(response.message); // Display success message
-                        location.reload(); // Refresh the page
-                    },
-                    error: function(xhr, status, error) {
-                        alert(xhr.responseJSON.message); // Display error message
-                    }
-                });
-            }
+        $('#validCouponsBtn').click(function() {
+            console.log('Valid Coupons button clicked');
+            toggleCouponCards('valid');
         });
-    });
-</script> -->
 
+        $('#expiredCouponsBtn').click(function() {
+            console.log('Expired Coupons button clicked');
+            toggleCouponCards('expired');
+        });
+
+        function toggleCouponCards(filter) {
+            $('.coupon-card').each(function() {
+                if (filter === 'valid' && !$(this).hasClass('expired')) {
+                    $(this).show();
+                } else if (filter === 'expired' && $(this).hasClass('expired')) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        }
+    });
+</script>
 @endsection

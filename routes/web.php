@@ -46,7 +46,6 @@ Route::group(['middleware' => 'auth:customer'], function () {
     Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
     Route::view('/customer', 'customer.customerHome');
     Route::get('/customer/membership', [CustomerController::class, 'showQRandBarCode'])->name('customer.membership');
-    Route::view('/customer/coupons', 'customer.coupons')->name('customer.coupons');
     Route::get('/customer/coupons', [CustomerController::class, 'getCouponsInfo'])->name('customer.coupons');
     Route::post('/customer/coupons/claim', [CustomerController::class, 'claimCoupon'])->name('customer.coupons.claim');
     Route::get('/customer/coupons/details/{couponCode}', [CustomerController::class, 'getCouponDetails'])->name('customer.coupons.details');

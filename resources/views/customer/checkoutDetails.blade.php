@@ -67,7 +67,7 @@
 
         <div class="row justify-content-center align-items-center mt-3">
             <div class="col-md-6 text-center">
-                <a href="{{ route('customer.coupons') }}" class="btn btn-secondary">Back to Coupons</a>
+                <a href="{{ route('customer.coupons') }}" class="btn btn-secondary">Back to My Coupons</a>
             </div>
             <div class="col-md-6 text-center">
                 <a href="{{ route('customer.checkout.history') }}" class="btn btn-secondary">Go to Checkout History</a>
