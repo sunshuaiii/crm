@@ -277,11 +277,24 @@ class CustomerController extends Controller
         // Get the authenticated customer
         $customer = Auth::user();
 
-        // Find the coupon details using the coupon code
-        $couponDetails = CustomerCoupon::where('code', $couponCode)->whereDate('customer_coupons.end_date', '>=', now())->first();
+        // validate the coupon before checkout
 
+        // check if the code is valid
+        $couponDetails = CustomerCoupon::where('code', $couponCode)->first();
         if (!$couponDetails) {
-            return redirect()->route('customer.coupons')->with('error', 'Coupon not found. The coupon is expired.');
+            return redirect()->route('customer.coupons')->with('error', 'Coupon not found.');
+        }
+
+        // check if the coupon is expired
+        $couponValid = CustomerCoupon::where('code', $couponCode)->whereDate('customer_coupons.end_date', '>=', now())->first();
+        if (!$couponValid) {
+            return redirect()->route('customer.coupons')->with('error', 'The coupon is expired.');
+        }
+
+        // check if the coupon is redeemed
+        $couponClaimed = CustomerCoupon::where('code', $couponCode)->where('customer_coupons.status', 'Claimed')->first();
+        if (!$couponClaimed) {
+            return redirect()->route('customer.coupons')->with('error', 'Sorry, you have already redeemed this coupon.');
         }
 
         // Generate random payment method
