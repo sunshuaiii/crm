@@ -62,6 +62,8 @@ Route::group(['middleware' => 'auth:customer'], function () {
 
 Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin', [AdminController::class, 'adminHome'])->name('admin.adminHome');
+    Route::get('/admin/getSupportStaffInsights/{staffId}', [AdminController::class, 'getSupportStaffInsights']);
+    Route::get('/admin/getMarketingStaffInsights/{staffId}', [AdminController::class, 'getMarketingStaffInsights']);
     Route::get('/admin/couponManagement', [AdminController::class, 'getAllCoupons'])->name('admin.couponManagement');
     Route::get('/admin/couponManagement/addCoupon', [AdminController::class, 'addCoupon'])->name('admin.addCoupon');
     Route::get('/admin/couponManagement/editCoupon/{id}', [AdminController::class, 'editCoupon'])->name('admin.editCoupon');
@@ -84,7 +86,11 @@ Route::group(['middleware' => 'auth:marketingStaff'], function () {
     Route::get('/marketingStaff', [MarketingStaffController::class, 'marketingStaffHome'])->name('marketingStaff.marketingStaffHome');
     Route::post('/marketingStaff/updateRfmScores', [MarketingStaffController::class, 'updateRfmScores'])->name('marketingStaff.updateRfmScores');
     Route::get('/marketingStaff/reportGeneration', [MarketingStaffController::class, 'reportGeneration'])->name('marketingStaff.reportGeneration');
-    Route::get('/marketingStaff/leadManagement', [MarketingStaffController::class, 'leadManagement'])->name('marketingStaff.leadManagement');
+    Route::get('/marketingStaff/leadManagement', [MarketingStaffController::class, 'getAllLeadsForMarketingStaff'])->name('marketingStaff.leadManagement');
+    Route::get('/marketingStaff/leadManagement/addLead', [MarketingStaffController::class, 'addLead'])->name('marketingStaff.addLead');
+    Route::post('/marketingStaff/leadManagement/storeLead', [MarketingStaffController::class, 'storeLead'])->name('marketingStaff.storeLead');
+    Route::get('/marketingStaff/leadDetails/{id}', [MarketingStaffController::class, 'viewLeadDetails'])->name('marketingStaff.viewLead');
+    Route::post('/marketingStaff/updateLeadStatus', [MarketingStaffController::class, 'updateLeadStatus'])->name('marketingStaff.updateLeadStatus');
     Route::view('/marketingStaff/searchCustomer', 'searchCustomer')->name('marketingStaff.searchCustomer');
     Route::post('/marketingStaff/searchCustomer', [MarketingStaffController::class, 'searchCustomers'])->name('marketingStaff.searchCustomer.submit');
     Route::get('/marketingStaff/viewCustomer/{id}', [MarketingStaffController::class, 'viewCustomer'])->name('marketingStaff.viewCustomer');

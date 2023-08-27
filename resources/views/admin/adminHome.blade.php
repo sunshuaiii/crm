@@ -16,7 +16,7 @@
     </div>
     @endif
     <div class="header">Admin Dashboard</div>
-    
+
     <div class="col-md-12 mb-4">
         <h4 class="sub-header">Coupon Insights</h4>
         <div class="card">
@@ -49,8 +49,8 @@
                         </div>
                     </div>
                     <div class='col-md-6 mt-4'>
-                        <h4 class="chart-title">Coupon Status Distribution</h4>
-                        <div style="max-width: 250px; margin: auto;">
+                        <h4 class="chart-title">Coupon Status Percentage Distribution </h4>
+                        <div style="max-width: 220px; margin: auto;">
                             <canvas id="couponStatusDistributionChart"></canvas>
                         </div>
                     </div>
@@ -73,7 +73,7 @@
                     <div class="col-md-6 mt-4">
                         <h4 class="chart-title">Coupon Usage by Customer Segments</h4>
                         <div style="max-width: 400px; margin: auto;">
-                        <canvas id="couponUsageBySegmentsChart"></canvas>
+                            <canvas id="couponUsageBySegmentsChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -90,6 +90,36 @@
                 <h4 class="chart-title">Summary</h4>
                 <div style="max-width: 250px; margin: auto;">
                     <canvas id="staffInsights"></canvas>
+                </div>
+
+                <h4 class="chart-title">Support Staff Insights</h4>
+                <div class="form-group">
+                    <label for="selectSupportStaff">Select Support Staff ID:</label>
+                    <select id="selectSupportStaff" class="form-control">
+                        <option value="">Select an ID</option>
+                        @foreach($supportStaffIds as $id)
+                        <option value="{{ $id }}">{{ $id }}</option>
+                        @endforeach
+                    </select>
+                    <button id="btnGetSupportStaffInsights" class="btn btn-primary mt-2">Get Support Staff Insights</button>
+                </div>
+                <div id="supportStaffInsights">
+                    <!-- Content from AJAX response will be displayed here -->
+                </div>
+
+                <h4 class="chart-title">Marketing Staff Insights</h4>
+                <div class="form-group">
+                    <label for="selectMarketingStaff">Select Marketing Staff ID:</label>
+                    <select id="selectMarketingStaff" class="form-control">
+                        <option value="">Select an ID</option>
+                        @foreach($marketingStaffIds as $id)
+                        <option value="{{ $id }}">{{ $id }}</option>
+                        @endforeach
+                    </select>
+                    <button id="btnGetMarketingStaffInsights" class="btn btn-primary mt-2">Get Marketing Staff Insights</button>
+                </div>
+                <div id="marketingStaffInsights">
+                    <!-- Content from AJAX response will be displayed here -->
                 </div>
             </div>
         </div>
@@ -208,7 +238,7 @@
         data: {
             labels: ['Claimed', 'Redeemed'],
             datasets: [{
-                data: [{{ $claimedCoupons }}, {{ $redeemedCoupons }}],
+                data: [{{ $claimedPercentage }}, {{ $redeemedPercentage }}],
                 backgroundColor: ['#36A2EB', '#FF5733'],
             }]
         },

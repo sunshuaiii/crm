@@ -17,7 +17,7 @@ use Illuminate\Validation\ValidationException;
 
 class AdminController extends Controller
 {
-    public function adminHome()
+    public function adminHome(Request $request)
     {
         $claimedCoupons = CustomerCoupon::where('status', "Claimed")->get()->count();
         $redeemedCoupons = CustomerCoupon::where('status', "Redeemed")->get()->count();
@@ -62,6 +62,18 @@ class AdminController extends Controller
         )
             ->groupBy('status')
             ->get();
+
+        // Calculate total coupons
+        $totalCoupons = $couponStatusDistribution->sum('status_count');
+
+        // Calculate claimed and redeemed coupons count
+        $claimedCoupons = $couponStatusDistribution->where('status', 'Claimed')->first()->status_count ?? 0;
+        $redeemedCoupons = $couponStatusDistribution->where('status', 'Redeemed')->first()->status_count ?? 0;
+
+        // Calculate claimed and redeemed coupons percentage
+        $claimedPercentage = ($claimedCoupons / $totalCoupons) * 100;
+        $redeemedPercentage = ($redeemedCoupons / $totalCoupons) * 100;
+
 
         // Coupon Usage Over Time
         $couponUsageOverTime = CustomerCoupon::select(
@@ -108,9 +120,14 @@ class AdminController extends Controller
         $totalMarketingStaff = MarketingStaff::all()->count();
         $totalSupportStaff = SupportStaff::all()->count();
 
+        $supportStaffIds = SupportStaff::pluck('id');
+        $marketingStaffIds = MarketingStaff::pluck('id');
+
         return view('admin.adminHome', compact(
             'claimedCoupons',
             'redeemedCoupons',
+            'claimedPercentage',
+            'redeemedPercentage',
             'totalAvailableCoupons',
             'expiredCoupons',
             'redemptionRates',
@@ -123,8 +140,57 @@ class AdminController extends Controller
             'claimedCouponsBySegment',
             'redeemedCouponsBySegment',
             'totalMarketingStaff',
-            'totalSupportStaff'
+            'totalSupportStaff',
+            'totalCoupons',
+            'supportStaffIds',
+            'marketingStaffIds'
         ));
+    }
+
+    public function getSupportStaffInsights($staffId)
+    {
+        dd($staffId);
+        // Retrieve support staff insights data based on the $staffId
+        // Example: $ticketsAssigned, $openTickets, $pendingTickets, $solvedTickets, $closedTickets
+
+        // return view('admin.adminHome', [
+        //     'ticketsAssigned' => $ticketsAssigned,
+        //     'openTickets' => $openTickets,
+        //     'pendingTickets' => $pendingTickets,
+        //     'solvedTickets' => $solvedTickets,
+        //     'closedTickets' => $closedTickets,
+        // ]);
+
+        return view('admin.adminHome', [
+            'ticketsAssigned' => 0,
+            'openTickets' => 0,
+            'pendingTickets' => 0,
+            'solvedTickets' => 0,
+            'closedTickets' => 0,
+        ]);
+    }
+
+    public function getMarketingStaffInsights($staffId)
+    {
+        dd($staffId);
+        // Retrieve marketing staff insights data based on the $staffId
+        // Example: $leadsAssigned, $newLeads, $contactedLeads, $interestedLeads, $notInterestedLeads
+
+        // return view('admin.adminHome', [
+        //     'leadsAssigned' => $leadsAssigned,
+        //     'newLeads' => $newLeads,
+        //     'contactedLeads' => $contactedLeads,
+        //     'interestedLeads' => $interestedLeads,
+        //     'notInterestedLeads' => $notInterestedLeads,
+        // ]);
+
+        return view('admin.adminHome', [
+            'leadsAssigned' => 0,
+            'newLeads' => 0,
+            'contactedLeads' => 0,
+            'interestedLeads' => 0,
+            'notInterestedLeads' => 0,
+        ]);
     }
 
     public function getAllCoupons()

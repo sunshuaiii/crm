@@ -9,7 +9,19 @@ class Lead extends Model
 {
     use HasFactory;
 
-    public function getMarketingStaff(){
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'contact',
+        'email',
+        'gender',
+        'status',
+        'activity',
+        'marketing_staff_id'
+    ];
+
+    public function getMarketingStaff()
+    {
         return $this->belongsTo(MarketingStaff::class);
     }
 }

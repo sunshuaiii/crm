@@ -20,7 +20,7 @@ class LeadsSeeder extends Seeder
         $status = ['New', 'Contacted', 'Interested', 'Not interested'];
         $mStaffIDs = DB::table('marketing_staff')->pluck('id');
 
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 50; $i++) {
             DB::table('leads')->insert([
                 'first_name' => $faker->firstName,
                 'last_name' => $faker->lastName,
