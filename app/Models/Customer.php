@@ -68,6 +68,11 @@ class Customer extends Authenticatable
         return $this->belongsToMany(Coupon::class);
     }
 
+    public function checkouts()
+    {
+        return $this->hasMany(Checkout::class);
+    }
+
     public function updatePoints($pointsToAdd)
     {
         $this->points += $pointsToAdd;

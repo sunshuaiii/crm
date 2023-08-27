@@ -75,11 +75,23 @@
                             <td>{{ $customer->contact }}</td>
                             <td>{{ $customer->created_at }}</td>
                             @if(Auth::guard('admin')->check())
-                            <td><a href="{{ route('admin.viewCustomer', ['id' => $customer->id]) }}" class="btn btn-primary">View Customer</a></td>
+                            <td>
+                                <a href="{{ route('admin.viewCustomer', ['id' => $customer->id]) }}" class="btn btn-primary">
+                                    <i class="fas fa-user"></i> View Customer
+                                </a>
+                            </td>
                             @elseif(Auth::guard('supportStaff')->check())
-                            <td><a href="{{ route('supportStaff.viewCustomer', ['id' => $customer->id]) }}" class="btn btn-primary">View Customer</a></td>
+                            <td>
+                                <a href="{{ route('supportStaff.viewCustomer', ['id' => $customer->id]) }}" class="btn btn-primary">
+                                    <i class="fas fa-user"></i> View Customer
+                                </a>
+                            </td>
                             @elseif(Auth::guard('marketingStaff')->check())
-                            <td><a href="{{ route('marketingStaff.viewCustomer', ['id' => $customer->id]) }}" class="btn btn-primary">View Customer</a></td>
+                            <td>
+                                <a href="{{ route('marketingStaff.viewCustomer', ['id' => $customer->id]) }}" class="btn btn-primary">
+                                    <i class="fas fa-user"></i> View Customer
+                                </a>
+                            </td>
                             @endif
                         </tr>
                         @endforeach

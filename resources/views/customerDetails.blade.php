@@ -19,7 +19,7 @@
     @endif
 
     <div class="mt-4">
-        <h4>Customer Details:</h4>
+        <h4><i class="fas fa-user text-primary"></i> Customer Details:</h4>
         <table class="table">
             <tr>
                 <th>ID</th>

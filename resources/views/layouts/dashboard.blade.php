@@ -44,11 +44,13 @@
             text-align: center;
             margin-bottom: 4%;
         }
+
         .sub-header {
             text-align: center;
             margin-bottom: 2%;
             font-weight: bold;
         }
+
         .chart-title {
             text-align: center;
             margin-bottom: 2%;
@@ -119,14 +121,14 @@
             </li>
             <li>
                 <a href="{{ route('marketingStaff.reportGeneration') }}">
-                    <i class='bx bx-user-plus'></i>
+                    <i class="fas fa-chart-bar"></i>
                     <span class="links_name">Report Generation</span>
                 </a>
                 <span class="tooltip">Report Generation</span>
             </li>
             <li>
                 <a href="{{ route('marketingStaff.leadManagement') }}">
-                    <i class='bx bx-gift'></i>
+                    <i class="fas fa-bullseye"></i>
                     <span class="links_name">Lead Management</span>
                 </a>
                 <span class="tooltip">Lead Management</span>

@@ -40,4 +40,14 @@ class Checkout extends Model
     {
         return $this->belongsTo(CustomerCoupon::class, 'customer_coupon_id');
     }
+    
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(CheckoutProduct::class);
+    }
 }

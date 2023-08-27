@@ -25,5 +25,10 @@
             </div>
         </div>
     </div>
+    <!-- Add this button to trigger RFM scores update -->
+    <form action="{{ route('marketingStaff.updateRfmScores') }}" method="post">
+        @csrf
+        <button type="submit" class="btn btn-primary">Update RFM Scores</button>
+    </form>
 </div>
 @endsection

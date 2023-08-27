@@ -73,12 +73,12 @@
                 @if (Route::has('login') && !Auth::user())
                 <a class="navbar-brand" href="{{ url('/') }}">
                     <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 35px; height: 35px;">
-                    {{ config('app.name', 'Customer Relationship System') }}
+                    {{ config('app.name', 'Customer Relationship Management System') }}
                 </a>
                 @else
                 <a class="navbar-brand" href="{{ url('/customer') }}">
                     <img src="{{ asset('images/icon/points.png') }}" alt="Points Image" class="mr-3" style="width: 35px; height: 35px;">
-                    {{ config('app.name', 'Customer Relationship System') }}
+                    {{ config('app.name', 'Customer Relationship Management System') }}
                 </a>
                 @endif
 
@@ -174,7 +174,7 @@
         </main>
 
         <footer class="footer py-3">
-            &copy; {{ date('Y') }} {{ 'Customer Relationship System for Retail Store' }}. All rights reserved.
+            &copy; {{ date('Y') }} {{ 'Customer Relationship Management System for Retail Store' }}. All rights reserved.
         </footer>
     </div>
 </body>

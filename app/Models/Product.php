@@ -12,4 +12,9 @@ class Product extends Model
     public function getCheckouts(){
         return $this->belongsToMany(Checkout::class);
     }
+
+    public function checkoutProducts()
+    {
+        return $this->hasMany(CheckoutProduct::class);
+    }
 }
