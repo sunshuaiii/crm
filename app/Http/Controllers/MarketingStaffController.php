@@ -31,6 +31,12 @@ class MarketingStaffController extends Controller
         ));
     }
 
+    public function updateCSegment()
+    {
+        
+        return redirect()->route('marketingStaff.marketingStaffHome')->with('success', 'Customer segments updated successfully!');
+    }
+
     public function updateRfmScores()
     {
         // $latestDate = Checkout::max('date');
