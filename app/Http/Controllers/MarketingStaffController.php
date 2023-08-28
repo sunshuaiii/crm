@@ -33,7 +33,7 @@ class MarketingStaffController extends Controller
 
     public function updateCSegment()
     {
-        
+
         return redirect()->route('marketingStaff.marketingStaffHome')->with('success', 'Customer segments updated successfully!');
     }
 
@@ -43,6 +43,7 @@ class MarketingStaffController extends Controller
         $latestDate = Carbon::now();
 
         $customers = Customer::all();
+        // $customers = Customer::where('id', 10000)->get();
 
         foreach ($customers as $customer) {
             $latestCheckoutDate = CheckoutProduct::join('checkouts', 'checkout_products.checkout_id', '=', 'checkouts.id')
@@ -50,18 +51,36 @@ class MarketingStaffController extends Controller
                 ->max('checkouts.date');
 
             if ($latestCheckoutDate) {
-                $recencyScore = $latestDate->diffInDays($latestCheckoutDate);
+                $recencyScore = $latestDate->diffInDays($latestCheckoutDate) + 1;
             } else {
                 // Set a default recency score if no checkout history
                 $recencyScore = 365; // Assuming 1 year
             }
 
             $frequencyScore = $customer->checkouts->count(); // Assuming checkouts relation in Customer model
-            $monetaryScore = DB::table('checkouts')
-                ->join('checkout_products', 'checkouts.id', '=', 'checkout_products.checkout_id')
-                ->join('products', 'checkout_products.product_id', '=', 'products.id')
-                ->where('checkouts.customer_id', $customer->id)
-                ->sum(DB::raw('products.unit_price * checkout_products.quantity'));
+            // $monetaryScore = DB::table('checkouts')
+            //     ->join('checkout_products', 'checkouts.id', '=', 'checkout_products.checkout_id')
+            //     ->join('products', 'checkout_products.product_id', '=', 'products.id')
+            //     ->where('checkouts.customer_id', $customer->id)
+            //     ->sum(DB::raw('products.unit_price * checkout_products.quantity'));
+
+            // Retrieve customer's checkouts with related checkout products and products
+            $checkouts = $customer->checkouts()
+                ->with(['checkoutProducts.product'])
+                ->get();
+
+            // Initialize a variable to store the monetary score
+            $monetaryScore = 0;
+
+            // Calculate the monetary score
+            foreach ($checkouts as $checkout) {
+                foreach ($checkout->checkoutProducts as $checkoutProduct) {
+                    $product = $checkoutProduct->product;
+                    if ($product && $product->unit_price !== null) {
+                        $monetaryScore += ($product->unit_price * $checkoutProduct->quantity);
+                    }
+                }
+            }
 
             // Update the RFM scores in the customers table
             $customer->r_score = $recencyScore;

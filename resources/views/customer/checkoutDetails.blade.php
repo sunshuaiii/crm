@@ -42,8 +42,8 @@
                 <tr>
                     <td>{{ $checkoutProduct->product->name }}</td>
                     <td>{{ $checkoutProduct->quantity }}</td>
-                    <td>RM {{ $checkoutProduct->product->unit_price }}</td>
-                    <td>RM {{ $checkoutProduct->product->unit_price * $checkoutProduct->quantity }}</td>
+                    <td>RM {{ number_format($checkoutProduct->product->unit_price, 2) }}</td>
+                    <td>RM {{ number_format($checkoutProduct->product->unit_price * $checkoutProduct->quantity, 2) }}</td>
                 </tr>
                 @endforeach
 
@@ -51,7 +51,7 @@
                     <td colspan="3" class="text-right">
                         <i class="fas fa-dollar-sign"></i> Total Amount:
                     </td>
-                    <td>RM {{ $totalAmount }}</td>
+                    <td>RM {{ number_format($totalAmount, 2) }}</td>
                 </tr>
 
                 @if($couponDiscount)
@@ -59,13 +59,13 @@
                     <td colspan="3" class="text-right">
                         <i class="fas fa-percent"></i> Coupon Discount:
                     </td>
-                    <td>RM {{ $couponDiscount }}</td>
+                    <td>RM {{ number_format($couponDiscount, 2) }}</td>
                 </tr>
                 <tr>
                     <td colspan="3" class="text-right">
                         <i class="fas fa-money-bill-wave"></i> Final Amount:
                     </td>
-                    <td>RM {{ $finalAmount }}</td>
+                    <td>RM {{ number_format($finalAmount, 2) }}</td>
                 </tr>
                 @endif
 

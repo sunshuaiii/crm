@@ -29,7 +29,7 @@ return new class extends Migration
                 $table->integer('points')->default(0);
                 $table->integer('r_score')->default(0);
                 $table->integer('f_score')->default(0);
-                $table->integer('m_score')->default(0);
+                $table->double('m_score', 8, 2)->default(0);
                 $table->string('c_segment')->default("NA");
                 $table->rememberToken();
                 $table->timestamps();

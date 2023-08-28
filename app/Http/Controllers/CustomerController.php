@@ -314,6 +314,7 @@ class CustomerController extends Controller
 
         // Get random product IDs
         $productIds = Product::pluck('id')->toArray();
+        // dd($productIds);
 
         // Insert checkout_products records
         for ($i = 0; $i < $numProducts; $i++) {

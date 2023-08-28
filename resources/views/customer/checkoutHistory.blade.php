@@ -26,8 +26,8 @@
                     <tr>
                         <td>{{ $checkoutSummary['checkout']->date->setTimezone('Asia/Kuala_Lumpur')->format('d M Y H:i:s') }}</td>
                         <td>{{ $checkoutSummary['checkout']->payment_method }}</td>
-                        <td>RM {{ $checkoutSummary['totalAmount'] }}</td>
-                        <td>RM {{ $checkoutSummary['finalAmount'] }}</td>
+                        <td>RM {{ number_format($checkoutSummary['totalAmount'], 2) }}</td>
+                        <td>RM {{ number_format($checkoutSummary['finalAmount'], 2) }}</td>
                         <td>{{ $checkoutSummary['pointsToCredit'] }} points</td>
                         <td>
                             <a href="{{ route('customer.checkoutDetails', ['id' => $checkoutSummary['checkout']->id]) }}" class="btn btn-primary">
