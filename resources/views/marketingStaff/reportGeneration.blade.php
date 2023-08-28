@@ -4,6 +4,7 @@
 
 @section('content')
 <div class="container-content">
+    <div class="header">Report Generation</div>
     @if(session('success'))
     <div class="alert alert-success">
         {{ session('success') }}
@@ -15,7 +16,6 @@
         {{ session('error') }}
     </div>
     @endif
-    <div class="header">Report Generation</div>
 
     Hi there, awesome marketing staff for this site!
 </div>

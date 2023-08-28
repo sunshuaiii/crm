@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Checkout;
 use App\Models\CheckoutProduct;
 use App\Models\Customer;
 use App\Models\Lead;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Symfony\Component\Process\Process;
 
 class MarketingStaffController extends Controller
 {
@@ -31,11 +30,141 @@ class MarketingStaffController extends Controller
         ));
     }
 
-    public function updateCSegment()
+    public function updateCSegment(Request $request)
     {
+        $pythonScript = base_path('kmeans_script.py');
 
-        return redirect()->route('marketingStaff.marketingStaffHome')->with('success', 'Customer segments updated successfully!');
+        $process = new Process(["python", $pythonScript]);
+        $process->run();
+
+        if ($process->isSuccessful()) {
+            return redirect()->back()->with('success', 'Python script executed.');
+        } else {
+            return redirect()->back()->with('error', 'An error occurred while executing the Python script.');
+        }
     }
+
+    // // Extract the log-transformed values into separate arrays
+    // $rScores = $logTfdData->pluck('r_score')->toArray();
+    // $fScores = $logTfdData->pluck('f_score')->toArray();
+    // $mScores = $logTfdData->pluck('m_score')->toArray();
+
+    // // Combine them into a multi-dimensional array
+    // $data = [];
+    // foreach ($rScores as $index => $rScore) {
+    //     $data[] = [$rScore, $fScores[$index], $mScores[$index]];
+    // }
+
+    // // Initialize and fit the StandardScaler
+    // $scaler = new StandardScaler();
+    // $scaler->fit($data);
+
+    // // Scale the data
+    // $scaledData = $scaler->transform($data);
+
+    // public function updateCSegment()
+    // {
+    //     // Step 1: Fetch the scores from the database
+    //     $customers = DB::table('customers')->select('r_score', 'f_score', 'm_score')->get();
+
+    //     // Transform Eloquent collection into an array
+    //     $scores = $customers->map(function ($customer) {
+    //         return [
+    //             'r_score' => $customer->r_score,
+    //             'f_score' => $customer->f_score,
+    //             'm_score' => $customer->m_score,
+    //         ];
+    //     })->toArray();
+
+    //     // Create a collection from the scores array
+    //     $RFMScores = collect($scores);
+
+    //     // Step 2: Perform Log transformation to bring data into normal or near-normal distribution
+    //     // Apply natural logarithm and round to three decimal places
+    //     $logTfdData = $RFMScores->map(function ($score) {
+    //         return [
+    //             'r_score' => round(log($score['r_score']), 3),
+    //             'f_score' => round(log($score['f_score']), 3),
+    //             'm_score' => round(log($score['m_score']), 3),
+    //         ];
+    //     });
+
+    //     // Step 3: Bring the data on the same scale
+    //     // Calculate means and standard deviations for each column
+    //     $meanValues = [
+    //         'r_score' => $logTfdData->avg('r_score'),
+    //         'f_score' => $logTfdData->avg('f_score'),
+    //         'm_score' => $logTfdData->filter(function ($item) {
+    //             // Exclude zero and negative values from the calculation
+    //             return $item['m_score'] > 0;
+    //         })->avg('m_score'),
+    //     ];
+
+    //     $stdDevValues = [
+    //         'r_score' => sqrt(
+    //             $logTfdData->map(function ($item) use ($meanValues) {
+    //                 return pow($item['r_score'] - $meanValues['r_score'], 2);
+    //             })->sum() / ($logTfdData->count() - 1)
+    //         ),
+
+    //         'f_score' => sqrt(
+    //             $logTfdData->map(function ($item) use ($meanValues) {
+    //                 return pow($item['f_score'] - $meanValues['f_score'], 2);
+    //             })->sum() / ($logTfdData->count() - 1)
+    //         ),
+
+    //         'm_score' => sqrt(
+    //             $logTfdData->filter(function ($item) {
+    //                 // Exclude zero and negative values from the calculation
+    //                 return $item['m_score'] > 0;
+    //             })->map(function ($item) use ($meanValues) {
+    //                 return pow($item['m_score'] - $meanValues['m_score'], 2);
+    //             })->sum() / ($logTfdData->count() - 1)
+    //         ),
+    //     ];
+
+    //     // Standardize the data
+    //     $standardizedData = $logTfdData->map(function ($item) use ($meanValues, $stdDevValues) {
+    //         return [
+    //             '0' => ($item['r_score'] - $meanValues['r_score']) / sqrt($stdDevValues['r_score']),
+    //             '1' => ($item['f_score'] - $meanValues['f_score']) / sqrt($stdDevValues['f_score']),
+    //             '2' => ($item['m_score'] - $meanValues['m_score']) / sqrt($stdDevValues['m_score']),
+    //         ];
+    //     });
+
+    //     // Step 4: K-Means Clustering
+    //     // Convert the Collection to a proper array for clustering
+    //     $standardizedDataArray = $standardizedData->toArray();
+    //     // dd($standardizedDataArray);
+
+    //     // Create a KMeans instance and perform clustering
+    //     $kMeans = new KMeans(3, KMeans::INIT_KMEANS_PLUS_PLUS, 1000);
+    //     $clusterAssignments = $kMeans->cluster($standardizedDataArray);
+
+    //     // Extract the cluster assignments as a flat array
+    //     $clusterAssignmentsFlat = array_column($clusterAssignments, 0);
+
+    //     dd($clusterAssignmentsFlat);
+
+    //     // Add the 'c_segment' column to the Collection
+    //     $RFMScores->each(function ($item, $index) use ($clusterAssignments) {
+    //         $item->c_segment = (int) $clusterAssignments[$index];
+    //     });
+
+    //     // dd($RFMScores[0]);
+
+    //     // Update the database with the new cluster segment values
+    //     foreach ($RFMScores as $index => $score) {
+    //         $clusterIndex = $index;
+    //         DB::table('customers')
+    //             ->where('r_score', $score['r_score'])
+    //             ->where('f_score', $score['f_score'])
+    //             ->where('m_score', $score['m_score'])
+    //             ->update(['c_segment' => $clusterAssignments[$clusterIndex]]);
+    //     }
+
+    //     return redirect()->route('marketingStaff.marketingStaffHome')->with('success', 'Customer segments updated successfully!');
+    // }
 
     public function updateRfmScores()
     {

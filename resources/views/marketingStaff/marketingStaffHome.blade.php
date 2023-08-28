@@ -17,8 +17,6 @@
     @endif
     <div class="header">Marketing Staff Dashboard</div>
 
-
-
     <!-- Add buttons to trigger update -->
     <div class="row col-md-12">
         <div class="col-md-3">
@@ -32,7 +30,7 @@
         <div class="mb-4">
             <form id="updateCSegmentForm" action="{{ route('marketingStaff.updateCSegment') }}" method="post">
                 @csrf
-                <button type="button" class="btn btn-primary" onclick="updateCSegment()">
+                <button type="submit" class="btn btn-primary" onclick="updateCSegment()">
                     <i id="updateIcon2" class="fas fa-sync"></i> Update Customer Segment
                 </button>
             </form>
