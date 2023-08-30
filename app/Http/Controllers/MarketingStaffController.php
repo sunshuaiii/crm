@@ -50,7 +50,7 @@ class MarketingStaffController extends Controller
         $cltvData = $this->calculateCLTV();
 
         // Lead Insights
-        
+
 
         return view('marketingStaff.marketingStaffHome', compact(
             'customerDistribution',
@@ -489,21 +489,101 @@ class MarketingStaffController extends Controller
                 'activity' => 'required',
             ]);
 
-            Lead::create([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'contact' => $request->contact,
-                'email' => $request->email,
-                'gender' => $request->gender,
-                'status' => 'New',
-                'activity' => $request->activity,
-                'marketing_staff_id' => Auth::user()->id,
-            ]);
+            if ($request->has('feedback')) {
+                Lead::create([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'contact' => $request->contact,
+                    'email' => $request->email,
+                    'gender' => $request->gender,
+                    'status' => 'New',
+                    'activity' => $request->activity_string,
+                    'feedback' => $request->feedback_string,
+                    'marketing_staff_id' => Auth::user()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+
+                // Get the ID of the newly created lead
+                $newLeadId = Lead::orderBy('id', 'desc')->first()->id;
+
+                // Update activity_date and feedback_date for the newly created lead
+                Lead::where('id', $newLeadId)->update([
+                    'activity_date' => Carbon::now(),
+                    'feedback_date' => Carbon::now(),
+                ]);
+            } else {
+                Lead::create([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'contact' => $request->contact,
+                    'email' => $request->email,
+                    'gender' => $request->gender,
+                    'status' => 'New',
+                    'activity' => $request->activity_string,
+                    'marketing_staff_id' => Auth::user()->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+
+                // Get the ID of the newly created lead
+                $newLeadId = Lead::orderBy('id', 'desc')->first()->id;
+
+                // Update activity_date and feedback_date for the newly created lead
+                Lead::where('id', $newLeadId)->update([
+                    'activity_date' => Carbon::now(),
+                ]);
+            }
 
             return redirect()->route('marketingStaff.leadManagement')->with('success', 'Lead added successfully!');
-        } catch (\Exception $e) {
-            // dd($e);
-            return redirect()->back()->with('error', 'An error occurred while adding the lead. Please try again.');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $errorCode = $e->errorInfo[1]; // Get the error code
+
+            if ($errorCode === 1062) {
+                return redirect()->back()->with('error', 'A lead with the same email already exists.');
+            } else {
+                return redirect()->back()->with('error', 'An error occurred while adding the lead. Please try again.');
+            }
         }
+    }
+
+    public function updateLead($id)
+    {
+        $lead = Lead::findOrFail($id);
+        return view('marketingStaff.updateLeadDetails', ['lead' => $lead]);
+    }
+
+    public function storeUpdatedLead(Request $request, $id)
+    {
+        $lead = Lead::findOrFail($id);
+        $activityString = '';
+        $feedbackString = '';
+        $activityDate = $lead->activity_date;
+        $feedbackDate = $lead->feedback_date;
+        if ($request->input('activity')) {
+            $activityString = implode(', ', $request->input('activity'));
+            $activityDate = Carbon::now();
+        }
+        if ($request->input('feedback')) {
+            $feedbackString = implode(', ', $request->input('feedback'));
+            $feedbackDate = Carbon::now();
+        }
+
+        // Update the lead details
+        $lead->first_name = $request->input('first_name');
+        $lead->last_name = $request->input('last_name');
+        $lead->contact = $request->input('contact');
+        $lead->email = $request->input('email');
+        $lead->gender = $request->input('gender');
+        $lead->activity = $activityString;
+        $lead->feedback = $feedbackString;
+        $lead->activity_date = $activityDate;
+        $lead->feedback_date = $feedbackDate;
+
+        // Save the updated lead
+        $lead->save();
+
+        return redirect()->route('marketingStaff.leadManagement', ['id' => $lead->id])
+            ->with('success', 'Lead details updated successfully.');
     }
 }

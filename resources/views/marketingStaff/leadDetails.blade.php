@@ -20,7 +20,7 @@
 
     <div class="row mt-4">
         <div class="col-md-8 offset-md-2">
-            <h5>{{ $lead->status }}</h5>
+            <h5>{{ $lead->status }} Lead </h5>
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
@@ -56,7 +56,39 @@
                         N/A
                         @endif
                     </p>
-                    <p class="card-text">{{ $lead->activity }}</p>
+                    <div class="activity mb-2">
+                        <p>Activity: @if ($lead->activity_date)
+                            (Updated At: {{ $lead->activity_date->setTimezone('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s') }})
+                            @else
+                            (Updated At: NA)
+                            @endif
+                        </p>
+                        <div class="tag-container">
+                            @php
+                            $activityTags = $lead->activity ? explode(',', $lead->activity) : ['NA'];
+                            @endphp
+                            @foreach($activityTags as $tag)
+                            <button class="tag">{{ trim($tag) }}</button>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="feedback mb-4">
+                        <p>Feedback: @if ($lead->feedback_date)
+                            (Updated At: {{ $lead->feedback_date->setTimezone('Asia/Kuala_Lumpur')->format('Y-m-d H:i:s') }})
+                            @else
+                            (Updated At: NA)
+                            @endif
+                        </p>
+                        <div class="tag-container">
+                            @php
+                            $feedbackTags = $lead->feedback ? explode(',', $lead->feedback) : ['NA'];
+                            @endphp
+                            @foreach($feedbackTags as $tag)
+                            <button class="tag">{{ trim($tag) }}</button>
+                            @endforeach
+                        </div>
+                    </div>
 
                     <div class="text-end">
                         <a href="{{ route('marketingStaff.leadManagement') }}" class="btn btn-secondary">Back to Lead Management</a>

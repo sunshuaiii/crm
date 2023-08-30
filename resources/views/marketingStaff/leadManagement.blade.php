@@ -67,11 +67,31 @@
                         <p class="card-text">Last Name: {{ $lead->last_name }}</p>
                         <p class="card-text">Contact: {{ $lead->contact }}</p>
                         <p class="card-text">Email: {{ $lead->email }}</p>
-                        <p class="card-text">Activity: {{ strlen($lead->activity) > 200 ? substr($lead->activity, 0, 200) . '...' : $lead->activity }}</p>
+
+                        <div class="tag-container activity mb-2">
+                            <p class="card-text">Activity:</p>
+                            @php
+                            $activityTags = $lead->activity ? explode(',', $lead->activity) : ['NA'];
+                            @endphp
+                            @foreach($activityTags as $tag)
+                            <button class="tag">{{ trim($tag) }}</button>
+                            @endforeach
+                        </div>
+
+                        <div class="tag-container feedback mb-2">
+                            <p class="card-text">Feedback:</p>
+                            @php
+                            $feedbackTags = $lead->feedback ? explode(',', $lead->feedback) : ['NA'];
+                            @endphp
+                            @foreach($feedbackTags as $tag)
+                            <button class="tag">{{ trim($tag) }}</button>
+                            @endforeach
+                        </div>
 
                         <div class="d-flex justify-content-between">
                             <div class="text-end">
                                 <a href="{{ route('marketingStaff.viewLead', ['id' => $lead->id]) }}" class="btn btn-primary">View Lead Details</a>
+                                <a href="{{ route('marketingStaff.updateLead', ['id' => $lead->id]) }}" class="btn btn-primary">Update Lead Details</a>
                             </div>
 
                             <div class="text-end">

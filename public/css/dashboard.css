@@ -308,3 +308,34 @@
     padding: 0.2rem; /* Adjust the padding as needed */
     font-size: 0.8rem; /* Adjust the font size as needed */
 }
+
+.tag-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.tag {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.activity .tag {
+    background-color: #64b5f6; /* Activity tag color */
+}
+
+.feedback .tag {
+    background-color: #81c784; /* Feedback tag color */
+}
+
+.tag:hover {
+    background-color: #ccc;
+}

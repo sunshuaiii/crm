@@ -22,9 +22,9 @@ class LeadsSeeder extends Seeder
         $mStaffIDs = DB::table('marketing_staff')->pluck('id');
 
         $activityTypes = [
-            'website visit', 'email opened', 'phone call', 'meeting scheduled',
-            'follow-up email', 'demo attended', 'social media engagement', 'product trial started',
-            'content download', 'event registration', 'proposal sent', 'contract negotiation',
+            'Website visit', 'Email opened', 'Phone call', 'Meeting scheduled',
+            'Follow-up email', 'Demo attended', 'Social media engagement', 'Product trial started',
+            'Content download', 'Event registration', 'Proposal sent', 'Contract negotiation',
         ];
 
         $feedbackMessages = [
@@ -55,6 +55,28 @@ class LeadsSeeder extends Seeder
             $selectedFeedbackMessages = array_intersect_key($feedbackMessages, array_flip((array) $selectedFeedbackIndices));
             $feedbackString = implode(', ', $selectedFeedbackMessages);
 
+            $activity_date = null;
+            $feedback_date = null;
+
+            if ($activityString != '') {
+                $activity_date = Carbon::now()->subDays(rand(1, 30));
+            }
+            if ($feedbackString != '') {
+                $feedback_date = Carbon::now()->subDays(rand(1, 30));
+            }
+
+            $created_at = Carbon::now()->subDays(30);
+
+            if ($activity_date && $feedback_date) {
+                $updated_at = $activity_date->max($feedback_date);
+            } else if ($activity_date) {
+                $updated_at = $activity_date;
+            } else if ($feedback_date) {
+                $updated_at = $feedback_date;
+            } else {
+                $updated_at = $created_at;
+            }
+
             $leadData[] = [
                 'first_name' => $faker->firstName,
                 'last_name' => $faker->lastName,
@@ -64,9 +86,11 @@ class LeadsSeeder extends Seeder
                 'status' => $faker->randomElement($status),
                 'activity' => $activityString,
                 'feedback' => $feedbackString,
-                'activity_date' => Carbon::now()->subDays(rand(1, 30)), // Random date within the last month
-                'feedback_date' => Carbon::now()->subDays(rand(1, 30)), // Random date within the last month
+                'activity_date' => $activity_date, // Random date within the last month
+                'feedback_date' => $feedback_date, // Random date within the last month
                 'marketing_staff_id' => $faker->randomElement($mStaffIDs),
+                'created_at' => $created_at,
+                'updated_at' => $updated_at,
             ];
         }
 
