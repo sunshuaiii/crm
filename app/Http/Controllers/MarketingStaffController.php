@@ -13,7 +13,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Symfony\Component\Process\Process;
+use Illuminate\Support\Collection;
+use Sentiment\Analyzer;
 
 class MarketingStaffController extends Controller
 {
@@ -49,9 +50,76 @@ class MarketingStaffController extends Controller
 
     public function leadInsights()
     {
+        $activityCounts = $this->leadActivityAnalysis();
+        $$sentimentCounts = $this->feedbackSentimentAnalysis();
+
         return view('marketingStaff.leadInsights', compact(
-            '',
+            'activityCounts',
+            '$sentimentCounts',
         ));
+    }
+
+    private function feedbackSentimentAnalysis()
+    {
+        $feedbackData = DB::table('leads')
+            ->select('feedback')
+            ->whereNotNull('feedback')
+            ->get();
+
+        $positiveCount = 0;
+        $negativeCount = 0;
+        $neutralCount = 0;
+
+        $analyzer = new Analyzer();
+
+        foreach ($feedbackData as $feedbackEntry) {
+            $feedbackText = $feedbackEntry->feedback;
+
+            // Use VADER Sentiment Analysis
+            $sentiment = $analyzer->getSentiment($feedbackText);
+
+            // Determine sentiment
+            if ($sentiment['compound'] >= 0.05) {
+                $positiveCount++;
+            } elseif ($sentiment['compound'] <= -0.05) {
+                $negativeCount++;
+            } else {
+                $neutralCount++;
+            }
+        }
+
+        $sentimentCounts = [
+            'Positive' => $positiveCount,
+            'Negative' => $negativeCount,
+            'Neutral' => $neutralCount,
+        ];
+
+        return $sentimentCounts;
+    }
+
+    private function leadActivityAnalysis()
+    {
+        $activityData = DB::table('leads')
+            // ->where('marketing_staff_id', Auth::user()->id)
+            ->select('activity')
+            ->get();
+
+        $activityCounts = [];
+
+        foreach ($activityData as $activityRecord) {
+            $activityTypes = explode(', ', $activityRecord->activity);
+            foreach ($activityTypes as $type) {
+                if (!empty($type)) {
+                    if (!isset($activityCounts[$type])) {
+                        $activityCounts[$type] = 1;
+                    } else {
+                        $activityCounts[$type]++;
+                    }
+                }
+            }
+        }
+
+        return $activityCounts;
     }
 
     public function productInsights()

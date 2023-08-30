@@ -15,16 +15,31 @@
         {{ session('error') }}
     </div>
     @endif
-    <div class="header">Lead Insights/div>
+    <div class="header">Lead Insights</div>
 
     <div class="col-md-12 mb-4">
         <div class="card">
             <div class="card-body">
                 <div class="row justify-content-center">
                     <div class='col-md-6 mt-4'>
-                        <h4 class="chart-title">Customer Distribution by RFM Scores and Segments</h4>
+                        <h4 class="chart-title">Lead Activity Analysis</h4>
                         <div style="max-width: 500px; margin: auto;">
-                            <canvas id="customerDistributionChart"></canvas>
+                            <canvas id="activityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="row justify-content-center">
+                    <div class='col-md-6 mt-4'>
+                        <h4 class="chart-title">Feedback Sentiment Analysis</h4>
+                        <div style="max-width: 500px; margin: auto;">
+                            <canvas id="sentimentChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -41,6 +56,51 @@
 </div>
 
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var activityCounts = @json($activityCounts);
 
+        var ctx = document.getElementById('activityChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(activityCounts),
+                datasets: [{
+                    label: 'Activity Counts',
+                    data: Object.values(activityCounts),
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderWidth: 1,
+                }],
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stepSize: 1,
+                    },
+                },
+            },
+        });
+    });
+
+    // Function to render sentiment analysis chart
+    function renderSentimentChart(sentimentData) {
+        var ctx = document.getElementById('sentimentChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(sentimentData),
+                datasets: [{
+                    data: Object.values(sentimentData),
+                    backgroundColor: ['#36A2EB', '#FF5733', '#33FF33'],
+                }],
+            },
+        });
+    }
+
+    // Sentiment analysis data from the controller
+    var sentimentData = {!! json_encode($sentimentResults) !!};
+
+    // Call the function to render the chart
+    renderSentimentChart(sentimentData);
 </script>
 @endsection
