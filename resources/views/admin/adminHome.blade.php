@@ -98,6 +98,7 @@
                         <label for="selectSupportStaff">Select Support Staff ID:</label>
                         <select id="selectSupportStaff" class="form-control">
                             <option value="">Select an ID</option>
+                            <option value="all">All Staff</option> <!-- Add the option to view all staff -->
                             @foreach($supportStaffIds as $id)
                             <option value="{{ $id }}">{{ $id }}</option>
                             @endforeach
@@ -115,6 +116,7 @@
                         <label for="selectMarketingStaff">Select Marketing Staff ID:</label>
                         <select id="selectMarketingStaff" class="form-control">
                             <option value="">Select an ID</option>
+                            <option value="all">All Staff</option> <!-- Add the option to view all staff -->
                             @foreach($marketingStaffIds as $id)
                             <option value="{{ $id }}">{{ $id }}</option>
                             @endforeach
@@ -379,6 +381,29 @@
                     success: function(response) {
                         // Update the content with the insights
                         $("#supportStaffInsights").html(response);
+                    },
+                    error: function(error) {
+                        console.log("Error:", error);
+                    }
+                });
+            }
+        });
+    });
+
+    $(document).ready(function() {
+        // Handle button click event
+        $("#btnGetMarketingStaffInsights").click(function() {
+            var selectedStaffId = $("#selectMarketingStaff").val();
+        
+            if (selectedStaffId) {
+                // Make an AJAX request
+                $.ajax({
+                    url: "/admin/getMarketingStaffInsights",
+                    method: "GET",
+                    data: { staffId: selectedStaffId },
+                    success: function(response) {
+                        // Update the content with the insights
+                        $("#marketingStaffInsights").html(response);
                     },
                     error: function(error) {
                         console.log("Error:", error);

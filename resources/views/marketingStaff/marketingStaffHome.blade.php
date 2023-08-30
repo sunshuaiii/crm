@@ -41,7 +41,7 @@
         <h4 class="sub-header">Customer Insights</h4>
         <div class="card">
             <div class="card-body">
-            <div class="row justify-content-center">
+                <div class="row justify-content-center">
                     <div class='col-md-6 mt-4'>
                         <h4 class="chart-title">Top Customers by Purchase Amount</h4>
                         <table class="table table-sm custom-table">
@@ -114,12 +114,23 @@
     </div>
 
     <div class="col-md-12 mb-4">
-        <h4 class="sub-header">Product Insights</h4>
+        <h4 class="sub-header">Lead Insights</h4>
         <div class="card">
             <div class="card-body">
-
+                <div class="row justify-content-center">
+                    <div class='col-md-6 mt-4'>
+                        <h4 class="chart-title">Customer Distribution by RFM Scores and Segments</h4>
+                        <div style="max-width: 500px; margin: auto;">
+                            <canvas id="customerDistributionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+
+    <div class="col-md-12 text-center mt-4">
+        <a href="{{ route('marketingStaff.productInsights') }}" class="btn btn-primary">Show Product Insights</a>
     </div>
 
 </div>

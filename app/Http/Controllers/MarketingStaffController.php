@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Checkout;
 use App\Models\CheckoutProduct;
 use App\Models\Customer;
 use App\Models\CustomerCoupon;
 use App\Models\Lead;
+use App\Models\Product;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,6 +26,18 @@ class MarketingStaffController extends Controller
         ));
     }
 
+    public function productInsights()
+    {
+        // Product Insights
+        $products = Product::all();
+        $salesData = $this->calculateProductSales($products);
+
+        return view('marketingStaff.productInsights', compact(
+            'products',
+            'salesData',
+        ));
+    }
+
     public function marketingStaffHome()
     {
         // Customer Insights
@@ -35,8 +49,6 @@ class MarketingStaffController extends Controller
         $topCustomers = $this->getTopCustomers(10); //get top 10 purchase customers
         $cltvData = $this->calculateCLTV();
 
-        // Product Insights
-
         return view('marketingStaff.marketingStaffHome', compact(
             'customerDistribution',
             'customerGrowth',
@@ -44,7 +56,7 @@ class MarketingStaffController extends Controller
             'couponRedemptionData',
             'interactionData',
             'topCustomers',
-            'cltvData'
+            'cltvData',
         ));
     }
 
@@ -147,7 +159,6 @@ class MarketingStaffController extends Controller
         $customerGrowth = [];
         $oldestDate = Customer::oldest('created_at')->value('created_at');
         $startDate = Carbon::parse($oldestDate); // Use the oldest created_at date
-
         $endDate = Carbon::now();
 
         while ($startDate <= $endDate) {
@@ -269,17 +280,60 @@ class MarketingStaffController extends Controller
         return $cltvData;
     }
 
-    public function updateCSegment(Request $request)
+    private function calculateProductSales($products)
     {
-        $pythonScript = base_path('kmeans_script.py');
+        $salesData = [];
 
-        $process = new Process(["python", $pythonScript]);
-        $process->run();
+        $oldestDate = Checkout::orderBy('date')->limit(1)->value('date');
+        $startDate = Carbon::parse($oldestDate)->subMonths(6);
+        $endDate = Carbon::now();
 
-        if ($process->isSuccessful()) {
-            return redirect()->back()->with('success', 'Python script executed.');
-        } else {
-            return redirect()->back()->with('error', 'An error occurred while executing the Python script.');
+        $chunkSize = 1000; // Number of records to process in each chunk
+        $totalProducts = count($products);
+
+        for ($offset = 0; $offset < $totalProducts; $offset += $chunkSize) {
+            $productIds = $products->pluck('id')->slice($offset, $chunkSize);
+
+            $productQuantities = CheckoutProduct::whereIn('product_id', $productIds)
+                ->join('checkouts', 'checkout_products.checkout_id', '=', 'checkouts.id')
+                ->whereBetween('checkouts.date', [$startDate, $endDate])
+                ->select('product_id', DB::raw('SUM(quantity) as total_quantity_sold'))
+                ->groupBy('product_id')
+                ->orderByDesc('total_quantity_sold') // Order by total_quantity_sold in descending order
+                ->limit(10) // Limit to top 10 products
+                ->get();
+
+            foreach ($productQuantities as $productQuantity) {
+                $product = $products->firstWhere('id', $productQuantity->product_id);
+                if ($product) {
+                    $salesData[$product->id] = [
+                        'product_name' => $product->name,
+                        'total_quantity_sold' => $productQuantity->total_quantity_sold,
+                    ];
+                }
+            }
+        }
+
+        return $salesData;
+    }
+
+    public function updateCSegment()
+    {
+        try {
+            $projectPath = base_path(); // Root path of the Laravel project
+            $pythonScriptPath = $projectPath . '/kmeans_script.py'; // Path to the Python script
+
+            $command = "python {$pythonScriptPath}";
+
+            $output = shell_exec($command);
+
+            if (!empty($output)) {
+                return redirect()->back()->with('success', 'Customer segment updated successfully.');
+            } else {
+                return redirect()->back()->with('error', 'Script executed, but no output received.');
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while executing the script: ' . $e->getMessage());
         }
     }
 

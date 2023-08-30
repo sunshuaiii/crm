@@ -1,5 +1,3 @@
-<!-- admin/supportStaffInsights.blade.php -->
-
 <!DOCTYPE html>
 <html>
 

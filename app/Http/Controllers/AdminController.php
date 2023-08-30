@@ -151,12 +151,21 @@ class AdminController extends Controller
     public function getSupportStaffInsightsAjax(Request $request)
     {
         $staffId = $request->input('staffId');
-        $ticketsAssigned = Ticket::where('support_staff_id', $staffId)->count();
-        $newTickets = Ticket::where('support_staff_id', $staffId)->where('status', 'New')->count();
-        $openTickets = Ticket::where('support_staff_id', $staffId)->where('status', 'Open')->count();
-        $pendingTickets = Ticket::where('support_staff_id', $staffId)->where('status', 'Pending')->count();
-        $solvedTickets = Ticket::where('support_staff_id', $staffId)->where('status', 'Solved')->count();
-        $closedTickets = Ticket::where('support_staff_id', $staffId)->where('status', 'Closed')->count();
+        if ($staffId == 'all') {
+            $ticketsAssigned = Ticket::count();
+            $newTickets = Ticket::where('status', 'New')->count();
+            $openTickets = Ticket::where('status', 'Open')->count();
+            $pendingTickets = Ticket::where('status', 'Pending')->count();
+            $solvedTickets = Ticket::where('status', 'Solved')->count();
+            $closedTickets = Ticket::where('status', 'Closed')->count();
+        } else {
+            $ticketsAssigned = Ticket::where('support_staff_id', $staffId)->count();
+            $newTickets = Ticket::where('support_staff_id', $staffId)->where('status', 'New')->count();
+            $openTickets = Ticket::where('support_staff_id', $staffId)->where('status', 'Open')->count();
+            $pendingTickets = Ticket::where('support_staff_id', $staffId)->where('status', 'Pending')->count();
+            $solvedTickets = Ticket::where('support_staff_id', $staffId)->where('status', 'Solved')->count();
+            $closedTickets = Ticket::where('support_staff_id', $staffId)->where('status', 'Closed')->count();
+        }
 
         $queryTypes = ['Feedback', 'Complaint', 'Query', 'Issue'];
         // Response Time Analysis
@@ -185,25 +194,48 @@ class AdminController extends Controller
     private function getResponseTimeData($queryTypes, $supportStaffId)
     {
         $responseTimeData = [];
-        foreach ($queryTypes as $queryType) {
-            $atickets = Ticket::where('query_type', $queryType)
-                ->where('support_staff_id', $supportStaffId)
-                ->whereNotNull('response_time')
-                ->get();
+        if ($supportStaffId == 'all') {
+            foreach ($queryTypes as $queryType) {
+                $atickets = Ticket::where('query_type', $queryType)
+                    ->whereNotNull('response_time')
+                    ->get();
 
-            $totalResponseTime = 0;
-            $validTicketsCount = 0;
+                $totalResponseTime = 0;
+                $validTicketsCount = 0;
 
-            foreach ($atickets as $ticket) {
-                $totalResponseTime += $ticket->response_time;
-                $validTicketsCount++;
+                foreach ($atickets as $ticket) {
+                    $totalResponseTime += $ticket->response_time;
+                    $validTicketsCount++;
+                }
+
+                if ($validTicketsCount > 0) {
+                    $averageResponseTime = $totalResponseTime / $validTicketsCount;
+                    $responseTimeData[$queryType] = $averageResponseTime;
+                } else {
+                    $responseTimeData[$queryType] = 0; // No valid tickets
+                }
             }
+        } else {
+            foreach ($queryTypes as $queryType) {
+                $atickets = Ticket::where('query_type', $queryType)
+                    ->where('support_staff_id', $supportStaffId)
+                    ->whereNotNull('response_time')
+                    ->get();
 
-            if ($validTicketsCount > 0) {
-                $averageResponseTime = $totalResponseTime / $validTicketsCount;
-                $responseTimeData[$queryType] = $averageResponseTime;
-            } else {
-                $responseTimeData[$queryType] = 0; // No valid tickets
+                $totalResponseTime = 0;
+                $validTicketsCount = 0;
+
+                foreach ($atickets as $ticket) {
+                    $totalResponseTime += $ticket->response_time;
+                    $validTicketsCount++;
+                }
+
+                if ($validTicketsCount > 0) {
+                    $averageResponseTime = $totalResponseTime / $validTicketsCount;
+                    $responseTimeData[$queryType] = $averageResponseTime;
+                } else {
+                    $responseTimeData[$queryType] = 0; // No valid tickets
+                }
             }
         }
 
@@ -213,53 +245,66 @@ class AdminController extends Controller
     private function getResolutionTimeData($queryTypes, $supportStaffId)
     {
         $resolutionTimeData = [];
+        if ($supportStaffId == 'all') {
+            foreach ($queryTypes as $queryType) {
+                $btickets = Ticket::where('query_type', $queryType)
+                    ->where('status', 'Closed')
+                    ->whereNotNull('resolution_time')
+                    ->get();
 
-        foreach ($queryTypes as $queryType) {
-            $btickets = Ticket::where('query_type', $queryType)
-                ->where('status', 'Closed')
-                ->where('support_staff_id', $supportStaffId)
-                ->whereNotNull('resolution_time')
-                ->get();
+                $totalResolutionTime = 0;
+                $validTicketsCount = count($btickets);
 
-            $totalResolutionTime = 0;
-            $validTicketsCount = count($btickets);
+                foreach ($btickets as $ticket) {
+                    $totalResolutionTime += $ticket->resolution_time;
+                }
 
-            foreach ($btickets as $ticket) {
-                $totalResolutionTime += $ticket->resolution_time;
+                if ($validTicketsCount > 0) {
+                    $averageResolutionTime = $totalResolutionTime / $validTicketsCount;
+                    $resolutionTimeData[$queryType] = $averageResolutionTime;
+                } else {
+                    $resolutionTimeData[$queryType] = 0; // No valid tickets
+                }
             }
+        } else {
+            foreach ($queryTypes as $queryType) {
+                $btickets = Ticket::where('query_type', $queryType)
+                    ->where('status', 'Closed')
+                    ->where('support_staff_id', $supportStaffId)
+                    ->whereNotNull('resolution_time')
+                    ->get();
 
-            if ($validTicketsCount > 0) {
-                $averageResolutionTime = $totalResolutionTime / $validTicketsCount;
-                $resolutionTimeData[$queryType] = $averageResolutionTime;
-            } else {
-                $resolutionTimeData[$queryType] = 0; // No valid tickets
+                $totalResolutionTime = 0;
+                $validTicketsCount = count($btickets);
+
+                foreach ($btickets as $ticket) {
+                    $totalResolutionTime += $ticket->resolution_time;
+                }
+
+                if ($validTicketsCount > 0) {
+                    $averageResolutionTime = $totalResolutionTime / $validTicketsCount;
+                    $resolutionTimeData[$queryType] = $averageResolutionTime;
+                } else {
+                    $resolutionTimeData[$queryType] = 0; // No valid tickets
+                }
             }
         }
 
         return $resolutionTimeData;
     }
 
-    public function getMarketingStaffInsights($staffId)
+    public function getMarketingStaffInsightsAjax(Request $request)
     {
-        dd($staffId);
-        // Retrieve marketing staff insights data based on the $staffId
-        // Example: $leadsAssigned, $newLeads, $contactedLeads, $interestedLeads, $notInterestedLeads
+        $staffId = $request->input('staffId');
+        //todo
 
-        // return view('admin.adminHome', [
-        //     'leadsAssigned' => $leadsAssigned,
-        //     'newLeads' => $newLeads,
-        //     'contactedLeads' => $contactedLeads,
-        //     'interestedLeads' => $interestedLeads,
-        //     'notInterestedLeads' => $notInterestedLeads,
-        // ]);
-
-        return view('admin.adminHome', [
-            'leadsAssigned' => 0,
-            'newLeads' => 0,
-            'contactedLeads' => 0,
-            'interestedLeads' => 0,
-            'notInterestedLeads' => 0,
-        ]);
+        return view('admin.marketingStaffInsights', compact(
+            'leadsAssigned',
+            'newLeads',
+            'contactedLeads',
+            'interestedLeads',
+            'notInterestedLeads',
+        ));
     }
 
     public function getAllCoupons()

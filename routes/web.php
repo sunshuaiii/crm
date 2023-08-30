@@ -63,7 +63,7 @@ Route::group(['middleware' => 'auth:customer'], function () {
 Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin', [AdminController::class, 'adminHome'])->name('admin.adminHome');
     Route::get('/admin/getSupportStaffInsights', [AdminController::class, 'getSupportStaffInsightsAjax']);
-    Route::get('/admin/getMarketingStaffInsights/{staffId}', [AdminController::class, 'getMarketingStaffInsights']);
+    Route::get('/admin/getMarketingStaffInsights', [AdminController::class, 'getMarketingStaffInsightsAjax']);
     Route::get('/admin/couponManagement', [AdminController::class, 'getAllCoupons'])->name('admin.couponManagement');
     Route::get('/admin/couponManagement/addCoupon', [AdminController::class, 'addCoupon'])->name('admin.addCoupon');
     Route::get('/admin/couponManagement/editCoupon/{id}', [AdminController::class, 'editCoupon'])->name('admin.editCoupon');
@@ -84,6 +84,7 @@ Route::group(['middleware' => 'auth:admin'], function () {
 
 Route::group(['middleware' => 'auth:marketingStaff'], function () {
     Route::get('/marketingStaff', [MarketingStaffController::class, 'marketingStaffHome'])->name('marketingStaff.marketingStaffHome');
+    Route::get('/marketingStaff/productInsights', [MarketingStaffController::class, 'productInsights'])->name('marketingStaff.productInsights');
     Route::post('/marketingStaff/updateRfmScores', [MarketingStaffController::class, 'updateRfmScores'])->name('marketingStaff.updateRfmScores');
     Route::post('/marketingStaff/updateCSegment', [MarketingStaffController::class, 'updateCSegment'])->name('marketingStaff.updateCSegment');
     Route::get('/marketingStaff/reportGeneration', [MarketingStaffController::class, 'reportGeneration'])->name('marketingStaff.reportGeneration');

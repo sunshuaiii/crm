@@ -1,5 +1,6 @@
 import numpy as np
 import mysql.connector
+from datetime import datetime
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
@@ -69,8 +70,9 @@ with mysql.connector.connect(**db_config) as connection:
             else:
                 segment_label = "Unknown"  # Handle any unexpected cluster values
 
-            update_query = "UPDATE customers SET c_segment = %s WHERE id = %s"
-            cursor.execute(update_query, (segment_label, customer_id))
+            update_query = "UPDATE customers SET c_segment = %s, updated_at = %s WHERE id = %s"
+            current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            cursor.execute(update_query, (segment_label, current_time, customer_id))
 
         # Commit the changes
         connection.commit()
