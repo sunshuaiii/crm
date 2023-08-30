@@ -92,34 +92,38 @@
                     <canvas id="staffInsights"></canvas>
                 </div>
 
-                <h4 class="chart-title">Support Staff Insights</h4>
-                <div class="form-group">
-                    <label for="selectSupportStaff">Select Support Staff ID:</label>
-                    <select id="selectSupportStaff" class="form-control">
-                        <option value="">Select an ID</option>
-                        @foreach($supportStaffIds as $id)
-                        <option value="{{ $id }}">{{ $id }}</option>
-                        @endforeach
-                    </select>
-                    <button id="btnGetSupportStaffInsights" class="btn btn-primary mt-2">Get Support Staff Insights</button>
-                </div>
-                <div id="supportStaffInsights">
-                    <!-- Content from AJAX response will be displayed here -->
+                <div class='mt-4'>
+                    <h4 class="chart-title">Support Staff Insights</h4>
+                    <div class="form-group">
+                        <label for="selectSupportStaff">Select Support Staff ID:</label>
+                        <select id="selectSupportStaff" class="form-control">
+                            <option value="">Select an ID</option>
+                            @foreach($supportStaffIds as $id)
+                            <option value="{{ $id }}">{{ $id }}</option>
+                            @endforeach
+                        </select>
+                        <button id="btnGetSupportStaffInsights" class="btn btn-primary mt-2">Get Support Staff Insights</button>
+                    </div>
+                    <div id="supportStaffInsights">
+                        <!-- Content from AJAX response will be displayed here -->
+                    </div>
                 </div>
 
-                <h4 class="chart-title">Marketing Staff Insights</h4>
-                <div class="form-group">
-                    <label for="selectMarketingStaff">Select Marketing Staff ID:</label>
-                    <select id="selectMarketingStaff" class="form-control">
-                        <option value="">Select an ID</option>
-                        @foreach($marketingStaffIds as $id)
-                        <option value="{{ $id }}">{{ $id }}</option>
-                        @endforeach
-                    </select>
-                    <button id="btnGetMarketingStaffInsights" class="btn btn-primary mt-2">Get Marketing Staff Insights</button>
-                </div>
-                <div id="marketingStaffInsights">
-                    <!-- Content from AJAX response will be displayed here -->
+                <div class='mt-4'>
+                    <h4 class="chart-title">Marketing Staff Insights</h4>
+                    <div class="form-group">
+                        <label for="selectMarketingStaff">Select Marketing Staff ID:</label>
+                        <select id="selectMarketingStaff" class="form-control">
+                            <option value="">Select an ID</option>
+                            @foreach($marketingStaffIds as $id)
+                            <option value="{{ $id }}">{{ $id }}</option>
+                            @endforeach
+                        </select>
+                        <button id="btnGetMarketingStaffInsights" class="btn btn-primary mt-2">Get Marketing Staff Insights</button>
+                    </div>
+                    <div id="marketingStaffInsights">
+                        <!-- Content from AJAX response will be displayed here -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -359,6 +363,29 @@
         options: {
             responsive: true,
         }
+    });
+
+    $(document).ready(function() {
+        // Handle button click event
+        $("#btnGetSupportStaffInsights").click(function() {
+            var selectedStaffId = $("#selectSupportStaff").val();
+        
+            if (selectedStaffId) {
+                // Make an AJAX request
+                $.ajax({
+                    url: "/admin/getSupportStaffInsights",
+                    method: "GET",
+                    data: { staffId: selectedStaffId },
+                    success: function(response) {
+                        // Update the content with the insights
+                        $("#supportStaffInsights").html(response);
+                    },
+                    error: function(error) {
+                        console.log("Error:", error);
+                    }
+                });
+            }
+        });
     });
 </script>
 @endsection

@@ -47,7 +47,7 @@ class SupportStaffController extends Controller
         $responseTimeData = $this->getResponseTimeData($queryTypes, $supportStaffId);
 
         // Resolution Time Analysis
-        $resolutionTimeData = $this->getResolutionTimeData($queryTypes, $status, $supportStaffId);
+        $resolutionTimeData = $this->getResolutionTimeData($queryTypes, $supportStaffId);
 
         // Ticket Creation Time Distribution Analysis
         $ticketCreationDistribution = $this->getTicketCreationDistributionData($allTickets);
@@ -104,13 +104,13 @@ class SupportStaffController extends Controller
         return $responseTimeData;
     }
 
-    private function getResolutionTimeData($queryTypes, $status, $supportStaffId)
+    private function getResolutionTimeData($queryTypes, $supportStaffId)
     {
         $resolutionTimeData = [];
 
         foreach ($queryTypes as $queryType) {
             $btickets = Ticket::where('query_type', $queryType)
-                ->where('status', $status)
+                ->where('status', 'Closed')
                 ->where('support_staff_id', $supportStaffId)
                 ->whereNotNull('resolution_time')
                 ->get();

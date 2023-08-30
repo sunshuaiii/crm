@@ -62,7 +62,7 @@ Route::group(['middleware' => 'auth:customer'], function () {
 
 Route::group(['middleware' => 'auth:admin'], function () {
     Route::get('/admin', [AdminController::class, 'adminHome'])->name('admin.adminHome');
-    Route::get('/admin/getSupportStaffInsights/{staffId}', [AdminController::class, 'getSupportStaffInsights']);
+    Route::get('/admin/getSupportStaffInsights', [AdminController::class, 'getSupportStaffInsightsAjax']);
     Route::get('/admin/getMarketingStaffInsights/{staffId}', [AdminController::class, 'getMarketingStaffInsights']);
     Route::get('/admin/couponManagement', [AdminController::class, 'getAllCoupons'])->name('admin.couponManagement');
     Route::get('/admin/couponManagement/addCoupon', [AdminController::class, 'addCoupon'])->name('admin.addCoupon');
