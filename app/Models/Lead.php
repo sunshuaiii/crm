@@ -17,7 +17,13 @@ class Lead extends Model
         'gender',
         'status',
         'activity',
+        'feedback',
         'marketing_staff_id'
+    ];
+
+    protected $casts = [
+        'activity_date' => 'datetime',
+        'feedback_date' => 'datetime',
     ];
 
     public function getMarketingStaff()

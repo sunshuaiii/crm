@@ -21,8 +21,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('gender')->enum('Female', 'Male', '');
             $table->string('status')->enum('New', 'Contacted', 'Interested', 'Not interested');
-            $table->text('activity');
-            $table->foreignId('marketing_staff_id')->constrained('marketing_staffs', 'id');
+            $table->text('activity')->nullable();
+            $table->text('feedback')->nullable();
+            $table->foreignId('marketing_staff_id')->constrained('marketing_staffs', 'id');      
+            $table->timestamp('activity_date')->nullable();  
+            $table->timestamp('feedback_date')->nullable();  
             $table->timestamps();
         });
     }

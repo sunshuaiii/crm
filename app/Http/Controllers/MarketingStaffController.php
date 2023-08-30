@@ -49,6 +49,9 @@ class MarketingStaffController extends Controller
         $topCustomers = $this->getTopCustomers(10); //get top 10 purchase customers
         $cltvData = $this->calculateCLTV();
 
+        // Lead Insights
+        
+
         return view('marketingStaff.marketingStaffHome', compact(
             'customerDistribution',
             'customerGrowth',
