@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use App\Models\SupportStaff;
 use App\Models\Ticket;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class SupportStaffController extends Controller
@@ -46,6 +44,40 @@ class SupportStaffController extends Controller
         }
 
         // Response Time Analysis
+        $responseTimeData = $this->getResponseTimeData($queryTypes, $supportStaffId);
+
+        // Resolution Time Analysis
+        $resolutionTimeData = $this->getResolutionTimeData($queryTypes, $status, $supportStaffId);
+
+        // Ticket Creation Time Distribution Analysis
+        $ticketCreationDistribution = $this->getTicketCreationDistributionData($allTickets);
+
+        // Ticket Aging Analysis
+        $ageIntervalData = $this->getAgeIntervalData($tickets);
+
+        // Closed rate analysis
+        $closedRateData = $this->getClosedRateData($queryTypes, $supportStaffId);
+
+        return view('supportStaff.supportStaffHome', compact(
+            'closedTickets',
+            'inProgressTickets',
+            'totalTickets',
+            'queryTypeCounts',
+            'ticketStatusCounts',
+            'segmentTicketCounts',
+            'customerSegments',
+            'responseTimeData',
+            'queryTypes',
+            'ticketStatuses',
+            'resolutionTimeData',
+            'ticketCreationDistribution',
+            'ageIntervalData',
+            'closedRateData'
+        ));
+    }
+
+    private function getResponseTimeData($queryTypes, $supportStaffId)
+    {
         $responseTimeData = [];
         foreach ($queryTypes as $queryType) {
             $atickets = Ticket::where('query_type', $queryType)
@@ -69,7 +101,11 @@ class SupportStaffController extends Controller
             }
         }
 
-        // Resolution Time Analysis
+        return $responseTimeData;
+    }
+
+    private function getResolutionTimeData($queryTypes, $status, $supportStaffId)
+    {
         $resolutionTimeData = [];
 
         foreach ($queryTypes as $queryType) {
@@ -94,7 +130,13 @@ class SupportStaffController extends Controller
             }
         }
 
-        // Time-Based Analysis
+        return $resolutionTimeData;
+    }
+
+    private function getTicketCreationDistributionData($allTickets)
+    {
+        $ticketCreationDistribution = [];
+
         foreach ($allTickets as $ticket) {
             $creationTime = $ticket->created_at;
             $hour = $creationTime->hour;
@@ -107,7 +149,11 @@ class SupportStaffController extends Controller
             $ticketCreationDistribution[$hour]++;
         }
 
-        // Ticket Aging Analysis
+        return $ticketCreationDistribution;
+    }
+
+    private function getAgeIntervalData($tickets)
+    {
         $ageIntervalData = []; // Array to store ticket counts for each age interval
 
         // Define your age intervals (e.g., 0-3 hours, 4-8 hours, etc.)
@@ -147,62 +193,11 @@ class SupportStaffController extends Controller
             $ageIntervalData[$interval] = count($ticketsInInterval);
         }
 
-        // $ageIntervalData = [];
-        // $ageIntervals = [];
-        // $maxAge = 0; // To track the longest ticket age
+        return $ageIntervalData;
+    }
 
-        // // Define the interval boundaries based on your distribution
-        // $intervalBoundaries = [1, 3, 5, 8]; // Example boundaries, you can adjust these
-
-        // foreach ($tickets as $ticket) {
-        //     if ($ticket->status == 'Open' || $ticket->status == 'Pending') {
-        //         $ageInSeconds = now()->diffInSeconds($ticket->created_at);
-        //         $ageInHours = round($ageInSeconds / 3600); // Convert age to hours
-
-        //         if ($ageInHours > $maxAge) {
-        //             $maxAge = $ageInHours;
-        //         }
-
-        //         // Assign ticket to an appropriate interval based on boundaries
-        //         $assigned = false;
-        //         foreach ($intervalBoundaries as $index => $boundary) {
-        //             if ($ageInHours <= $boundary) {
-        //                 $ageIntervals[] = ($index === 0 ? "0-{$boundary} hours" : ($boundary + 1) . "-{$boundary} hours");
-        //                 $ageIntervalData[] = 0;
-        //                 $assigned = true;
-        //                 break;
-        //             }
-        //         }
-
-        //         if (!$assigned) {
-        //             $ageIntervals[] = ">{$intervalBoundaries[count($intervalBoundaries) - 1]} hours";
-        //             $ageIntervalData[] = 0;
-        //         }
-        //     }
-        // }
-
-        // foreach ($tickets as $ticket) {
-        //     if ($ticket->status == 'Open' || $ticket->status == 'Pending') {
-        //         $ageInSeconds = now()->diffInSeconds($ticket->created_at);
-        //         $ageInHours = round($ageInSeconds / 3600); // Convert age to hours
-
-        //         // Increment the count of the appropriate interval
-        //         foreach ($intervalBoundaries as $index => $boundary) {
-        //             if ($ageInHours <= $boundary) {
-        //                 $ageIntervalData[$index]++;
-        //                 break;
-        //             }
-        //         }
-
-        //         if ($ageInHours > $intervalBoundaries[count($intervalBoundaries) - 1]) {
-        //             $ageIntervalData[count($ageIntervalData) - 1]++;
-        //         }
-        //     }
-        // }
-
-
-
-        // Closed rate analysis
+    private function getClosedRateData($queryTypes, $supportStaffId)
+    {
         // Get closed and total ticket counts for each query type
         $closedRateData = [];
         foreach ($queryTypes as $queryType) {
@@ -225,22 +220,7 @@ class SupportStaffController extends Controller
             $closedRateData[$queryType] = $closedRate;
         }
 
-        return view('supportStaff.supportStaffHome', compact(
-            'closedTickets',
-            'inProgressTickets',
-            'totalTickets',
-            'queryTypeCounts',
-            'ticketStatusCounts',
-            'segmentTicketCounts',
-            'customerSegments',
-            'responseTimeData',
-            'queryTypes',
-            'ticketStatuses',
-            'resolutionTimeData',
-            'ticketCreationDistribution',
-            'ageIntervalData',
-            'closedRateData'
-        ));
+        return $closedRateData;
     }
 
     public function getAllTicketsForSupportStaff()

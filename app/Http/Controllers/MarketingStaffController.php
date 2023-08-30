@@ -4,23 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\CheckoutProduct;
 use App\Models\Customer;
+use App\Models\CustomerCoupon;
 use App\Models\Lead;
+use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\Process\Process;
 
 class MarketingStaffController extends Controller
 {
-    public function marketingStaffHome()
-    {
-        $data = '';
-
-        return view('marketingStaff.marketingStaffHome', compact(
-            'data',
-        ));
-    }
-
     public function reportGeneration()
     {
         $data = '';
@@ -28,6 +22,251 @@ class MarketingStaffController extends Controller
         return view('marketingStaff.reportGeneration', compact(
             'data',
         ));
+    }
+
+    public function marketingStaffHome()
+    {
+        // Customer Insights
+        $customerDistribution = $this->calculateCustomerDistribution();
+        $customerGrowth = $this->calculateCustomerGrowth();
+        $churnData = $this->calculateCustomerChurn();
+        $couponRedemptionData = $this->calculateCouponRedemption();
+        $interactionData = $this->calculateCustomerServiceInteraction();
+        $topCustomers = $this->getTopCustomers(10); //get top 10 purchase customers
+        $cltvData = $this->calculateCLTV();
+
+        // Product Insights
+
+        return view('marketingStaff.marketingStaffHome', compact(
+            'customerDistribution',
+            'customerGrowth',
+            'churnData',
+            'couponRedemptionData',
+            'interactionData',
+            'topCustomers',
+            'cltvData'
+        ));
+    }
+
+    private function calculateCustomerDistribution()
+    {
+        $customerData = $this->getCustomerDistributionData();
+
+        // Retrieve quantile values from the database
+        $quantiles = $this->getQuantileValues();
+
+        $rfmScores = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // Assuming these are the column names for RFM scores
+        $customerSegments = ['Silver', 'Gold', 'Platinum', 'NA']; // Sample customer segments
+
+        $customerDistribution = [];
+        foreach ($rfmScores as $rfmScore) {
+            foreach ($customerSegments as $segment) {
+                $customerDistribution[$rfmScore][$segment] = 0;
+            }
+        }
+
+        foreach ($customerData as $customer) {
+            $rfmScore = $this->calculateRFMScore($customer->r_score, $customer->f_score, $customer->m_score, $quantiles);
+            $segment = $customer->c_segment;
+            $customerDistribution[$rfmScore][$segment]++;
+        }
+
+        return $customerDistribution;
+    }
+
+    private function getCustomerDistributionData()
+    {
+        // Replace this with your actual data retrieval logic
+        return DB::table('customers')
+            ->select('r_score', 'f_score', 'm_score', 'c_segment')
+            ->get();
+    }
+
+    private function getQuantileValues()
+    {
+        $customers = DB::table('customers')
+            ->select('r_score', 'f_score', 'm_score')
+            ->get();
+
+        $quantiles = [
+            'r_score' => [],
+            'f_score' => [],
+            'm_score' => [],
+        ];
+
+        foreach (['r_score', 'f_score', 'm_score'] as $scoreType) {
+            $sortedScores = $customers->pluck($scoreType)->sort()->values();
+            $quantiles[$scoreType][0.25] = $sortedScores[ceil($sortedScores->count() * 0.25) - 1];
+            $quantiles[$scoreType][0.50] = $sortedScores[ceil($sortedScores->count() * 0.50) - 1];
+            $quantiles[$scoreType][0.75] = $sortedScores[ceil($sortedScores->count() * 0.75) - 1];
+        }
+
+        return $quantiles;
+    }
+
+    private function calculateRFMScore($r, $f, $m, $quantiles)
+    {
+        $rScore = $this->RScoring($r, 'r_score', $quantiles);
+        $fScore = $this->FnMScoring($f, 'f_score', $quantiles);
+        $mScore = $this->FnMScoring($m, 'm_score', $quantiles);
+
+        // Combine the scores to get the RFM score
+        $rfmScore = $rScore + $fScore + $mScore;
+
+        return $rfmScore;
+    }
+
+    private function RScoring($x, $p, $d)
+    {
+        if ($x <= $d[$p][0.25]) {
+            return 1;
+        } elseif ($x <= $d[$p][0.50]) {
+            return 2;
+        } elseif ($x <= $d[$p][0.75]) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+
+    private function FnMScoring($x, $p, $d)
+    {
+        if ($x <= $d[$p][0.25]) {
+            return 4;
+        } elseif ($x <= $d[$p][0.50]) {
+            return 3;
+        } elseif ($x <= $d[$p][0.75]) {
+            return 2;
+        } else {
+            return 1;
+        }
+    }
+
+    private function calculateCustomerGrowth()
+    {
+        $customerGrowth = [];
+        $oldestDate = Customer::oldest('created_at')->value('created_at');
+        $startDate = Carbon::parse($oldestDate); // Use the oldest created_at date
+
+        $endDate = Carbon::now();
+
+        while ($startDate <= $endDate) {
+            $quarterEndDate = $startDate->copy()->addMonths(3)->endOfDay();
+            $newCustomersCount = Customer::whereBetween('created_at', [$startDate, $quarterEndDate])->count();
+
+            $customerGrowth[] = [
+                'date' => $startDate->format('Y-m-d'),
+                'new_customers' => $newCustomersCount,
+            ];
+
+            $startDate->addMonths(3); // Set interval as a quarter of a year
+        }
+
+        return $customerGrowth;
+    }
+
+    private function calculateCustomerChurn()
+    {
+        $churnData = [];
+        $startDate = Carbon::now()->subMonths(12); // Change the start date to 1 year ago
+        $endDate = Carbon::now();
+
+        $activeCustomers = DB::table('customers')
+            ->select('id')
+            ->whereIn('id', function ($query) use ($startDate, $endDate) {
+                $query->select('customer_id')
+                    ->from('checkouts')
+                    ->whereBetween('date', [$startDate, $endDate]);
+            })
+            ->get()
+            ->pluck('id');
+
+        $churnCustomersCount = DB::table('customers')
+            ->whereNotIn('id', $activeCustomers)
+            ->count();
+
+        $activeCustomersCount = $activeCustomers->count();
+
+        $churnData['churned'] = $churnCustomersCount;
+        $churnData['active'] = $activeCustomersCount;
+
+        return $churnData;
+    }
+
+    private function calculateCouponRedemption()
+    {
+        $distributedCouponsCount = CustomerCoupon::count(); // Count of all distributed coupons
+        $redeemedCouponsCount = CustomerCoupon::where('status', 'Redeemed')->count(); // Count of redeemed coupons
+
+        $couponRedemptionData = [
+            'distributed' => $distributedCouponsCount,
+            'redeemed' => $redeemedCouponsCount,
+        ];
+
+        return $couponRedemptionData;
+    }
+
+    private function calculateCustomerServiceInteraction()
+    {
+        $interactionTypes = Ticket::pluck('query_type')->unique();
+        $interactionCounts = [];
+
+        foreach ($interactionTypes as $type) {
+            $interactionCounts[$type] = Ticket::where('query_type', $type)->count();
+        }
+
+        return $interactionCounts;
+    }
+
+    private function getTopCustomers($numbersOfTopCustomer)
+    {
+        $topCustomers = DB::table('customers')
+            ->select('id', 'first_name', 'last_name', 'm_score as total_purchase_amount')
+            ->orderByDesc('total_purchase_amount')
+            ->take($numbersOfTopCustomer)
+            ->get();
+
+        return $topCustomers;
+    }
+
+    private function calculateCLTV()
+    {
+        // Assuming you have customer segments defined in the customers table
+        $customerSegments = ['Silver', 'Gold', 'Platinum'];
+
+        $cltvData = [];
+
+        foreach ($customerSegments as $segment) {
+            $averagePurchaseAmount = Customer::where('c_segment', $segment)
+                ->avg('m_score');
+
+            $averagePurchaseFrequency = Customer::where('c_segment', $segment)
+                ->avg('f_score');
+
+            $averageCustomerLifespan = Customer::where('c_segment', $segment)
+                ->with(['checkouts' => function ($query) {
+                    $query->orderBy('date', 'asc');
+                }])
+                ->get()
+                ->map(function ($customer) {
+                    if ($customer->checkouts->isEmpty()) {
+                        return 0;
+                    }
+
+                    $firstPurchaseDate = $customer->checkouts->first()->date;
+                    $lastPurchaseDate = $customer->checkouts->last()->date;
+
+                    return $lastPurchaseDate->diffInDays($firstPurchaseDate);
+                })
+                ->avg(); // Calculate average lifespan in days
+
+            // Calculate CLTV using a formula that makes sense for your business
+            $cltv = $averagePurchaseAmount * $averagePurchaseFrequency * $averageCustomerLifespan;
+
+            $cltvData[$segment] = $cltv;
+        }
+
+        return $cltvData;
     }
 
     public function updateCSegment(Request $request)
@@ -43,128 +282,6 @@ class MarketingStaffController extends Controller
             return redirect()->back()->with('error', 'An error occurred while executing the Python script.');
         }
     }
-
-    // // Extract the log-transformed values into separate arrays
-    // $rScores = $logTfdData->pluck('r_score')->toArray();
-    // $fScores = $logTfdData->pluck('f_score')->toArray();
-    // $mScores = $logTfdData->pluck('m_score')->toArray();
-
-    // // Combine them into a multi-dimensional array
-    // $data = [];
-    // foreach ($rScores as $index => $rScore) {
-    //     $data[] = [$rScore, $fScores[$index], $mScores[$index]];
-    // }
-
-    // // Initialize and fit the StandardScaler
-    // $scaler = new StandardScaler();
-    // $scaler->fit($data);
-
-    // // Scale the data
-    // $scaledData = $scaler->transform($data);
-
-    // public function updateCSegment()
-    // {
-    //     // Step 1: Fetch the scores from the database
-    //     $customers = DB::table('customers')->select('r_score', 'f_score', 'm_score')->get();
-
-    //     // Transform Eloquent collection into an array
-    //     $scores = $customers->map(function ($customer) {
-    //         return [
-    //             'r_score' => $customer->r_score,
-    //             'f_score' => $customer->f_score,
-    //             'm_score' => $customer->m_score,
-    //         ];
-    //     })->toArray();
-
-    //     // Create a collection from the scores array
-    //     $RFMScores = collect($scores);
-
-    //     // Step 2: Perform Log transformation to bring data into normal or near-normal distribution
-    //     // Apply natural logarithm and round to three decimal places
-    //     $logTfdData = $RFMScores->map(function ($score) {
-    //         return [
-    //             'r_score' => round(log($score['r_score']), 3),
-    //             'f_score' => round(log($score['f_score']), 3),
-    //             'm_score' => round(log($score['m_score']), 3),
-    //         ];
-    //     });
-
-    //     // Step 3: Bring the data on the same scale
-    //     // Calculate means and standard deviations for each column
-    //     $meanValues = [
-    //         'r_score' => $logTfdData->avg('r_score'),
-    //         'f_score' => $logTfdData->avg('f_score'),
-    //         'm_score' => $logTfdData->filter(function ($item) {
-    //             // Exclude zero and negative values from the calculation
-    //             return $item['m_score'] > 0;
-    //         })->avg('m_score'),
-    //     ];
-
-    //     $stdDevValues = [
-    //         'r_score' => sqrt(
-    //             $logTfdData->map(function ($item) use ($meanValues) {
-    //                 return pow($item['r_score'] - $meanValues['r_score'], 2);
-    //             })->sum() / ($logTfdData->count() - 1)
-    //         ),
-
-    //         'f_score' => sqrt(
-    //             $logTfdData->map(function ($item) use ($meanValues) {
-    //                 return pow($item['f_score'] - $meanValues['f_score'], 2);
-    //             })->sum() / ($logTfdData->count() - 1)
-    //         ),
-
-    //         'm_score' => sqrt(
-    //             $logTfdData->filter(function ($item) {
-    //                 // Exclude zero and negative values from the calculation
-    //                 return $item['m_score'] > 0;
-    //             })->map(function ($item) use ($meanValues) {
-    //                 return pow($item['m_score'] - $meanValues['m_score'], 2);
-    //             })->sum() / ($logTfdData->count() - 1)
-    //         ),
-    //     ];
-
-    //     // Standardize the data
-    //     $standardizedData = $logTfdData->map(function ($item) use ($meanValues, $stdDevValues) {
-    //         return [
-    //             '0' => ($item['r_score'] - $meanValues['r_score']) / sqrt($stdDevValues['r_score']),
-    //             '1' => ($item['f_score'] - $meanValues['f_score']) / sqrt($stdDevValues['f_score']),
-    //             '2' => ($item['m_score'] - $meanValues['m_score']) / sqrt($stdDevValues['m_score']),
-    //         ];
-    //     });
-
-    //     // Step 4: K-Means Clustering
-    //     // Convert the Collection to a proper array for clustering
-    //     $standardizedDataArray = $standardizedData->toArray();
-    //     // dd($standardizedDataArray);
-
-    //     // Create a KMeans instance and perform clustering
-    //     $kMeans = new KMeans(3, KMeans::INIT_KMEANS_PLUS_PLUS, 1000);
-    //     $clusterAssignments = $kMeans->cluster($standardizedDataArray);
-
-    //     // Extract the cluster assignments as a flat array
-    //     $clusterAssignmentsFlat = array_column($clusterAssignments, 0);
-
-    //     dd($clusterAssignmentsFlat);
-
-    //     // Add the 'c_segment' column to the Collection
-    //     $RFMScores->each(function ($item, $index) use ($clusterAssignments) {
-    //         $item->c_segment = (int) $clusterAssignments[$index];
-    //     });
-
-    //     // dd($RFMScores[0]);
-
-    //     // Update the database with the new cluster segment values
-    //     foreach ($RFMScores as $index => $score) {
-    //         $clusterIndex = $index;
-    //         DB::table('customers')
-    //             ->where('r_score', $score['r_score'])
-    //             ->where('f_score', $score['f_score'])
-    //             ->where('m_score', $score['m_score'])
-    //             ->update(['c_segment' => $clusterAssignments[$clusterIndex]]);
-    //     }
-
-    //     return redirect()->route('marketingStaff.marketingStaffHome')->with('success', 'Customer segments updated successfully!');
-    // }
 
     public function updateRfmScores()
     {
@@ -187,11 +304,6 @@ class MarketingStaffController extends Controller
             }
 
             $frequencyScore = $customer->checkouts->count(); // Assuming checkouts relation in Customer model
-            // $monetaryScore = DB::table('checkouts')
-            //     ->join('checkout_products', 'checkouts.id', '=', 'checkout_products.checkout_id')
-            //     ->join('products', 'checkout_products.product_id', '=', 'products.id')
-            //     ->where('checkouts.customer_id', $customer->id)
-            //     ->sum(DB::raw('products.unit_price * checkout_products.quantity'));
 
             // Retrieve customer's checkouts with related checkout products and products
             $checkouts = $customer->checkouts()

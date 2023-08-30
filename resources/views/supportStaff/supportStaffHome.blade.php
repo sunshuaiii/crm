@@ -476,5 +476,6 @@
     // Initial chart update based on default selection
     var defaultQueryType = queryTypeSelect.value;
     updateClosedRateChart(defaultQueryType);
+
 </script>
 @endsection
