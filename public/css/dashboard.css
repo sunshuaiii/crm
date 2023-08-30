@@ -339,3 +339,51 @@
 .tag:hover {
     background-color: #ccc;
 }
+
+.custom-card {
+    background-color: #E6F7FF;
+    border: 2px solid #0056b3;
+    border-radius: 10px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.custom-card:hover {
+    transform: scale(1.02);
+    border-color: #003C7A;
+}
+
+.card-icon {
+    font-size: 36px;
+    color: #003C7A;
+}
+
+/* Define the custom button style */
+.custom-button {
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-bottom: 10px; /* Add margin to the bottom of the button */
+    margin-right: 15px;
+}
+
+/* Add hover effect */
+.custom-button:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+/* Add margin to separate buttons */
+.custom-button + .custom-button {
+    margin-top: 10px; /* Add margin to the top of the button */
+    margin-bottom: 10px; /* Add margin to the bottom of the button */
+}
+
+/* Style for the icon inside the button */
+.custom-button i {
+    margin-right: 8px;
+}

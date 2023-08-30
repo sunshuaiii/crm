@@ -26,6 +26,34 @@ class MarketingStaffController extends Controller
         ));
     }
 
+    public function customerInsights()
+    {
+        $customerDistribution = $this->calculateCustomerDistribution();
+        $customerGrowth = $this->calculateCustomerGrowth();
+        $churnData = $this->calculateCustomerChurn();
+        $couponRedemptionData = $this->calculateCouponRedemption();
+        $interactionData = $this->calculateCustomerServiceInteraction();
+        $topCustomers = $this->getTopCustomers(10); //get top 10 purchase customers
+        $cltvData = $this->calculateCLTV();
+
+        return view('marketingStaff.customerInsights', compact(
+            'customerDistribution',
+            'customerGrowth',
+            'churnData',
+            'couponRedemptionData',
+            'interactionData',
+            'topCustomers',
+            'cltvData',
+        ));
+    }
+
+    public function leadInsights()
+    {
+        return view('marketingStaff.leadInsights', compact(
+            '',
+        ));
+    }
+
     public function productInsights()
     {
         // Product Insights
@@ -40,27 +68,7 @@ class MarketingStaffController extends Controller
 
     public function marketingStaffHome()
     {
-        // Customer Insights
-        $customerDistribution = $this->calculateCustomerDistribution();
-        $customerGrowth = $this->calculateCustomerGrowth();
-        $churnData = $this->calculateCustomerChurn();
-        $couponRedemptionData = $this->calculateCouponRedemption();
-        $interactionData = $this->calculateCustomerServiceInteraction();
-        $topCustomers = $this->getTopCustomers(10); //get top 10 purchase customers
-        $cltvData = $this->calculateCLTV();
-
-        // Lead Insights
-
-
-        return view('marketingStaff.marketingStaffHome', compact(
-            'customerDistribution',
-            'customerGrowth',
-            'churnData',
-            'couponRedemptionData',
-            'interactionData',
-            'topCustomers',
-            'cltvData',
-        ));
+        return view('marketingStaff.marketingStaffHome');
     }
 
     private function calculateCustomerDistribution()

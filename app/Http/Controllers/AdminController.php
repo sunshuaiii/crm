@@ -18,7 +18,7 @@ use Illuminate\Validation\ValidationException;
 
 class AdminController extends Controller
 {
-    public function adminHome(Request $request)
+    public function couponInsights()
     {
         $claimedCoupons = CustomerCoupon::where('status', "Claimed")->get()->count();
         $redeemedCoupons = CustomerCoupon::where('status', "Redeemed")->get()->count();
@@ -118,13 +118,7 @@ class AdminController extends Controller
             $redeemedCouponsBySegment[] = $redeemedCount;
         }
 
-        $totalMarketingStaff = MarketingStaff::all()->count();
-        $totalSupportStaff = SupportStaff::all()->count();
-
-        $supportStaffIds = SupportStaff::pluck('id');
-        $marketingStaffIds = MarketingStaff::pluck('id');
-
-        return view('admin.adminHome', compact(
+        return view('admin.couponInsights', compact(
             'claimedCoupons',
             'redeemedCoupons',
             'claimedPercentage',
@@ -140,12 +134,40 @@ class AdminController extends Controller
             'segmentLabels',
             'claimedCouponsBySegment',
             'redeemedCouponsBySegment',
+        ));
+    }
+
+    public function staffInsights()
+    {
+        $couponStatusDistribution = CustomerCoupon::select(
+            'status',
+            DB::raw('COUNT(*) AS status_count')
+        )
+            ->groupBy('status')
+            ->get();
+
+        // Calculate total coupons
+        $totalCoupons = $couponStatusDistribution->sum('status_count');
+
+        $totalMarketingStaff = MarketingStaff::all()->count();
+        $totalSupportStaff = SupportStaff::all()->count();
+
+        $supportStaffIds = SupportStaff::pluck('id');
+        $marketingStaffIds = MarketingStaff::pluck('id');
+
+        return view('admin.staffInsights', compact(
+            'totalCoupons',
             'totalMarketingStaff',
             'totalSupportStaff',
             'totalCoupons',
             'supportStaffIds',
             'marketingStaffIds'
         ));
+    }
+
+    public function adminHome()
+    {
+        return view('admin.adminHome');
     }
 
     public function getSupportStaffInsightsAjax(Request $request)

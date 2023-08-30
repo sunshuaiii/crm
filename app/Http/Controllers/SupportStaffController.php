@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SupportStaffController extends Controller
 {
-    public function supportStaffHome()
+    public function ticketInsights()
     {
         $supportStaffId = Auth::user()->id;
         $allTickets = Ticket::all();
@@ -58,7 +58,7 @@ class SupportStaffController extends Controller
         // Closed rate analysis
         $closedRateData = $this->getClosedRateData($queryTypes, $supportStaffId);
 
-        return view('supportStaff.supportStaffHome', compact(
+        return view('supportStaff.ticketInsights', compact(
             'closedTickets',
             'inProgressTickets',
             'totalTickets',
@@ -74,6 +74,11 @@ class SupportStaffController extends Controller
             'ageIntervalData',
             'closedRateData'
         ));
+    }
+
+    public function supportStaffHome()
+    {
+        return view('supportStaff.supportStaffHome');
     }
 
     private function getResponseTimeData($queryTypes, $supportStaffId)

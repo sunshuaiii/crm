@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Marketing Staff Dashboard')
+@section('title', 'Product Insights')
 
 @section('content')
 <div class="container-content">
@@ -15,30 +15,9 @@
         {{ session('error') }}
     </div>
     @endif
-    <div class="header">Marketing Staff Dashboard</div>
-
-    <!-- Add buttons to trigger update -->
-    <div class="row col-md-12">
-        <div class="col-md-3">
-            <form id="updateRfmForm" action="{{ route('marketingStaff.updateRfmScores') }}" method="post">
-                @csrf
-                <button type="button" class="btn btn-primary" onclick="updateRfmScores()">
-                    <i id="updateIcon1" class="fas fa-sync"></i> Update RFM Scores
-                </button>
-            </form>
-        </div>
-        <div class="mb-4">
-            <form id="updateCSegmentForm" action="{{ route('marketingStaff.updateCSegment') }}" method="post">
-                @csrf
-                <button type="submit" class="btn btn-primary" onclick="updateCSegment()">
-                    <i id="updateIcon2" class="fas fa-sync"></i> Update Customer Segment
-                </button>
-            </form>
-        </div>
-    </div>
+    <div class="header">Product Insights</div>
 
     <div class="col-md-12 mb-4">
-        <h4 class="sub-header">Product Insights</h4>
         <div class="card">
             <div class="card-body">
                 <div class="row justify-content-center">
@@ -51,6 +30,12 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="text-center">
+        <a href="{{ route('marketingStaff.marketingStaffHome') }}" class="btn btn-secondary">
+            <i class="bx bx-arrow-back"></i> Go Back
+        </a>
     </div>
 
 </div>
