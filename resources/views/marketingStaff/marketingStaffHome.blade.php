@@ -24,6 +24,9 @@
             <button type="button" class="custom-button" onclick="updateRfmScores()">
                 <i id="updateIcon1" class="fas fa-sync"></i> Update Customer RFM Scores
             </button>
+            <div id="loadingRfm" class="loading-status d-none">
+                Updating... Please wait patiently.
+            </div>
         </form>
 
         <form id="updateCSegmentForm" action="{{ route('marketingStaff.updateCSegment') }}" method="post">
@@ -31,6 +34,9 @@
             <button type="submit" class="custom-button" onclick="updateCSegment()">
                 <i id="updateIcon2" class="fas fa-sync"></i> Update Customer Segment
             </button>
+            <div id="loadingCSegment" class="loading-status d-none">
+                Updating... Please wait patiently.
+            </div>
         </form>
     </div>
 
@@ -43,6 +49,9 @@
                         <p class="card-text">View insights about customer behavior and segments.</p>
                     </div>
                 </div>
+                <div id="loadingCustomerInsights" class="loading-status d-none">
+                    Loading... Please wait patiently.
+                </div>
             </a>
         </div>
         <div class="col-md-4 mb-4">
@@ -52,6 +61,9 @@
                         <h5 class="card-title"><i class="fas fa-chart-line card-icon"></i> Lead Insights</h5>
                         <p class="card-text">Explore insights about lead activities and engagement.</p>
                     </div>
+                </div>
+                <div id="loadingLeadInsights" class="loading-status d-none">
+                    Loading... Please wait patiently.
                 </div>
             </a>
         </div>
@@ -63,6 +75,9 @@
                         <p class="card-text">Discover insights about product sales performance.</p>
                     </div>
                 </div>
+                <div id="loadingProductInsights" class="loading-status d-none">
+                    Loading... Please wait patiently.
+                </div>
             </a>
         </div>
     </div>
@@ -71,22 +86,53 @@
 <script>
     function updateRfmScores() {
         var button = document.getElementById('updateIcon1');
+        var loadingRfm = document.getElementById('loadingRfm'); // Get the loading status element
         var form = document.getElementById('updateRfmForm');
 
         button.classList.remove('fa-sync');
         button.classList.add('fa-spinner', 'fa-spin');
+        loadingRfm.classList.remove('d-none'); // Show the loading status
 
         form.submit();
     }
 
     function updateCSegment() {
         var button = document.getElementById('updateIcon2');
+        var loadingCSegment = document.getElementById('loadingCSegment'); // Get the loading status element
         var form = document.getElementById('updateCSegmentForm');
 
         button.classList.remove('fa-sync');
         button.classList.add('fa-spinner', 'fa-spin');
+        loadingCSegment.classList.remove('d-none'); // Show the loading status
 
         form.submit();
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const customerInsightsLink = document.querySelector(".card-link[href*='customerInsights']");
+        const loadingCustomerInsights = document.getElementById("loadingCustomerInsights");
+
+        customerInsightsLink.addEventListener("click", function () {
+            loadingCustomerInsights.classList.remove("d-none");
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const leadInsightsLink = document.querySelector(".card-link[href*='leadInsights']");
+        const loadingLeadInsights = document.getElementById("loadingLeadInsights");
+
+        leadInsightsLink.addEventListener("click", function () {
+            loadingLeadInsights.classList.remove("d-none");
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const productInsightsLink = document.querySelector(".card-link[href*='productInsights']");
+        const loadingProductInsights = document.getElementById("loadingProductInsights");
+
+        productInsightsLink.addEventListener("click", function() {
+            loadingProductInsights.classList.remove("d-none");
+        });
+    });
 </script>
 @endsection

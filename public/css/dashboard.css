@@ -345,6 +345,7 @@
     border: 2px solid #0056b3;
     border-radius: 10px;
     transition: transform 0.2s, border-color 0.2s;
+    margin-bottom: 10px;
 }
 
 .custom-card:hover {
