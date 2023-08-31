@@ -42,19 +42,25 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class='col-md-6 mt-4'>
+                        <h4 class="chart-title">Customer Growth Over Time</h4>
+                        <div style="max-width: 500px; margin: auto;">
+                            <canvas id="customerGrowthChart"></canvas>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row justify-content-center">
                     <div class='col-md-6 mt-4'>
                         <h4 class="chart-title">Customer Distribution by RFM Scores and Segments</h4>
-                        <div style="max-width: 500px; margin: auto;">
+                        <div style="max-width: 450px; margin: auto;">
                             <canvas id="customerDistributionChart"></canvas>
                         </div>
                     </div>
                     <div class='col-md-6 mt-4'>
-                        <h4 class="chart-title">Customer Growth Over Time</h4>
-                        <div style="max-width: 500px; margin: auto;">
-                            <canvas id="customerGrowthChart"></canvas>
+                        <h4 class="chart-title">Customer Segment Distribution</h4>
+                        <div style="max-width: 400px; margin: auto;">
+                            <canvas id="customerSegmentChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -101,8 +107,44 @@
 </div>
 
 <script>
+    function renderCustomerSegmentChart(segmentLabels, countData, segmentColors) {
+        var ctx = document.getElementById('customerSegmentChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: segmentLabels,
+                datasets: [{
+                    label: 'Customer Count',
+                    data: countData,
+                    backgroundColor: segmentColors,
+                    borderWidth: 1,
+                }],
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        stepSize: 1,
+                    },
+                },
+            },
+        });
+    }
 
-function renderCustomerDistributionChart(customerDistributionData) {
+    var silverCounts = {{ $silverCustomerCounts }};
+    var goldCounts = {{ $goldCustomerCounts }};
+    var platinumCounts = {{ $platinumCustomerCounts }};
+
+    var cSegmentLabels = ['Silver', 'Gold', 'Platinum'];
+    var countData = [silverCounts, goldCounts, platinumCounts];
+    
+    // Define colors for each segment
+    var segmentColors = ['#FFC107', '#28A745', '#007BFF'];
+
+    // Call the function to render the chart
+    renderCustomerSegmentChart(cSegmentLabels, countData, segmentColors);
+
+    function renderCustomerDistributionChart(customerDistributionData) {
         var rfmScores = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; // Assuming these are the column names for RFM scores
         var customerSegments = ['Silver', 'Gold', 'Platinum']; // Sample customer segments
 

@@ -28,6 +28,9 @@ class MarketingStaffController extends Controller
 
     public function customerInsights()
     {
+        $silverCustomerCounts = Customer::where('c_segment', 'Silver')->count();
+        $goldCustomerCounts = Customer::where('c_segment', 'Gold')->count();
+        $platinumCustomerCounts = Customer::where('c_segment', 'Platinum')->count();
         $customerDistribution = $this->calculateCustomerDistribution();
         $customerGrowth = $this->calculateCustomerGrowth();
         $churnData = $this->calculateCustomerChurn();
@@ -37,6 +40,9 @@ class MarketingStaffController extends Controller
         $cltvData = $this->calculateCLTV();
 
         return view('marketingStaff.customerInsights', compact(
+            'silverCustomerCounts',
+            'goldCustomerCounts',
+            'platinumCustomerCounts',
             'customerDistribution',
             'customerGrowth',
             'churnData',
