@@ -141,18 +141,6 @@ class MarketingStaffController extends Controller
         return $activityCounts;
     }
 
-    public function productInsights()
-    {
-        // Product Insights
-        $products = Product::all();
-        $salesData = $this->calculateProductSales($products);
-
-        return view('marketingStaff.productInsights', compact(
-            'products',
-            'salesData',
-        ));
-    }
-
     public function marketingStaffHome()
     {
         return view('marketingStaff.marketingStaffHome');

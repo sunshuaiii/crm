@@ -11,15 +11,16 @@
                 {{ session('success') }}
             </div>
             @endif
-            <h3 class="mt-4">Welcome to our Customer Loyalty Program! </h3>
+            <div class="text-center">
+                <h3 class="mt-4">Join Our Customer Loyalty Program and Unlock Exclusive Rewards! </h3>
+            </div>
         </div>
 
-        <div class="col-md-5 mt-5">
+        <div class="col-md-5 mt-4">
             <div class="card">
                 <div class="card-body text-center">
                     <div class="m-4">
-                        <h5 class="mb-3">Join Us and Unlock Exclusive Rewards</h5>
-                        <p class="mb-4">We're excited to have you as part of our community. Sign in or create an account to start enjoying the incredible benefits of our Customer Loyalty Program.</p>
+                        <h5 class="mb-4">Sign in or create an account to start enjoying the incredible benefits of our Customer Loyalty Program.</h5>
                         <p class="highlight mb-4">Register now to receive <span class="highlight-text">RM10 off New Member Coupon</span> and <span class="highlight-text">300 bonus points</span> for free!</p>
                     </div>
                     <div class="mb-3">
@@ -30,7 +31,6 @@
                         </a>
                     </div>
                     </div>
-                    <div class="or-separator">or</div>
                     <p class="mt-4">Already have an account?</p>
                     <div class="mb-4">
                         <a href="{{ route('login.customer') }}" class="btn btn-outline-primary btn-lg btn-block">Sign In</a>

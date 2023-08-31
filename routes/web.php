@@ -88,7 +88,6 @@ Route::group(['middleware' => 'auth:marketingStaff'], function () {
     Route::get('/marketingStaff', [MarketingStaffController::class, 'marketingStaffHome'])->name('marketingStaff.marketingStaffHome');
     Route::get('/marketingStaff/customerInsights', [MarketingStaffController::class, 'customerInsights'])->name('marketingStaff.customerInsights');
     Route::get('/marketingStaff/leadInsights', [MarketingStaffController::class, 'leadInsights'])->name('marketingStaff.leadInsights');
-    Route::get('/marketingStaff/productInsights', [MarketingStaffController::class, 'productInsights'])->name('marketingStaff.productInsights');
     Route::post('/marketingStaff/updateRfmScores', [MarketingStaffController::class, 'updateRfmScores'])->name('marketingStaff.updateRfmScores');
     Route::post('/marketingStaff/updateCSegment', [MarketingStaffController::class, 'updateCSegment'])->name('marketingStaff.updateCSegment');
     Route::get('/marketingStaff/reportGeneration', [MarketingStaffController::class, 'reportGeneration'])->name('marketingStaff.reportGeneration');

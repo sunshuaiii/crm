@@ -18,7 +18,7 @@
     <div class="header">Marketing Staff Dashboard</div>
 
     <!-- Add buttons to trigger update -->
-    <div class="row col-md-12 mb-4">
+    <div class="row col-md-12 mb-4 justify-content-center">
         <form id="updateRfmForm" action="{{ route('marketingStaff.updateRfmScores') }}" method="post">
             @csrf
             <button type="button" class="custom-button" onclick="updateRfmScores()">
@@ -67,19 +67,6 @@
                 </div>
             </a>
         </div>
-        <div class="col-md-4 mb-4">
-            <a href="{{ route('marketingStaff.productInsights') }}" class="card-link">
-                <div class="card custom-card">
-                    <div class="card-body">
-                        <h5 class="card-title"><i class="fas fa-shopping-cart card-icon"></i> Product Insights</h5>
-                        <p class="card-text">Discover insights about product sales performance.</p>
-                    </div>
-                </div>
-                <div id="loadingProductInsights" class="loading-status d-none">
-                    Loading... Please wait patiently.
-                </div>
-            </a>
-        </div>
     </div>
 </div>
 
@@ -108,30 +95,21 @@
         form.submit();
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const customerInsightsLink = document.querySelector(".card-link[href*='customerInsights']");
         const loadingCustomerInsights = document.getElementById("loadingCustomerInsights");
 
-        customerInsightsLink.addEventListener("click", function () {
+        customerInsightsLink.addEventListener("click", function() {
             loadingCustomerInsights.classList.remove("d-none");
         });
     });
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         const leadInsightsLink = document.querySelector(".card-link[href*='leadInsights']");
         const loadingLeadInsights = document.getElementById("loadingLeadInsights");
 
-        leadInsightsLink.addEventListener("click", function () {
+        leadInsightsLink.addEventListener("click", function() {
             loadingLeadInsights.classList.remove("d-none");
-        });
-    });
-
-    document.addEventListener("DOMContentLoaded", function() {
-        const productInsightsLink = document.querySelector(".card-link[href*='productInsights']");
-        const loadingProductInsights = document.getElementById("loadingProductInsights");
-
-        productInsightsLink.addEventListener("click", function() {
-            loadingProductInsights.classList.remove("d-none");
         });
     });
 </script>
