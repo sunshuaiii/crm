@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use Carbon\Carbon;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
@@ -44,7 +43,7 @@ class LeadsSeeder extends Seeder
 
         $leadData = [];
 
-        for ($i = 1; $i <= 50; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $activityCount = rand(0, count($activityTypes)); // Adjust the upper limit
             $selectedActivityIndices = ($activityCount > 0) ? array_rand($activityTypes, $activityCount) : [];
             $selectedActivityTypes = array_intersect_key($activityTypes, array_flip((array) $selectedActivityIndices));
@@ -59,13 +58,13 @@ class LeadsSeeder extends Seeder
             $feedback_date = null;
 
             if ($activityString != '') {
-                $activity_date = Carbon::now()->subDays(rand(1, 30));
+                $activity_date = Carbon::now()->subDays(rand(1, 90));
             }
             if ($feedbackString != '') {
-                $feedback_date = Carbon::now()->subDays(rand(1, 30));
+                $feedback_date = Carbon::now()->subDays(rand(1, 90));
             }
 
-            $created_at = Carbon::now()->subDays(30);
+            $created_at = Carbon::now()->subDays(90);
 
             if ($activity_date && $feedback_date) {
                 $updated_at = $activity_date->max($feedback_date);

@@ -82,25 +82,6 @@
         });
     });
 
-    // Function to render sentiment analysis chart
-    function renderSentimentChart(sentimentData) {
-        var ctx = document.getElementById('sentimentChart').getContext('2d');
-        var chart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: Object.keys(sentimentData),
-                datasets: [{
-                    data: Object.values(sentimentData),
-                    backgroundColor: ['#36A2EB', '#FF5733', '#33FF33'],
-                }],
-            },
-        });
-    }
 
-    // Sentiment analysis data from the controller
-    var sentimentData = {!! json_encode($sentimentResults) !!};
-
-    // Call the function to render the chart
-    renderSentimentChart(sentimentData);
 </script>
 @endsection
