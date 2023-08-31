@@ -43,7 +43,7 @@ class LeadsSeeder extends Seeder
 
         $leadData = [];
 
-        for ($i = 1; $i <= 100; $i++) {
+        for ($i = 1; $i <= 50; $i++) {
             $activityCount = rand(0, count($activityTypes)); // Adjust the upper limit
             $selectedActivityIndices = ($activityCount > 0) ? array_rand($activityTypes, $activityCount) : [];
             $selectedActivityTypes = array_intersect_key($activityTypes, array_flip((array) $selectedActivityIndices));

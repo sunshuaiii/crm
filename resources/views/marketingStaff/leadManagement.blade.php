@@ -88,7 +88,7 @@
                             @endforeach
                         </div>
 
-                        <div class="d-flex justify-content-between">
+                        <div class="d-flex justify-content-between mt-4">
                             <div class="text-end">
                                 <a href="{{ route('marketingStaff.viewLead', ['id' => $lead->id]) }}" class="btn btn-primary">View Lead Details</a>
                                 <a href="{{ route('marketingStaff.updateLead', ['id' => $lead->id]) }}" class="btn btn-primary">Update Lead Details</a>

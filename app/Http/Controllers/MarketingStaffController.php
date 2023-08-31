@@ -57,16 +57,69 @@ class MarketingStaffController extends Controller
     {
         $activityCounts = $this->leadActivityAnalysis();
 
+        //lead engagament trends
+        $activictyData = Lead::where('marketing_staff_id', Auth::user()->id)
+            ->select(
+                DB::raw('DATE_FORMAT(activity_date, "%Y-%m") as month'),
+                DB::raw('COUNT(activity) as activity_count'),
+            )
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $feedbackData = Lead::where('marketing_staff_id', Auth::user()->id)
+            ->select(
+                DB::raw('DATE_FORMAT(feedback_date, "%Y-%m") as month'),
+                DB::raw('COUNT(feedback) as feedback_count'),
+            )
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $activityMonths = $activictyData->pluck('month');
+        $feedbackMonths = $feedbackData->pluck('month');
+        $activityCount = $activictyData->pluck('activity_count');
+        $feedbackCounts = $feedbackData->pluck('feedback_count');
+
+        $genderCounts = $this->leadGenderDistribution();
+
+        $activityFrequencies = Lead::where('marketing_staff_id', Auth::user()->id)
+            ->select('id', 'first_name', 'last_name', 'email', 'activity')
+            ->get();
+
+        foreach ($activityFrequencies as $lead) {
+            $activityArray = explode(',', $lead->activity);
+            $activityCount = count(array_filter($activityArray)); // Exclude empty elements
+            $lead->activity_count = $activityCount;
+        }
+
+        $activityFrequencies = $activityFrequencies->sortByDesc('activity_count');
 
         return view('marketingStaff.leadInsights', compact(
             'activityCounts',
+            'activityMonths',
+            'feedbackMonths',
+            'activityCount',
+            'feedbackCounts',
+            'genderCounts',
+            'activityFrequencies',
         ));
+    }
+
+    private function leadGenderDistribution()
+    {
+        $genderCounts = Lead::where('marketing_staff_id', Auth::user()->id)
+            ->select('gender', DB::raw('COUNT(*) as count'))
+            ->groupBy('gender')
+            ->get();
+
+        return $genderCounts;
     }
 
     private function leadActivityAnalysis()
     {
         $activityData = DB::table('leads')
-            // ->where('marketing_staff_id', Auth::user()->id)
+            ->where('marketing_staff_id', Auth::user()->id)
             ->select('activity')
             ->get();
 
