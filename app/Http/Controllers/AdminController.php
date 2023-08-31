@@ -8,6 +8,7 @@ use App\Models\MarketingStaff;
 use App\Models\SupportStaff;
 use App\Models\Customer;
 use App\Models\CustomerCoupon;
+use App\Models\Lead;
 use App\Models\Ticket;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -318,7 +319,53 @@ class AdminController extends Controller
     public function getMarketingStaffInsightsAjax(Request $request)
     {
         $staffId = $request->input('staffId');
-        //todo
+        if ($staffId == 'all') {
+            $leadsAssigned = Lead::count();
+            $newLeads = Lead::where('status', 'New')->count();
+            $contactedLeads = Lead::where('status', 'Contacted')->count();
+            $interestedLeads = Lead::where('status', 'Interested')->count();
+            $notInterestedLeads = Lead::where('status', 'Not Interested')->count();
+
+            $staffPerformance = Lead::select('marketing_staff_id', 'status', DB::raw('COUNT(*) as lead_count'))
+                ->whereNotNull('marketing_staff_id')
+                ->groupBy('marketing_staff_id', 'status')
+                ->orderByDesc('lead_count')
+                ->get();
+
+            $staffIds = Lead::distinct('marketing_staff_id')->pluck('marketing_staff_id');
+            $statuses = Lead::distinct('status')->pluck('status');
+
+            $staffData = [];
+            foreach ($staffIds as $staffId) {
+                $staffData[$staffId] = $statuses->map(function ($status) use ($staffId, $staffPerformance) {
+                    $match = $staffPerformance->where('marketing_staff_id', $staffId)->where('status', $status)->first();
+                    return $match ? $match->lead_count : 0;
+                })->toArray(); // Convert to array
+            }
+        } else {
+            $leadsAssigned = Lead::where('marketing_staff_id', $staffId)->count();
+            $newLeads = Lead::where('marketing_staff_id', $staffId)->where('status', 'New')->count();
+            $contactedLeads = Lead::where('marketing_staff_id', $staffId)->where('status', 'Contacted')->count();
+            $interestedLeads = Lead::where('marketing_staff_id', $staffId)->where('status', 'Interested')->count();
+            $notInterestedLeads = Lead::where('marketing_staff_id', $staffId)->where('status', 'Not Interested')->count();
+
+            $staffPerformance = Lead::where('marketing_staff_id', $staffId)->select('marketing_staff_id', 'status', DB::raw('COUNT(*) as lead_count'))
+                ->whereNotNull('marketing_staff_id')
+                ->groupBy('marketing_staff_id', 'status')
+                ->orderByDesc('lead_count')
+                ->get();
+
+            $staffIds = [$request->input('staffId')];
+            $statuses = Lead::distinct('status')->pluck('status');
+
+            $staffData = [];
+            foreach ($staffIds as $staffId) {
+                $staffData[$staffId] = $statuses->map(function ($status) use ($staffId, $staffPerformance) {
+                    $match = $staffPerformance->where('marketing_staff_id', $staffId)->where('status', $status)->first();
+                    return $match ? $match->lead_count : 0;
+                })->toArray(); // Convert to array
+            }
+        }
 
         return view('admin.marketingStaffInsights', compact(
             'leadsAssigned',
@@ -326,6 +373,10 @@ class AdminController extends Controller
             'contactedLeads',
             'interestedLeads',
             'notInterestedLeads',
+            'staffPerformance',
+            'staffIds',
+            'statuses',
+            'staffData',
         ));
     }
 

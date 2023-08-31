@@ -23,7 +23,7 @@
                 <div class="row justify-content-center">
                     <div class='col-md-6 mt-4'>
                         <h4 class="chart-title">Top Customers by Purchase Amount</h4>
-                        <table class="table table-sm custom-table">
+                        <table class="table table-sm custom-table table-striped">
                             <thead>
                                 <tr>
                                     <th>Customer ID</th>
