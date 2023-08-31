@@ -29,5 +29,18 @@
             </a>
         </div>
     </div>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-4 mb-4">
+            <a href="{{ route('supportStaff.searchCustomer') }}" class="card-link">
+                <div class="card custom-card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-search card-icon"></i> Search Customer</h5>
+                        <p class="card-text">Find and analyze customer information for better support.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
 </div>
 @endsection

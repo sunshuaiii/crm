@@ -131,7 +131,7 @@
             </li>
             <li>
                 <a href="{{ route('marketingStaff.leadManagement') }}">
-                    <i class="fas fa-bullseye"></i>
+                    <i class="fas fa-user-tie"></i>
                     <span class="links_name">Lead Management</span>
                 </a>
                 <span class="tooltip">Lead Management</span>

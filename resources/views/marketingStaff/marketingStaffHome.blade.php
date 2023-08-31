@@ -18,7 +18,7 @@
     <div class="header">Marketing Staff Dashboard</div>
 
     <!-- Add buttons to trigger update -->
-    <div class="row col-md-12 mb-4 justify-content-center">
+    <div class="row col-md-12 justify-content-center">
         <form id="updateRfmForm" action="{{ route('marketingStaff.updateRfmScores') }}" method="post">
             @csrf
             <button type="button" class="custom-button" onclick="updateRfmScores()">
@@ -64,6 +64,39 @@
                 </div>
                 <div id="loadingLeadInsights" class="loading-status d-none">
                     Loading... Please wait patiently.
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-4 mb-4">
+            <a href="{{ route('marketingStaff.reportGeneration') }}" class="card-link">
+                <div class="card custom-card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-chart-bar card-icon"></i> Report Generation</h5>
+                        <p class="card-text">Generate detailed reports on customer behavior and sales performance.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+            <a href="{{ route('marketingStaff.leadManagement') }}" class="card-link">
+                <div class="card custom-card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-user-tie card-icon"></i> Lead Management</h5>
+                        <p class="card-text">Manage leads and track engagement for effective conversions and sales report.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
+            <a href="{{ route('marketingStaff.searchCustomer') }}" class="card-link">
+                <div class="card custom-card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-search card-icon"></i> Search Customer</h5>
+                        <p class="card-text">Find and analyze customer information for better support.</p>
+                    </div>
                 </div>
             </a>
         </div>
