@@ -27,50 +27,46 @@
         <p><i class="fas fa-credit-card"></i> Payment Method: {{ $checkout->payment_method }}</p>
         <p><i class="far fa-calendar-alt"></i> Checkout Date: {{ $checkout->date->setTimezone('Asia/Kuala_Lumpur')->format('d M Y H:i:s') }}</p>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th><i class="fas fa-box"></i> Product Name</th>
-                    <th><i class="fas fa-sort-amount-up"></i> Quantity</th>
-                    <th><i class="fas fa-tag"></i> Unit Price</th>
-                    <th><i class="fas fa-file-invoice-dollar"></i> Subtotal</th>
-                </tr>
-            </thead>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-box"></i> Product Name</th>
+                        <th><i class="fas fa-sort-amount-up"></i> Quantity</th>
+                        <th><i class="fas fa-tag"></i> Unit Price</th>
+                        <th><i class="fas fa-file-invoice-dollar"></i> Subtotal</th>
+                    </tr>
+                </thead>
 
-            <tbody>
-                @foreach ($checkout->checkoutProducts as $checkoutProduct)
-                <tr>
-                    <td>{{ $checkoutProduct->product->name }}</td>
-                    <td>{{ $checkoutProduct->quantity }}</td>
-                    <td>RM {{ number_format($checkoutProduct->product->unit_price, 2) }}</td>
-                    <td>RM {{ number_format($checkoutProduct->product->unit_price * $checkoutProduct->quantity, 2) }}</td>
-                </tr>
-                @endforeach
+                <tbody>
+                    @foreach ($checkout->checkoutProducts as $checkoutProduct)
+                    <tr>
+                        <td>{{ $checkoutProduct->product->name }}</td>
+                        <td>{{ $checkoutProduct->quantity }}</td>
+                        <td>RM {{ number_format($checkoutProduct->product->unit_price, 2) }}</td>
+                        <td>RM {{ number_format($checkoutProduct->product->unit_price * $checkoutProduct->quantity, 2) }}</td>
+                    </tr>
+                    @endforeach
 
-                <tr>
-                    <td colspan="3" class="text-right">
-                        <i class="fas fa-dollar-sign"></i> Total Amount:
-                    </td>
-                    <td>RM {{ number_format($totalAmount, 2) }}</td>
-                </tr>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Total Amount:</strong></td>
+                        <td>RM {{ number_format($totalAmount, 2) }}</td>
+                    </tr>
 
-                @if($couponDiscount)
-                <tr>
-                    <td colspan="3" class="text-right">
-                        <i class="fas fa-percent"></i> Coupon Discount:
-                    </td>
-                    <td>RM {{ number_format($couponDiscount, 2) }}</td>
-                </tr>
-                <tr>
-                    <td colspan="3" class="text-right">
-                        <i class="fas fa-money-bill-wave"></i> Final Amount:
-                    </td>
-                    <td>RM {{ number_format($finalAmount, 2) }}</td>
-                </tr>
-                @endif
+                    @if($couponDiscount)
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Coupon Discount:</strong></td>
+                        <td>RM {{ number_format($couponDiscount, 2) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Final Amount:</strong></td>
+                        <td>RM {{ number_format($finalAmount, 2) }}</td>
+                    </tr>
+                    @endif
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
 
         <div class="row justify-content-center align-items-center mt-3">
             <div class="col-md-6 text-center">

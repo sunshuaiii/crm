@@ -91,6 +91,8 @@ Route::group(['middleware' => 'auth:marketingStaff'], function () {
     Route::post('/marketingStaff/updateRfmScores', [MarketingStaffController::class, 'updateRfmScores'])->name('marketingStaff.updateRfmScores');
     Route::post('/marketingStaff/updateCSegment', [MarketingStaffController::class, 'updateCSegment'])->name('marketingStaff.updateCSegment');
     Route::get('/marketingStaff/reportGeneration', [MarketingStaffController::class, 'reportGeneration'])->name('marketingStaff.reportGeneration');
+    Route::get('/marketingStaff/reportGeneration/customerBehaviour', [MarketingStaffController::class, 'customerBehaviourReport'])->name('marketingStaff.customerBehaviourReport');
+    Route::get('/marketingStaff/reportGeneration/salesPerformance', [MarketingStaffController::class, 'salesPerformanceReport'])->name('marketingStaff.salesPerformanceReport');
     Route::get('/marketingStaff/leadManagement', [MarketingStaffController::class, 'getAllLeadsForMarketingStaff'])->name('marketingStaff.leadManagement');
     Route::get('/marketingStaff/leadManagement/addLead', [MarketingStaffController::class, 'addLead'])->name('marketingStaff.addLead');
     Route::post('/marketingStaff/leadManagement/storeLead', [MarketingStaffController::class, 'storeLead'])->name('marketingStaff.storeLead');

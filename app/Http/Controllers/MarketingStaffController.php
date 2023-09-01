@@ -13,7 +13,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use GuzzleHttp\Client;
 
 class MarketingStaffController extends Controller
 {
@@ -55,51 +54,75 @@ class MarketingStaffController extends Controller
 
     public function leadInsights()
     {
-        $activityCounts = $this->leadActivityAnalysis();
+        $activitiesCounts = $this->leadActivityAnalysis();
 
         //lead engagament trends
-        $activictyData = Lead::where('marketing_staff_id', Auth::user()->id)
-            ->select(
-                DB::raw('DATE_FORMAT(activity_date, "%Y-%m") as month'),
-                DB::raw('COUNT(activity) as activity_count'),
-            )
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
+        $oldestDate = Lead::where('marketing_staff_id', Auth::user()->id)
+            ->min('created_at');
 
-        $feedbackData = Lead::where('marketing_staff_id', Auth::user()->id)
-            ->select(
-                DB::raw('DATE_FORMAT(feedback_date, "%Y-%m") as month'),
-                DB::raw('COUNT(feedback) as feedback_count'),
-            )
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
+        $startDate = Carbon::parse($oldestDate); // Use Carbon to generate months between the oldest date and current date
+        $endDate = Carbon::now();
 
-        $activityMonths = $activictyData->pluck('month');
-        $feedbackMonths = $feedbackData->pluck('month');
-        $activityCount = $activictyData->pluck('activity_count');
-        $feedbackCounts = $feedbackData->pluck('feedback_count');
+        $months = [];
+        while ($startDate->lte($endDate)) {
+            $months[] = $startDate->format('Y-m');
+            $startDate->addMonth();
+        }
+        // \DB::enableQueryLog();
 
+        $engagementData = [];
+
+        foreach ($months as $month) {
+            $data = DB::table('leads')
+                ->select(
+                    DB::raw("'$month' as month"),
+                    DB::raw("SUM(CASE WHEN DATE_FORMAT(leads.activity_date, '%Y-%m') = '$month' THEN 1 ELSE 0 END) as activity_count"),
+                    DB::raw("SUM(CASE WHEN DATE_FORMAT(leads.feedback_date, '%Y-%m') = '$month' THEN 1 ELSE 0 END) as feedback_count")
+                )
+                ->where('leads.marketing_staff_id', Auth::user()->id)
+                ->first();
+
+            // Add the data to the engagementData array
+            $engagementData[] = $data;
+        }
+
+        // $query = \DB::getQueryLog();
+        // dd($query);
+
+        $activityCounts = [];
+        $feedbackCounts = [];
+
+        foreach ($engagementData as $data) {
+            $activityCounts[] = $data->activity_count;
+            $feedbackCounts[] = $data->feedback_count;
+        }
+
+        // dd($engagementData);
+        // dd($activityCounts);
+
+        // lead gender distribution
         $genderCounts = $this->leadGenderDistribution();
 
+        // lead activity frequency analysis (lead overview)
         $activityFrequencies = Lead::where('marketing_staff_id', Auth::user()->id)
-            ->select('id', 'first_name', 'last_name', 'email', 'activity')
+            ->select('id', 'first_name', 'last_name', 'status', 'email', 'activity', 'feedback')
             ->get();
 
         foreach ($activityFrequencies as $lead) {
             $activityArray = explode(',', $lead->activity);
+            $feedbackArray = explode(',', $lead->feedback);
             $activityCount = count(array_filter($activityArray)); // Exclude empty elements
+            $feedbackCount = count(array_filter($feedbackArray)); // Exclude empty elements
             $lead->activity_count = $activityCount;
+            $lead->feedback_count = $feedbackCount;
         }
 
         $activityFrequencies = $activityFrequencies->sortByDesc('activity_count');
 
         return view('marketingStaff.leadInsights', compact(
+            'activitiesCounts',
+            'months',
             'activityCounts',
-            'activityMonths',
-            'feedbackMonths',
-            'activityCount',
             'feedbackCounts',
             'genderCounts',
             'activityFrequencies',

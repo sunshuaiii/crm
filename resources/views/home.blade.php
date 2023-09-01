@@ -26,10 +26,10 @@
                     <div class="mb-3">
                         <a href="{{ route('register.customer') }}" class="btn btn-primary btn-lg btn-block">Get Started</a>
                         <div class="text-center m-4">
-                        <a href="{{ route('google.auth') }}" class="btn btn-outline-primary btn-google">
-                            <i class="fab fa-google mr-2"></i> {{ __('Continue with Google') }}
-                        </a>
-                    </div>
+                            <a href="{{ route('google.auth') }}" class="btn btn-outline-primary btn-google">
+                                <i class="fab fa-google mr-2"></i> {{ __('Continue with Google') }}
+                            </a>
+                        </div>
                     </div>
                     <p class="mt-4">Already have an account?</p>
                     <div class="mb-4">
@@ -37,9 +37,9 @@
                     </div>
                     <div class="login-options mt-4">
                         <p class="mb-2">Looking for other login options?</p>
-                        <div class="d-flex justify-content-center m-2">
-                            <a href="{{ route('login.admin') }}" class="btn btn-outline-secondary mr-2">Admin Login</a>
-                            <a href="{{ route('login.marketingStaff') }}" class="btn btn-outline-secondary mr-2">Marketing Staff Login</a>
+                        <div class="d-flex justify-content-center md-2">
+                            <a href="{{ route('login.admin') }}" class="btn btn-outline-secondary mr-3">Admin Login</a>
+                            <a href="{{ route('login.marketingStaff') }}" class="btn btn-outline-secondary mr-3">Marketing Staff Login</a>
                             <a href="{{ route('login.supportStaff') }}" class="btn btn-outline-secondary">Support Staff Login</a>
                         </div>
                     </div>
