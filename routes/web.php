@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CustomerResetPasswordController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SupportStaffController;
@@ -42,6 +43,11 @@ Route::post('/login/supportStaff', [LoginController::class, 'supportStaffLogin']
 Route::post('/register/customer', [RegisterController::class, 'createCustomer']);
 Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
 Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
+
+Route::get('/customer/password/reset', [CustomerResetPasswordController::class, 'showLinkRequestForm'])->name('customer.password.request');
+Route::post('/customer/password/email', [CustomerResetPasswordController::class, 'sendResetLinkEmail'])->name('customer.password.email');
+Route::get('/customer/password/reset/{token}', [CustomerResetPasswordController::class, 'showResetForm'])->name('customer.password.reset');
+Route::post('/customer/password/reset', [CustomerResetPasswordController::class, 'reset'])->name('customer.password.update');
 
 Route::group(['middleware' => 'auth:customer'], function () {
     Route::view('/customer', 'customer.customerHome');

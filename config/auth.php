@@ -38,7 +38,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'customers',
         ],
         'customer' => [
             'driver' => 'session',
@@ -119,13 +119,12 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
-            'table' => 'password_resets',
-            'expire' => 60,
-            'throttle' => 60,
+        'customers' => [
+            'provider' => 'customers', // The user provider for this broker
+            'table' => 'password_resets', // The table used to store password reset tokens
+            'expire' => 60, // The number of minutes a reset token should be considered valid
         ],
-    ],
+    ],    
 
     /*
     |--------------------------------------------------------------------------

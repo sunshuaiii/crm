@@ -92,8 +92,8 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-        'name' => env('MAIL_FROM_NAME', 'Example'),
+        'address' => env('MAIL_FROM_ADDRESS', 'kim112799@gmailcom'),
+        'name' => env('MAIL_FROM_NAME', 'CRM'),
     ],
 
     /*
@@ -115,4 +115,13 @@ return [
         ],
     ],
 
+    'passwords' => [
+        'customers' => [ // Use the 'customers' guard
+            'provider' => 'customers', // Use the 'customers' provider
+            'email' => 'auth.passwords', 
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+    ],
+    
 ];
