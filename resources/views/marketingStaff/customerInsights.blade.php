@@ -29,6 +29,7 @@
                                     <th>Customer ID</th>
                                     <th>Customer Name</th>
                                     <th>Total Purchase Amount</th>
+                                    <th>Member Since</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,6 +38,12 @@
                                     <td>{{ $customer->id }}</td>
                                     <td>{{ $customer->first_name }} {{ $customer->last_name }}</td>
                                     <td>RM {{ number_format($customer->total_purchase_amount, 2) }}</td>
+                                    <td>@if ($customer->created_at)
+                                            {{ \Carbon\Carbon::parse($customer->created_at)->timezone('Asia/Kuala_Lumpur')->format('Y-m-d') }}
+                                        @else
+                                            NA
+                                        @endif
+                                    </td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -100,7 +107,10 @@
 
     <div class="text-center">
         <a href="{{ route('marketingStaff.marketingStaffHome') }}" class="btn btn-secondary">
-            <i class="bx bx-arrow-back"></i> Go Back
+            <i class="bx bx-arrow-back"></i> Back to Dashboard
+        </a>
+        <a href="{{ route('marketingStaff.leadInsights') }}" class="btn btn-primary">
+            <i class="fas fa-chart-line"></i> Lead Insights
         </a>
     </div>
 

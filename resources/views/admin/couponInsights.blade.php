@@ -82,7 +82,10 @@
 
     <div class="text-center">
         <a href="{{ route('admin.adminHome') }}" class="btn btn-secondary">
-            <i class="bx bx-arrow-back"></i> Go Back
+            <i class="bx bx-arrow-back"></i> Back to Dashboard
+        </a>
+        <a href="{{ route('admin.staffInsights') }}" class="btn btn-primary">
+            <i class="fas fa-users-cog"></i> Staff Insights
         </a>
     </div>
 </div>

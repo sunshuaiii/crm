@@ -68,7 +68,10 @@
 
     <div class="text-center">
         <a href="{{ route('admin.adminHome') }}" class="btn btn-secondary">
-            <i class="bx bx-arrow-back"></i> Go Back
+            <i class="bx bx-arrow-back"></i> Back to Dashboard
+        </a>
+        <a href="{{ route('admin.couponInsights') }}" class="btn btn-primary">
+            <i class="fas fa-ticket-alt"></i> Coupon Insights
         </a>
     </div>
 </div>

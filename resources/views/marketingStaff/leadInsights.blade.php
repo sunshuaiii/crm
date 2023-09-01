@@ -86,7 +86,10 @@
 
     <div class="text-center">
         <a href="{{ route('marketingStaff.marketingStaffHome') }}" class="btn btn-secondary">
-            <i class="bx bx-arrow-back"></i> Go Back
+            <i class="bx bx-arrow-back"></i> Back to Dashboard
+        </a>
+        <a href="{{ route('marketingStaff.customerInsights') }}" class="btn btn-primary">
+            <i class="fas fa-users"></i> Customer Insights
         </a>
     </div>
 

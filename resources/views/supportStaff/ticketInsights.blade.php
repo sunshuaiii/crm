@@ -124,7 +124,7 @@
 
     <div class="text-center">
         <a href="{{ route('supportStaff.supportStaffHome') }}" class="btn btn-secondary">
-            <i class="bx bx-arrow-back"></i> Go Back
+            <i class="bx bx-arrow-back"></i> Back to Dashboard
         </a>
     </div>
 </div>

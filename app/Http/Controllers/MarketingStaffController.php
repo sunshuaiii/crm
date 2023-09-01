@@ -7,7 +7,6 @@ use App\Models\CheckoutProduct;
 use App\Models\Customer;
 use App\Models\CustomerCoupon;
 use App\Models\Lead;
-use App\Models\Product;
 use App\Models\Ticket;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -341,7 +340,7 @@ class MarketingStaffController extends Controller
     private function getTopCustomers($numbersOfTopCustomer)
     {
         $topCustomers = DB::table('customers')
-            ->select('id', 'first_name', 'last_name', 'm_score as total_purchase_amount')
+            ->select('id', 'first_name', 'last_name', 'm_score as total_purchase_amount', 'created_at')
             ->orderByDesc('total_purchase_amount')
             ->take($numbersOfTopCustomer)
             ->get();
