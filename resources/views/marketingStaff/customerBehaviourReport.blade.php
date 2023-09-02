@@ -163,6 +163,12 @@
                     </div>
                 </div>
 
+                <div class="text-center">
+                    <a href="{{ route('marketingStaff.reportGeneration') }}" class="btn btn-secondary">
+                        <i class="bx bx-arrow-back"></i> Back to Dashboard
+                    </a>
+                </div>
+
             </div>
         </div>
     </div>

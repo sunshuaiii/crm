@@ -12,6 +12,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\CustomerReportController;
+use App\Http\Controllers\SalesReportController;
 
 class MarketingStaffController extends Controller
 {
@@ -117,6 +119,55 @@ class MarketingStaffController extends Controller
             'genderCounts',
             'activityFrequencies',
         ));
+    }
+
+    public function generateReport(Request $request)
+    {
+        $customerReportController = new CustomerReportController();
+        $salesReportController = new SalesReportController();
+        // Validate the form data
+        $request->validate([
+            'reportType' => 'required|in:customerBehaviour,salesPerformance',
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after_or_equal:startDate',
+        ]);
+
+        // Retrieve user selections
+        $reportType = $request->input('reportType');
+        $startDate = $request->input('startDate');
+        $endDate = $request->input('endDate');
+
+        $reportDatasets = [];
+
+        if ($reportType == 'customerBehaviour') {
+            $reportDatasets = $customerReportController->customerBehaviourReport($startDate, $endDate);
+        } else if ($reportType == 'salesPerformance') {
+            $reportDatasets = $salesReportController->salesPerformanceReport($startDate, $endDate);
+        }
+
+        // Redirect the user back to the report generation page with a success message
+        if ($reportType == 'customerBehaviour') {
+            return view('marketingStaff.customerBehaviourReport')
+                ->with([
+                    'reportDatasets' => $reportDatasets,
+                    'startDate' => $startDate,
+                    'endDate' => $endDate,
+                ])
+                ->with('success', 'Customer Behavior Report generated successfully.');
+        } elseif ($reportType == 'salesPerformance') {
+            return view('marketingStaff.salesPerformanceReport')
+                ->with([
+                    'reportDatasets' => $reportDatasets,
+                    'startDate' => $startDate,
+                    'endDate' => $endDate,
+                ])
+                ->with('success', 'Sales Performance Report generated successfully.');
+        }
+    }
+
+    public function reportGeneration()
+    {
+        return view('marketingStaff.reportGeneration');
     }
 
     private function leadGenderDistribution()
