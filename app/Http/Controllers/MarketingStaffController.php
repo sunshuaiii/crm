@@ -15,15 +15,6 @@ use Illuminate\Support\Facades\DB;
 
 class MarketingStaffController extends Controller
 {
-    public function reportGeneration()
-    {
-        $data = '';
-
-        return view('marketingStaff.reportGeneration', compact(
-            'data',
-        ));
-    }
-
     public function customerInsights()
     {
         $silverCustomerCounts = Customer::where('c_segment', 'Silver')->count();

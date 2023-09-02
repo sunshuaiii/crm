@@ -304,6 +304,10 @@
     transition: none;
 }
 
+.spinner {
+    animation: fa-spin infinite linear;
+}
+
 .custom-table {
     padding: 0.2rem; /* Adjust the padding as needed */
     font-size: 0.8rem; /* Adjust the font size as needed */
@@ -341,7 +345,7 @@
 }
 
 .custom-card {
-    background-color: #E6F7FF;
+    background-color: #e6f7ff;
     border: 2px solid #0056b3;
     border-radius: 10px;
     transition: transform 0.2s, border-color 0.2s;
@@ -350,12 +354,12 @@
 
 .custom-card:hover {
     transform: scale(1.02);
-    border-color: #003C7A;
+    border-color: #003c7a;
 }
 
 .card-icon {
     font-size: 36px;
-    color: #003C7A;
+    color: #003c7a;
 }
 
 /* Define the custom button style */
@@ -387,4 +391,70 @@
 /* Style for the icon inside the button */
 .custom-button i {
     margin-right: 8px;
+}
+
+.report-type-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.report-card {
+    border: 1px solid #e6f7ff;
+    border-radius: 15px;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 300px; /* Set a fixed width for cards if needed */
+    background-color: #e6f7ff;
+}
+
+.report-card.selected {
+    border: 1px solid #003c7a;
+    background-color: #b6cbf1;
+    /* color: black; */
+}
+
+/* Hide the default radio input */
+.report-card input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.report-card:hover {
+    background-color: #f0f0f0;
+}
+
+.report-card.selected:hover {
+    background-color: #b6cbf1;
+}
+
+.report-card input[type="radio"] {
+    display: none;
+}
+
+.card-content {
+    text-align: center;
+}
+
+.card-content h4 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.card-content p {
+    font-size: 14px;
+    color: #888;
+}
+
+.section-header {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.section-description {
+    margin-bottom: 20px;
 }
