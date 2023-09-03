@@ -44,6 +44,7 @@ Route::post('/login/supportStaff', [LoginController::class, 'supportStaffLogin']
 Route::post('/register/customer', [RegisterController::class, 'createCustomer']);
 Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('google.auth');
 Route::get('auth/google/call-back', [GoogleAuthController::class, 'callbackGoogle']);
+Route::view('/forgotPassword', 'customer.forgotPassword')->name('password.forgot');
 
 Route::group(['middleware' => 'auth:customer'], function () {
     Route::view('/customer', 'customer.customerHome');
@@ -60,6 +61,7 @@ Route::group(['middleware' => 'auth:customer'], function () {
     Route::post('/customer/support/contactUs', [CustomerController::class, 'submitContactForm'])->name('customer.support.contactUs.submit');
     Route::get('/customer/profile', [CustomerController::class, 'profile'])->name('customer.profile');
     Route::post('/customer/profile/update', [CustomerController::class, 'updateProfile'])->name('customer.profile.update');
+    Route::post('/customer/profile/resetPassword', [CustomerController::class, 'resetPassword'])->name('customer.profile.resetPassword');
 });
 
 Route::group(['middleware' => 'auth:admin'], function () {

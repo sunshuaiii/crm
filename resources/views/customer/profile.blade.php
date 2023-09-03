@@ -6,6 +6,85 @@
 <div class="container-content">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
+
+            @if(session('success'))
+            <div class="alert alert-success mt-3">
+                {{ session('success') }}
+            </div>
+            @endif
+
+            <div class="card mb-5">
+                <div class="card-header">
+                    <i class="fas fa-lock"></i></i> {{ __('Reset Password') }}
+                </div>
+
+                <div class="card-body">
+                    <form method="POST" action="{{ route('customer.profile.resetPassword') }}">
+                        @csrf
+
+                        <!-- Old Password -->
+                        <div class="row mb-3">
+                            <label for="old_password" class="col-md-4 col-form-label text-md-end">
+                                {{ __('Old Password') }}
+                            </label>
+
+                            <div class="col-md-6">
+                                <input id="old_password" type="password" class="form-control @error('old_password') is-invalid @enderror" name="old_password" required>
+
+                                @error('old_password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- New Password -->
+                        <div class="row mb-3">
+                            <label for="new_password" class="col-md-4 col-form-label text-md-end">
+                                {{ __('New Password') }}
+                            </label>
+
+                            <div class="col-md-6">
+                                <input id="new_password" type="password" class="form-control @error('new_password') is-invalid @enderror" name="new_password" required>
+
+                                @error('new_password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Confirm New Password -->
+                        <div class="row mb-3">
+                            <label for="new_password_confirmation" class="col-md-4 col-form-label text-md-end">
+                                {{ __('Confirm New Password') }}
+                            </label>
+
+                            <div class="col-md-6">
+                                <input id="new_password_confirmation" type="password" class="form-control" name="new_password_confirmation" required>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="row mb-3">
+                            <div class="col-md-8 offset-md-4">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> {{ __('Reset Password') }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
             <div class="card">
                 <div class="card-header">
                     <i class="far fa-user-circle"></i> {{ __('My Profile Details') }}
@@ -14,22 +93,6 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('customer.profile.update') }}">
                         @csrf
-
-                        @if($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @endif
-
-                        @if(session('success'))
-                        <div class="alert alert-success mt-3">
-                            {{ session('success') }}
-                        </div>
-                        @endif
 
                         <div class="row mb-3">
                             <label for="username" class="col-md-4 col-form-label text-md-end">

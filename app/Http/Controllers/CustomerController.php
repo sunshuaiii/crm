@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Milon\Barcode\Facades\DNS1DFacade;
 use Carbon\Carbon;
@@ -22,6 +23,27 @@ class CustomerController extends Controller
     public function profile()
     {
         return view('customer.profile');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required|string|min:8', // Add any additional validation rules as needed
+            'new_password' => 'required|string|min:8|confirmed', // Ensure 'new_password' matches 'new_password_confirmation'
+        ]);
+
+        $user = Auth::user(); // Get the currently authenticated user
+
+        // Check if the provided old password matches the user's current password
+        if (!Hash::check($request->old_password, $user->password)) {
+            return redirect()->route('customer.profile')->with('error', 'The provided old password does not match your current password.');
+        }
+
+        // Update the user's password with the new one
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('customer.profile')->with('success', 'Password reset successfully.');
     }
 
     public function updateProfile(Request $request)
