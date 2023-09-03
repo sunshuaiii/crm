@@ -382,7 +382,7 @@ class MarketingStaffController extends Controller
     private function getTopCustomers($numbersOfTopCustomer)
     {
         $topCustomers = DB::table('customers')
-            ->select('id', 'first_name', 'last_name', 'm_score as total_purchase_amount', 'created_at')
+            ->select('id', 'first_name', 'last_name', 'm_score as total_purchase_amount', 'c_segment')
             ->orderByDesc('total_purchase_amount')
             ->take($numbersOfTopCustomer)
             ->get();

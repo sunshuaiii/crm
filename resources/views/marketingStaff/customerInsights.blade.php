@@ -22,14 +22,14 @@
             <div class="card-body">
                 <div class="row justify-content-center">
                     <div class='col-md-6 mt-4'>
-                        <h4 class="chart-title">Top Customers by Purchase Amount</h4>
+                        <h4 class="chart-title">Top 10 Customers by Purchase Amount</h4>
                         <table class="table table-sm custom-table table-striped">
                             <thead>
                                 <tr>
                                     <th>Customer ID</th>
                                     <th>Customer Name</th>
                                     <th>Total Purchase Amount</th>
-                                    <th>Member Since</th>
+                                    <th>Customer Segmentation</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -38,12 +38,7 @@
                                     <td>{{ $customer->id }}</td>
                                     <td>{{ $customer->first_name }} {{ $customer->last_name }}</td>
                                     <td>RM {{ number_format($customer->total_purchase_amount, 2) }}</td>
-                                    <td>@if ($customer->created_at)
-                                            {{ \Carbon\Carbon::parse($customer->created_at)->timezone('Asia/Kuala_Lumpur')->format('Y-m-d') }}
-                                        @else
-                                            NA
-                                        @endif
-                                    </td>
+                                    <td>{{ $customer->c_segment }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

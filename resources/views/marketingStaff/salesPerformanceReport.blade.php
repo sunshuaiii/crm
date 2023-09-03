@@ -36,20 +36,25 @@
                 <div class="section">
                     <h2 class="section-header">Product Performance</h2>
                     <h6 class="section-description">Bestselling products during the time period. Revenue contribution by each best selling product. Trends in best selling product sales.</h6>
-
-                    <h4 class="chart-title">Best Selling Products</h4>
-                    <div style="width: 100%; height: 600px; margin: auto;">
-                        <canvas id="bestsellingProductsChart"></canvas>
+                    <div>
+                        <h4 class="chart-title">Best Selling Products</h4>
+                        <div style="width: 700px; height: 400px; margin: auto;">
+                            <canvas id="bestsellingProductsChart"></canvas>
+                        </div>
                     </div>
 
-                    <h4 class="chart-title">Product Revenue Contribution</h4>
-                    <div style="width: 100%; height: 600px; margin: auto;">
-                        <canvas id="productRevenueContributionChart"></canvas>
+                    <div>
+                        <h4 class="chart-title">Product Revenue Contribution</h4>
+                        <div style="width: 700px; height: 400px; margin: auto;">
+                            <canvas id="productRevenueContributionChart"></canvas>
+                        </div>
                     </div>
 
-                    <h4 class="chart-title">Product Sales Trend</h4>
-                    <div style="width: 100%; height: 600px; margin: auto;">
-                        <canvas id="productSalesTrendsChart"></canvas>
+                    <div>
+                        <h4 class="chart-title">Product Sales Trend</h4>
+                        <div style="width: 700px; height: 400px; margin: auto;">
+                            <canvas id="productSalesTrendsChart"></canvas>
+                        </div>
                     </div>
                 </div>
 
