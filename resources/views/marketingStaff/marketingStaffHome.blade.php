@@ -46,7 +46,7 @@
                 <div class="card custom-card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fas fa-users card-icon"></i> Customer Insights</h5>
-                        <p class="card-text">View insights about customer behavior and segments.</p>
+                        <p class="card-text">View insights about customer activities, behavior and segments.</p>
                     </div>
                 </div>
                 <div id="loadingCustomerInsights" class="loading-status d-none">

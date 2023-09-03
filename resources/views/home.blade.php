@@ -20,7 +20,7 @@
             <div class="card">
                 <div class="card-body text-center">
                     <div class="m-4">
-                        <h5 class="mb-4">Sign in or create an account to start enjoying the incredible benefits of our Customer Loyalty Program.</h5>
+                        <h4 class="mb-4">Sign in or create an account to start enjoying the incredible benefits of our Customer Loyalty Program.</h4>
                         <p class="highlight mb-4">Register now to receive <span class="highlight-text">RM10 off New Member Coupon</span> and <span class="highlight-text">300 bonus points</span> for free!</p>
                     </div>
                     <div class="mb-3">

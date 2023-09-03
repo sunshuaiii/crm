@@ -5,9 +5,9 @@
 @section('content')
 <div class="container-content">
 
-    @if(isset($sucess))
+    @if(session('success'))
     <div class="alert alert-success">
-        {{ $success }}
+        {{ session('success') }}
     </div>
     @endif
 
@@ -25,7 +25,7 @@
 
                 <!-- Section 1: Overview -->
                 <div class="section">
-                    <h2 class="section-header">Overview</h2>
+                    <h2 class="section-header">Customer Overview</h2>
                     <h6 class="section-description">Total number of customers of all times. New customers acquired during the time period.</h6>
                     <p>Total Customers: {{ $reportDatasets['Overview']['Total Customers'] }} </p>
                     <p>New Customers Joined: {{ $reportDatasets['Overview']['New Customers'] }} </p>
