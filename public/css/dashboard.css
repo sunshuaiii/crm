@@ -458,3 +458,28 @@
 .section-description {
     margin-bottom: 20px;
 }
+
+/* Style the product pair list container */
+.product-pair-list-container {
+    background-color: #f9f9f9; /* Add a background color */
+    border: 1px solid #ddd; /* Add a border */
+    padding: 10px; /* Add some padding */
+    border-radius: 5px; /* Round corners */
+}
+
+/* Style the product pair list items */
+.product-pair-item {
+    list-style-type: none; /* Remove list bullets */
+    margin: 5px 0; /* Add vertical margin between items */
+    font-size: 16px; /* Adjust font size */
+}
+
+/* Style the product names and purchase count */
+.product-name {
+    font-weight: bold; /* Make product names bold */
+    color: #333; /* Set the text color */
+}
+
+.purchase-count {
+    color: #777; /* Adjust color for purchase count */
+}

@@ -46,30 +46,23 @@ class SalesReportController extends Controller
 
         // Section 2: Product Performance
         $bestsellingProducts = $this->getBestsellingProducts($startDate, $endDate);
-        $productRevenueContribution = $this->getProductRevenueContribution($startDate, $endDate);
-        $productSalesTrends = $this->getProductSalesTrends($startDate, $endDate);
+        $productRevenueContribution = $this->getProductRevenueContribution($bestsellingProducts, $startDate, $endDate);
+        $productSalesTrends = $this->getProductSalesTrends($bestsellingProducts, $startDate, $endDate);
 
         // Section 3: Customer Analysis
         $highValueCustomers = $this->getTopHighValueCustomers($startDate, $endDate);
         $repeatCustomerRate = $this->calculateRepeatCustomerRate($startDate, $endDate);
-        $customerRetentionRate = 1 - $repeatCustomerRate;
 
-        // Section 5: Product Affinity Analysis
+        // Section 4: Product Affinity Analysis
         $productAffinityAnalysis = $this->identifyProductAffinity($startDate, $endDate);
 
-        // Section 6: Payment Method Preferences
+        // Section 5: Payment Method Preferences
         $paymentMethodPreferences = $this->analyzePaymentMethodPreferences($startDate, $endDate);
 
-        // Section 7: Redemption of Coupons and Points
-        $couponRedemptionRate = $this->calculateCouponRedemptionRate($startDate, $endDate);
-
-        // Section 8: Sales by RFM Segment
+        // Section 6: Sales by RFM Segment
         $salesByCSegment = $this->analyzeSalesByCSegment($startDate, $endDate);
 
-        // Section 9: RFM and Product Performance
-        $cSegmentProductCorrelation = $this->correlateCSegmentWithProductPerformance($startDate, $endDate);
-
-        // Section 10: RFM and Coupon Redemption
+        // Section 7: Customer Segment and Coupon Redemption
         $cSegmentCouponRedemptionAnalysis = $this->analyzeCSegmentCouponRedemption($startDate, $endDate);
 
         // Add the datasets to the reportDatasets array
@@ -88,18 +81,13 @@ class SalesReportController extends Controller
         $reportDatasets['Customer Analysis'] = [
             'High-Value Customers' => $highValueCustomers,
             'Repeat Customer Rate' => $repeatCustomerRate,
-            'Customer Retention Rate' => $customerRetentionRate,
         ];
 
         $reportDatasets['Product Affinity Analysis'] = $productAffinityAnalysis;
 
         $reportDatasets['Payment Method Preferences'] = $paymentMethodPreferences;
 
-        $reportDatasets['Redemption of Coupons and Points'] = $couponRedemptionRate;
-
         $reportDatasets['Sales by Customer Segment'] = $salesByCSegment;
-
-        $reportDatasets['Customer Segment and Product Performance'] = $cSegmentProductCorrelation;
 
         $reportDatasets['Customer Segment and Coupon Redemption'] = $cSegmentCouponRedemptionAnalysis;
 
@@ -124,13 +112,17 @@ class SalesReportController extends Controller
         return $bestsellingProducts;
     }
 
-    private function getProductRevenueContribution($startDate, $endDate)
+    private function getProductRevenueContribution($bestsellingProducts, $startDate, $endDate)
     {
-        // Retrieve product revenue contribution within the specified date range
+        // Extract the product names from the best-selling products
+        $bestsellingProductNames = $bestsellingProducts->pluck('name')->toArray();
+
+        // Retrieve product revenue contribution within the specified date range for only the best-selling products
         $productRevenueContribution = DB::table('checkout_products')
             ->select('products.name', DB::raw('SUM(checkout_products.quantity * products.unit_price) as total_revenue'))
             ->join('products', 'checkout_products.product_id', '=', 'products.id')
             ->join('checkouts', 'checkout_products.checkout_id', '=', 'checkouts.id')
+            ->whereIn('products.name', $bestsellingProductNames) // Filter by best-selling products
             ->whereBetween('checkouts.date', [$startDate, $endDate])
             ->groupBy('products.name')
             ->orderByDesc('total_revenue')
@@ -139,9 +131,12 @@ class SalesReportController extends Controller
         return $productRevenueContribution;
     }
 
-    private function getProductSalesTrends($startDate, $endDate)
+    private function getProductSalesTrends($bestsellingProducts, $startDate, $endDate)
     {
-        // Retrieve product sales trends within the specified date range
+        // Extract the product names from the best-selling products
+        $bestsellingProductNames = $bestsellingProducts->pluck('name')->toArray();
+
+        // Retrieve product sales trends within the specified date range for only the best-selling products
         $productSalesTrends = DB::table('checkout_products')
             ->select(
                 'products.name',
@@ -150,6 +145,7 @@ class SalesReportController extends Controller
             )
             ->join('products', 'checkout_products.product_id', '=', 'products.id')
             ->join('checkouts', 'checkout_products.checkout_id', '=', 'checkouts.id')
+            ->whereIn('products.name', $bestsellingProductNames) // Filter by best-selling products
             ->whereBetween('checkouts.date', [$startDate, $endDate])
             ->groupBy('products.name', 'order_date')
             ->orderBy('order_date')
@@ -214,11 +210,13 @@ class SalesReportController extends Controller
             ->distinct()
             ->count('customer_id');
 
-        $totalCustomerCount = DB::table('customers')
-            ->count();
+        $totalCustomerCount = DB::table('checkouts')
+            ->select('customer_id')
+            ->whereBetween('date', [$startDate, $endDate])
+            ->count('customer_id');
 
         if ($totalCustomerCount > 0) {
-            $repeatCustomerRate = $uniqueCustomerCount / $totalCustomerCount;
+            $repeatCustomerRate = ($uniqueCustomerCount / $totalCustomerCount) * 100;
         } else {
             $repeatCustomerRate = 0; // Handle the case when there are no customers
         }
@@ -229,21 +227,23 @@ class SalesReportController extends Controller
     private function identifyProductAffinity($startDate, $endDate)
     {
         // Retrieve product affinity data within the specified date range
-        $productAffinityAnalysis = DB::table('checkout_products as cp1')
+        $productAffinityAnalysis = DB::table('checkout_products AS cp1')
+            ->join('checkout_products AS cp2', function ($join) {
+                $join->on('cp1.checkout_id', '=', 'cp2.checkout_id');
+                $join->on('cp1.product_id', '<', 'cp2.product_id'); // Ensure distinct pairs
+            })
+            ->join('checkouts', 'cp1.checkout_id', '=', 'checkouts.id') // Join with checkouts table
+            ->join('products AS p1', 'cp1.product_id', '=', 'p1.id') // Join with products table for the first product
+            ->join('products AS p2', 'cp2.product_id', '=', 'p2.id') // Join with products table for the second product
+            ->whereBetween('checkouts.date', [$startDate, $endDate]) // Filter by date range
             ->select(
-                'p1.name as product_1',
-                'p2.name as product_2',
-                DB::raw('COUNT(*) as purchase_count')
+                'p1.name AS product_1',
+                'p2.name AS product_2',
+                DB::raw('COUNT(*) AS pair_count')
             )
-            ->join('checkout_products as cp2', 'cp1.checkout_id', '=', 'cp2.checkout_id')
-            ->join('products as p1', 'cp1.product_id', '=', 'p1.id')
-            ->join('products as p2', 'cp2.product_id', '=', 'p2.id')
-            ->join('checkouts', 'cp1.checkout_id', '=', 'checkouts.id')
-            ->where('cp1.product_id', '<', 'cp2.product_id') // Avoid duplicate combinations
-            ->whereBetween('checkouts.date', [$startDate, $endDate]) // Filter by 'created_at' in the 'checkouts' table
             ->groupBy('product_1', 'product_2')
-            ->orderByDesc('purchase_count')
-            ->limit(10) // Get the top 10 product pairs with the highest purchase count
+            ->orderByDesc('pair_count')
+            ->limit(15)
             ->get();
 
         return $productAffinityAnalysis;
@@ -261,27 +261,6 @@ class SalesReportController extends Controller
         return $paymentMethodPreferences;
     }
 
-    private function calculateCouponRedemptionRate($startDate, $endDate)
-    {
-        // Calculate the coupon redemption rate within the specified date range
-        $totalCouponsRedeemed = DB::table('customer_coupons')
-            ->whereBetween('updated_at', [$startDate, $endDate])
-            ->where('status', 'Redeemed')
-            ->count();
-
-        $totalCouponsClaimed = DB::table('customer_coupons')
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->count();
-
-        if ($totalCouponsClaimed > 0) {
-            $couponRedemptionRate = $totalCouponsRedeemed / $totalCouponsClaimed;
-        } else {
-            $couponRedemptionRate = 0; // Handle the case when there are no coupons claimed
-        }
-
-        return $couponRedemptionRate;
-    }
-
     private function analyzeSalesByCSegment($startDate, $endDate)
     {
         // Retrieve data on sales distribution within the specified date range among different customer segments 
@@ -295,21 +274,6 @@ class SalesReportController extends Controller
             ->get();
 
         return $salesByCSegment;
-    }
-
-    private function correlateCSegmentWithProductPerformance($startDate, $endDate)
-    {
-        // Correlate customer segment with the performance of specific products sold within the specified date range
-        $rfmProductCorrelation = DB::table('customers')
-            ->join('checkouts', 'customers.id', '=', 'checkouts.customer_id')
-            ->join('checkout_products', 'checkouts.id', '=', 'checkout_products.checkout_id')
-            ->join('products', 'checkout_products.product_id', '=', 'products.id')
-            ->whereBetween('checkouts.date', [$startDate, $endDate])
-            ->select('customers.c_segment', 'products.id as product_id', DB::raw('SUM(products.unit_price * checkout_products.quantity) as total_sales'))
-            ->groupBy('customers.c_segment', 'product_id')
-            ->get();
-
-        return $rfmProductCorrelation;
     }
 
     private function analyzeCSegmentCouponRedemption($startDate, $endDate)

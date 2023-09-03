@@ -78,6 +78,20 @@
 
 <!-- Add this JavaScript code at the bottom of your reportGeneration.blade.php -->
 <script>
+    // Set the default end date to today
+    document.getElementById('endDate').value = new Date().toISOString().split('T')[0];
+
+    // Calculate the date 6 months ago
+    var oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 9);
+
+    // Format the date as YYYY-MM-DD (ISO format)
+    var formattedDate = oneMonthAgo.toISOString().split('T')[0];
+
+    // Set the default start date input value
+    document.getElementById('startDate').value = formattedDate;
+
+
     // Get all the report cards
     const reportCards = document.querySelectorAll('.report-card');
 
@@ -96,19 +110,6 @@
         });
     });
 
-    // Set the default end date to today
-    document.getElementById('endDate').value = new Date().toISOString().split('T')[0];
-
-    // Calculate the date 6 months ago
-    var oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 9);
-
-    // Format the date as YYYY-MM-DD (ISO format)
-    var formattedDate = oneMonthAgo.toISOString().split('T')[0];
-
-    // Set the default start date input value
-    document.getElementById('startDate').value = formattedDate;
-
     // Attach a click event listener to the Generate Report button
     document.getElementById('generateReportButton').addEventListener('click', function() {
         // Check if all required fields are filled
@@ -116,39 +117,29 @@
         const endDate = document.getElementById('endDate').value;
         const reportType = document.querySelector('input[name="reportType"]:checked');
 
-        // if (!startDate || !endDate || !reportType) {
-        //     alert('Please fill in all required fields: Start Date, End Date, and Report Type');
-        //     return;
-        // }
-
         // Display a confirmation pop-up
         if (confirm('Are you sure you want to generate the report?')) {
+            // Start the spinning icon and disable the button
+            toggleLoadingIcon(true);
+
             // Submit the form if the user confirms
             document.querySelector('form').submit();
         }
     });
 
-    $(document).ready(function() {
-        $("#generateReportButton").click(function() {
-            // Simulate report generation with a delay (replace with your actual logic)
-            toggleLoadingIcon();
-        });
+    function toggleLoadingIcon(startLoading) {
+        var button = $("#generateReportButton");
+        var icon = button.find("i");
 
-        function toggleLoadingIcon() {
-            var button = $("#generateReportButton");
-            var icon = button.find("i");
-
-            if (icon.hasClass("fa-download")) {
-                icon.removeClass("fa-download");
-                icon.addClass("fas fa-spinner fa-spin");
-                button.prop("disabled", true); // Disable the button while loading
-            } else {
-                icon.removeClass("fas fa-spinner fa-spin");
-                icon.addClass("fa-download");
-                button.prop("disabled", false); // Enable the button when loading is done
-            }
+        if (startLoading) {
+            icon.removeClass("fa-download");
+            icon.addClass("fas fa-spinner fa-spin");
+            button.prop("disabled", true); // Disable the button while loading
+        } else {
+            icon.removeClass("fas fa-spinner fa-spin");
+            icon.addClass("fa-download");
+            button.prop("disabled", false); // Enable the button when loading is done
         }
-    });
+    }
 </script>
-
 @endsection
