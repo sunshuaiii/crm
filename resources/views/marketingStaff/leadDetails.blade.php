@@ -91,7 +91,9 @@
                     </div>
 
                     <div class="text-end">
-                        <a href="{{ route('marketingStaff.leadManagement') }}" class="btn btn-secondary">Back to Lead Management</a>
+                        <a href="{{ route('marketingStaff.leadManagement') }}" class="btn btn-secondary">
+                            <i class="bx bx-arrow-back"></i> Back to Lead Management
+                        </a>
                     </div>
                 </div>
             </div>

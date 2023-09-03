@@ -21,7 +21,7 @@
     <div class="row col-md-12 justify-content-center">
         <form id="updateRfmForm" action="{{ route('marketingStaff.updateRfmScores') }}" method="post">
             @csrf
-            <button type="button" class="custom-button" onclick="updateRfmScores()">
+            <button type="button" class="custom-button" onclick="updateRfmScores(this)">
                 <i id="updateIcon1" class="fas fa-sync"></i> Update Customer RFM Scores
             </button>
             <div id="loadingRfm" class="loading-status d-none">
@@ -31,7 +31,7 @@
 
         <form id="updateCSegmentForm" action="{{ route('marketingStaff.updateCSegment') }}" method="post">
             @csrf
-            <button type="submit" class="custom-button" onclick="updateCSegment()">
+            <button type="submit" class="custom-button" onclick="updateCSegment(this)">
                 <i id="updateIcon2" class="fas fa-sync"></i> Update Customer Segment
             </button>
             <div id="loadingCSegment" class="loading-status d-none">
@@ -104,25 +104,25 @@
 </div>
 
 <script>
-    function updateRfmScores() {
-        var button = document.getElementById('updateIcon1');
+    function updateRfmScores(button) {
         var loadingRfm = document.getElementById('loadingRfm'); // Get the loading status element
         var form = document.getElementById('updateRfmForm');
 
-        button.classList.remove('fa-sync');
-        button.classList.add('fa-spinner', 'fa-spin');
+        button.disabled = true; // Disable the clicked button
+        button.querySelector('i').classList.remove('fa-sync');
+        button.querySelector('i').classList.add('fa-spinner', 'fa-spin');
         loadingRfm.classList.remove('d-none'); // Show the loading status
 
         form.submit();
     }
 
-    function updateCSegment() {
-        var button = document.getElementById('updateIcon2');
+    function updateCSegment(button) {
         var loadingCSegment = document.getElementById('loadingCSegment'); // Get the loading status element
         var form = document.getElementById('updateCSegmentForm');
 
-        button.classList.remove('fa-sync');
-        button.classList.add('fa-spinner', 'fa-spin');
+        button.disabled = true; // Disable the clicked button
+        button.querySelector('i').classList.remove('fa-sync');
+        button.querySelector('i').classList.add('fa-spinner', 'fa-spin');
         loadingCSegment.classList.remove('d-none'); // Show the loading status
 
         form.submit();

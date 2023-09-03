@@ -393,6 +393,13 @@
     margin-right: 8px;
 }
 
+/* Style for disabled button */
+.custom-button:disabled {
+    background-color: #666; /* Darker background color for disabled button */
+    cursor: not-allowed; /* Change cursor to not-allowed for disabled button */
+    transform: none; /* Remove transform effect for disabled button */
+}
+
 .report-type-container {
     display: flex;
     flex-direction: row;

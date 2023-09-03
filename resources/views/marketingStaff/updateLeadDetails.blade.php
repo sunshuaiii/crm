@@ -104,10 +104,10 @@
         </div>
 
         <div class="text-center">
-            <button type="submit" class="btn btn-primary" onclick="showConfirmation()">Update This Lead</button>
             <a href="{{ route('marketingStaff.leadManagement') }}" class="btn btn-secondary">
                 <i class="bx bx-arrow-back"></i> Go Back
             </a>
+            <button type="submit" class="btn btn-primary" onclick="showConfirmation()">Update This Lead</button>
         </div>
     </form>
 </div>
