@@ -463,7 +463,26 @@
 }
 
 .section-description {
+    font-size: 16px;              /* Increase font size */
+    font-weight: bold;            /* Make font bold */
+    background-color: #f4f4f4;   /* Light gray background */
+    padding: 10px 15px;          /* Padding around the text */
+    border-top: 2px solid #b3def0;   /* Top border */
+    border-bottom: 2px solid #b3def0; /* Bottom border */
+    text-transform: uppercase;   /* Make text uppercase */
+    letter-spacing: 1px;         /* Slight letter spacing */
+    margin: 20px 0;              /* Margin around the description */
     margin-bottom: 20px;
+}
+
+.section-description-sub {
+    font-size: 14px;                  /* Set font size */
+    font-weight: 600;                /* Semi-bold weight */
+    background-color: #f9f9f9;       /* Slightly lighter gray than the main description */
+    padding: 8px 12px;               /* Padding around the text */
+    font-style: italic;              /* Italicize the text */
+    margin: 10px 0 20px;             /* Margin around the subsection description */
+    border-left: 4px solid #e0e0e0;  /* Left border for distinction */
 }
 
 /* Style the product pair list container */

@@ -47,6 +47,7 @@
                     <div class="card-body">
                         <h5 class="card-title"><i class="bx bx-gift card-icon"></i> Coupon Management</h5>
                         <p class="card-text">Manage coupons and track sales performance.</p>
+                        <p></p>
                     </div>
                 </div>
             </a>
