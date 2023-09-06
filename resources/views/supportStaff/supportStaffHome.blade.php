@@ -32,6 +32,16 @@
 
     <div class="row justify-content-center mt-4">
         <div class="col-md-4 mb-4">
+            <a href="{{ route('supportStaff.customerService') }}" class="card-link">
+                <div class="card custom-card">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="bx bx-headphone card-icon"></i> Customer Service</h5>
+                        <p class="card-text">Provice customer service for customers for better customer satisfaction.</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4 mb-4">
             <a href="{{ route('supportStaff.searchCustomer') }}" class="card-link">
                 <div class="card custom-card">
                     <div class="card-body">

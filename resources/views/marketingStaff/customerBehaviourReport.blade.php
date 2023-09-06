@@ -157,7 +157,7 @@
                 <!-- Section 7: Customer Loyalty Trends -->
                 <div class="section">
                     <h2 class="section-header">Customer Loyalty Trends</h2>
-                    <h6 class="section-description">Analyze repeat purchases within the time period.</h6>
+                    <h6 class="section-description">Analyze Top 50 repeat purchases count customers within the time period.</h6>
                     <h4 class="chart-title">Repeat Purchase Customers</h4>
                     <div class="justify-content-center text-center"> <!-- Center the chart -->
                         <div style="max-width: 1000px; width: 100%; height: 550px; margin: auto;"> <!-- Increase width and center horizontally -->
@@ -365,7 +365,7 @@
     });
 
     // Get the chart data passed from the controller
-    var genderDistributionChartData = @json($reportDatasets['Customer Demographics']['Age Distribution Chart Data']);
+    var genderDistributionChartData = @json($reportDatasets['Customer Demographics']['Gender Distribution Chart Data']);
 
     // Get the canvas element for the chart
     var ctx = document.getElementById('genderDistributionChart').getContext('2d');

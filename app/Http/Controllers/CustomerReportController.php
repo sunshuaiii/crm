@@ -56,6 +56,8 @@ class CustomerReportController extends Controller
             ->whereBetween('checkouts.date', [$startDate, $endDate])
             ->groupBy('customers.id', 'customers.username', 'customers.email', 'customers.first_name', 'customers.last_name')
             ->having('purchase_count', '>', 1) // Customers with more than one purchase
+            ->orderByDesc('purchase_count') // Sort by purchase_count in descending order
+            ->limit(50)
             ->get();
 
         // Add the datasets to the reportDatasets array
