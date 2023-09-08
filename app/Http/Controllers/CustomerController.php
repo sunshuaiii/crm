@@ -225,16 +225,15 @@ class CustomerController extends Controller
             ->join('coupons', 'customer_coupons.coupon_id', '=', 'coupons.id')
             ->where('customer_coupons.code', $couponCode)
             ->first(); // Use first() instead of get() to retrieve a single result
-
-
+    
         if (!$couponDetails) {
-            return redirect()->route('customer.coupons')->with('error', 'Coupon details not found.');
+            return redirect()->route('customer.coupons')->with('error', 'Coupon not found.');
         }
-
+    
         $barCode = DNS1DFacade::getBarcodeHTML($couponDetails->code, 'C39');
-
+    
         return view('customer.couponDetails', ['couponDetails' => $couponDetails, 'barCode' => $barCode]);
-    }
+    }    
 
     public function membershipCheckout(Request $request)
     {

@@ -129,13 +129,25 @@ class MarketingStaffController extends Controller
         $request->validate([
             'reportType' => 'required|in:customerBehaviour,salesPerformance',
             'startDate' => 'required|date',
-            'endDate' => 'required|date|after_or_equal:startDate',
+            'endDate' => 'required|date',
         ]);
 
         // Retrieve user selections
         $reportType = $request->input('reportType');
         $startDate = $request->input('startDate');
         $endDate = $request->input('endDate');
+
+        // Check if end date is before start date
+        if ($endDate < $startDate) {
+            return redirect()->route('marketingStaff.reportGeneration')
+                ->with('error', 'End date cannot be before the start date.');
+        }
+
+        // Check if end date is after today
+        if ($endDate > Carbon::now()) {
+            return redirect()->route('marketingStaff.reportGeneration')
+                ->with('error', 'End date cannot be the date after today.');
+        }
 
         $reportDatasets = [];
 

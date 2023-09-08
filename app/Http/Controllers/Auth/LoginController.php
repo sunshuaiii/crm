@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
@@ -55,15 +56,23 @@ class LoginController extends Controller
             'email' => 'required|email',
             'password' => 'required|min:8'
         ]);
-
+    
+        // Check if a user with the provided email exists
+        $user = Customer::where('email', $request->email)->first();
+    
+        if (!$user) {
+            // User with the provided email does not exist
+            return back()->withInput($request->only('email'))->withErrors(['email' => 'Email is not registered.']);
+        }
+    
         if (Auth::guard('customer')->attempt(['email' => $request->email, 'password' => $request->password])) {
             // Login successful
             return redirect()->intended('/customer')->with('success', 'Login successful.');
         }
-
+    
         // Login failed
         return back()->withInput($request->only('email'))->withErrors(['login' => 'Login failed.']);
-    }
+    }    
 
     public function showAdminLoginForm()
     {

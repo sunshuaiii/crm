@@ -14,6 +14,6 @@ class AboveEighteen implements Rule
 
     public function message()
     {
-        return 'The :attribute must be a date above or equal to 18 years ago.';
+        return 'The date of birth must be a date above or equal to 18 years ago.';
     }
 }
