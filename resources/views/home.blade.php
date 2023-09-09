@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <p class="mt-4">Already have an account?</p>
-                    <div class="mb-4">
+                    <div class="mb-2">
                         <a href="{{ route('login.customer') }}" class="btn btn-outline-primary btn-lg btn-block">Login</a>
                     </div>
                 </div>
@@ -40,9 +40,9 @@
             <div class="login-options mt-4">
                 <p class="mb-2">Looking for other login options?</p>
                 <div class="d-flex justify-content-center md-2">
-                    <a href="{{ route('login.admin') }}" class="btn btn-outline-secondary mr-3">Admin Login</a>
-                    <a href="{{ route('login.marketingStaff') }}" class="btn btn-outline-secondary mr-3">Marketing Staff Login</a>
-                    <a href="{{ route('login.supportStaff') }}" class="btn btn-outline-secondary">Support Staff Login</a>
+                    <a href="{{ route('login.admin') }}" class="btn btn-primary login-btn">Admin Login</a>
+                    <a href="{{ route('login.marketingStaff') }}" class="btn btn-primary login-btn">Marketing Staff Login</a>
+                    <a href="{{ route('login.supportStaff') }}" class="btn btn-primary login-btn">Support Staff Login</a>
                 </div>
             </div>
         </div>

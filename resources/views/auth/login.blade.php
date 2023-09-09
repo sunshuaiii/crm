@@ -67,7 +67,7 @@
                                     {{ __('Login') }}
                                 </button>
 
-                                @if (Route::has('password.request'))
+                                @if(isset($url) && $url == 'customer')
                                 <a class="btn btn-link" href="{{ route('password.forgot') }}">
                                     {{ __('Forgot Your Password?') }}
                                 </a>

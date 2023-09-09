@@ -33,7 +33,7 @@
                 <div class="card custom-card">
                     <div class="card-body">
                         <h5 class="card-title"><i class="fas fa-users-cog card-icon"></i> Staff Insights</h5>
-                        <p class="card-text">View insights about staff performance and engagement.</p>
+                        <p class="card-text">View insights about staff performance.</p>
                     </div>
                 </div>
             </a>

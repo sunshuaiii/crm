@@ -44,7 +44,7 @@
                         <div class="d-flex justify-content-between">
                             <h5 class="card-title">Ticket ID: {{ $ticket->id }}</h5>
                             <div class="card-text">
-                                <p>Status: <span class="badge bg-primary">
+                                <p>Status: <span class="badge bg-primary" id="status-badge-{{ $ticket->id }}">
                                         @if ($ticket->status === 'New')
                                         <i class="fas fa-circle"></i> New
                                         @elseif ($ticket->status === 'Open')
@@ -85,6 +85,7 @@
                             </div>
                         </div>
                     </div>
+                    <div id="success-message-{{ $ticket->id }}" class="alert alert-success" style="display: none;"></div>
                 </div>
             </div>
             @empty
@@ -116,19 +117,11 @@
     });
 
     $('.status-update').on('click', function(e) {
-        console.log('Status update clicked');
-
         e.preventDefault();
         const ticketId = $(this).data('ticket-id');
         const newStatus = $(this).data('new-status');
-
-        // Get the current status from the PHP variable
         const currentStatus = $(this).data('old-status');
-
-        // Create a confirmation message
         const confirmationMessage = `Confirm to change Ticket ID: "${ticketId}" from "${currentStatus}" to "${newStatus}"?`;
-
-        // Show the confirmation dialog
         const isConfirmed = confirm(confirmationMessage);
 
         if (isConfirmed) {
@@ -141,13 +134,14 @@
                     new_status: newStatus,
                 },
                 success: function(response) {
-                    // Get the updated ticket details from the response
                     var updatedTicket = response.updatedTicket;
-
-                    // Show success message with the old and new status
                     var message = "Status for Ticket ID: " + updatedTicket.id + " is updated from '" + updatedTicket.oldStatus + "' to '" + updatedTicket.newStatus + "'";
 
-                    $('#status-update-message').text(message).fadeIn();
+                    // Show success message below the ticket card
+                    $('#success-message-' + ticketId).text(message).fadeIn();
+
+                    // You can also hide the dropdown menu here if needed
+                    // $(this).closest('.dropdown').removeClass('show');
                 },
                 error: function() {
                     alert('An error occurred while updating the status.');
