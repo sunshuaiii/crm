@@ -27,7 +27,7 @@
                         <p class="chart-title">Total Tickets Assigned: {{ $totalTickets }} ( {{ $inProgressTickets }} In Progress / {{ $closedTickets }} Closed )</p>
 
                         <div class="row justify-content-center">
-                            <div class='col-md-6 mt-4'>
+                            <div class='col-md-6 mt-5'>
                                 <div class="breakdown-section">
                                     <h5>Breakdown by Query Type</h5>
                                     <ul>
@@ -35,13 +35,14 @@
                                         <li>{{ $type }}: {{ $count }}</li>
                                         @endforeach
                                     </ul>
+                                    <h6 class="section-description">Breakdown of tickets by query types.</h6>
                                     <h4 class="chart-title">Query Type Analysis</h4>
                                     <div style="max-width: 400px; margin: auto;">
                                         <canvas id="queryTypeAnalysisChart"></canvas>
                                     </div>
                                 </div>
                             </div>
-                            <div class='col-md-6 mt-4'>
+                            <div class='col-md-6 mt-5'>
                                 <div class="distribution-section">
                                     <h5>Distribution by Ticket Status</h5>
                                     <ul>
@@ -49,6 +50,7 @@
                                         <li>{{ $status }}: {{ $count }}</li>
                                         @endforeach
                                     </ul>
+                                    <h6 class="section-description">Distribution of ticket statuses.</h6>
                                     <h4 class="chart-title">Ticket Status Analysis</h4>
                                     <div style="max-width: 400px; margin: auto;">
                                         <canvas id="ticketStatusChart"></canvas>
@@ -59,7 +61,8 @@
                     </div>
 
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
+                            <h6 class="section-description">Closed ticket rate of all query types.</h6>
                             <h4 class="chart-title">Closed Ticket Rate Analysis</h4>
                             <select id="queryTypeSelect">
                                 <option value="all">All Query Types</option>
@@ -74,13 +77,15 @@
                     </div>
 
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
+                            <h6 class="section-description">Show the number of tickets submitted by customer segments.</h6>
                             <h4 class="chart-title">Ticket Submitted by Customer Segments (Bar Chart)</h4>
                             <div style="max-width: 400px; height: 280px; margin: auto;">
                                 <canvas id="customerSegmentChart"></canvas>
                             </div>
                         </div>
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
+                            <h6 class="section-description">Show the number of tickets submitted by customer segments.</h6>
                             <h4 class="chart-title">Ticket Submitted by Customer Segments (Pie Chart)</h4>
                             <div style="max-width: 400px; height: 280px; margin: auto;">
                                 <canvas id="customerSegmentPieChart"></canvas>
@@ -89,13 +94,17 @@
                     </div>
 
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
+                            <h6 class="section-description">Average response time for each query type by all status levels to how the trend of response times over time.</h6>
+                            <h6 class="section-description-sub">The response time is the time used in seconds to change the ticket status from “New” to another status.</h6>
                             <h4 class="chart-title">Response Time Analysis</h4>
                             <div style="max-width: 600px; height: 300px; margin: auto;">
                                 <canvas id="responseTimeChart"></canvas>
                             </div>
                         </div>
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
+                            <h6 class="section-description">Average resolution time for each query type by all status levels to show the trend of resolution times over time.</h6>
+                            <h6 class="section-description-sub">The resolution time is the time used in seconds to change the ticket status to “Closed”.</h6>
                             <h4 class="chart-title">Resolution Time Analysis</h4>
                             <div style="max-width: 600px; height: 300px; margin: auto;">
                                 <canvas id="resolutionTimeChart"></canvas>
@@ -104,13 +113,17 @@
                     </div>
 
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
+                            <h6 class="section-description">Analyze the distribution of ticket creation times throughout the day.</h6>
+                            <h6 class="section-description-sub">To determine peak hours for ticket submissions.</h6>
                             <h4 class="chart-title">Ticket Creation Time Distribution</h4>
                             <div style="max-width: 600px; height: 300px; margin: auto;">
                                 <canvas id="ticketCreationDistributionChart"></canvas>
                             </div>
                         </div>
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
+                            <h6 class="section-description">Show the distribution of open and pending tickets based on their age (time since creation) with age intervals defined.</h6>
+                            <h6 class="section-description-sub">To highlight tickets that have been open or pending for an extended period.</h6>
                             <h4 class="chart-title">Open and Pending Ticket Aging Analysis</h4>
                             <div style="max-width: 600px; height: 300px; margin: auto;">
                                 <canvas id="ticketAgingChart"></canvas>
@@ -238,12 +251,12 @@
     var responseTimeData = {!! json_encode($responseTimeData) !!};
 
     // Prepare data for the chart
-    var labels = {!! json_encode($queryTypes) !!}; // Query types as X-axis labels
+    var queryTypes = {!! json_encode($queryTypes) !!}; // Query types as X-axis labels
     var data = [];
 
     // Create the dataset
-    for (var i = 0; i < labels.length; i++) {
-        data.push(responseTimeData[labels[i]]);
+    for (var i = 0; i < queryTypes.length; i++) {
+        data.push(responseTimeData[queryTypes[i]]);
     }
 
     // Create the chart
@@ -251,7 +264,7 @@
     var responseTimeChart = new Chart(responseTimeCtx, {
         type: 'line',
         data: {
-            labels: labels,
+            labels: queryTypes,
             datasets: [{
                 label: 'Average Response Time',
                 data: data,
@@ -288,10 +301,10 @@
     // Resolution Time Analysis
     // Construct dataset for average resolution time by query type
     var resolutionTimeData = {!! json_encode($resolutionTimeData) !!};
-    var labels = {!! json_encode($queryTypes) !!}; // Query types as X-axis labels
+    var queryTypes = {!! json_encode($queryTypes) !!}; // Query types as X-axis labels
 
     // Create data array based on average resolution time for each query type
-    var data = labels.map(function (queryType) {
+    var data = queryTypes.map(function (queryType) {
         return resolutionTimeData[queryType];
     });
 
@@ -300,7 +313,7 @@
     var resolutionTimeChart = new Chart(resolutionTimeCtx, {
         type: 'line',
         data: {
-            labels: labels,
+            labels: queryTypes,
             datasets: [{
                 label: 'Average Resolution Time',
                 data: data,
@@ -339,6 +352,22 @@
     var ticketCreationDistribution = {!! json_encode($ticketCreationDistribution) !!};
     var labels = Object.keys(ticketCreationDistribution); // Hours as X-axis labels
     var data = Object.values(ticketCreationDistribution); // Ticket counts for each hour
+
+    console.log(labels);
+
+    // Format the hour labels in 12-hour format (e.g., "4pm")
+    labels = labels.map(function (hour) {
+        const hourInt = parseInt(hour);
+        if (hourInt === 0) {
+            return '12am';
+        } else if (hourInt < 12) {
+            return hourInt + 'am';
+        } else if (hourInt === 12) {
+            return '12pm';
+        } else {
+            return (hourInt - 12) + 'pm';
+        }
+    });
 
     // Create the chart
     var ticketCreationDistributionCtx = document.getElementById('ticketCreationDistributionChart').getContext('2d');

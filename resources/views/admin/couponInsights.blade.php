@@ -22,18 +22,21 @@
             <div class="card-body">
                 <h6>Claimed Coupons: {{ $claimedCoupons }} ({{ $totalAvailableCoupons }} Available / {{ $expiredCoupons }} Expired)</h6>
                 <h6>Redeemed Coupons: {{ $redeemedCoupons }}</h6>
+                <h6 class="section-description">Total number of claimed coupons (available & expired) and redeemed coupons.</h6>
                 <h4 class="chart-title">Summary</h4>
                 <div style="max-width: 400px; margin: auto;">
                     <canvas id="couponInsights" width="400" height="200"></canvas>
                 </div>
                 <div class="row justify-content-center">
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">Number of claimed and redeemed coupons by coupon.</h6>
                         <h4 class="chart-title">Redemption Rate by Coupon</h4>
                         <div style="max-width: 500px; margin: auto;">
                             <canvas id="redemptionRateChart"></canvas>
                         </div>
                     </div>
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">Top 5 redeemed coupons by the number of times they have been successfully redeemed.</h6>
                         <h4 class="chart-title">Top 5 Redeemed Coupons</h4>
                         <div style="max-width: 500px; margin: auto;">
                             <canvas id="topRedeemedChart"></canvas>
@@ -41,13 +44,15 @@
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">a correlation (matrix) between the redemption points required and the discount rate.</h6>
                         <h4 class="chart-title">Redemption Points vs. Discount</h4>
                         <div style="max-width: 400px; margin: auto;">
                             <canvas id="redemptionVsDiscountChart"></canvas>
                         </div>
                     </div>
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">Distribution of coupon statuses (claimed, redeemed).</h6>
                         <h4 class="chart-title">Coupon Status Percentage Distribution </h4>
                         <div style="max-width: 220px; margin: auto;">
                             <canvas id="couponStatusDistributionChart"></canvas>
@@ -55,13 +60,15 @@
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="col-md-6 mt-4">
+                    <div class="col-md-6 mt-5">
+                        <h6 class="section-description">The usage of coupons (claimed and redeemed) changes over time to identify trends in coupon usage.</h6>
                         <h4 class="chart-title">Coupon Usage Over Time</h4>
                         <div style="max-width: 400px; margin: auto;">
                             <canvas id="couponUsageOverTimeChart"></canvas>
                         </div>
                     </div>
-                    <div class="col-md-6 mt-4">
+                    <div class="col-md-6 mt-5">
+                        <h6 class="section-description">The distribution of coupons based on their remaining days till expiry.</h6>
                         <h4 class="chart-title">Coupon Expiry Analysis</h4>
                         <div style="max-width: 400px; margin: auto;">
                             <canvas id="expiryAnalysisChart"></canvas>
@@ -69,7 +76,8 @@
                     </div>
                 </div>
                 <div class="row justify-content-center">
-                    <div class="col-md-6 mt-4">
+                    <div class="col-md-6 mt-5">
+                        <h6 class="section-description">Coupon usage (claimed and redeemed) across customer segments.</h6>
                         <h4 class="chart-title">Coupon Usage by Customer Segments</h4>
                         <div style="max-width: 400px; margin: auto;">
                             <canvas id="couponUsageBySegmentsChart"></canvas>

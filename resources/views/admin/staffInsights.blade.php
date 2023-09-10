@@ -22,6 +22,7 @@
             <div class="card-body">
                 <h6>Total Marketing Staff: {{ $totalMarketingStaff }}</h6>
                 <h6>Total Support Staff: {{ $totalSupportStaff }}</h6>
+                <h6 class="section-description">Distribution of staff members.</h6>
                 <h4 class="chart-title">Summary</h4>
                 <div style="max-width: 250px; margin: auto;">
                     <canvas id="staffInsights"></canvas>

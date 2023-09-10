@@ -22,7 +22,9 @@
             <div class="card-body">
 
                 <div class="row justify-content-center">
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">Calculate the number of lead activities and feedback of the leads assigned.</h6>
+                        <h6 class="section-description-sub">This can help in identifying the most engaged leads</h6>
                         <h4 class="chart-title">Lead Overview</h4>
                         <div class="row justify-content-center">
                             <div class="col-md-8">
@@ -58,7 +60,9 @@
                 </div>
 
                 <div class="row justify-content-center">
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">Distribution of different activity types.</h6>
+                        <h6 class="section-description-sub">This can help in understanding the most common interactions of leads by analyzing the types of activities engaged in by leads.</h6>
                         <h4 class="chart-title">Lead Activity Analysis</h4>
                         <div style="max-width: 500px; margin: auto;">
                             <canvas id="activityChart"></canvas>
@@ -67,13 +71,17 @@
                 </div>
 
                 <div class="row justify-content-center">
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">Distribution of lead gender.</h6>
+                        <h6 class="section-description-sub">This can provide insights into the gender demographics of the leads.</h6>
                         <h4 class="chart-title">Lead Gender Distribution</h4>
                         <div style="max-width: 300px; margin: auto;">
                             <canvas id="genderDistributionChart"></canvas>
                         </div>
                     </div>
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">Count of activities and feedback messages received from leads on a monthly basis.</h6>
+                        <h6 class="section-description-sub">This can help in identifying patterns and trends in lead engagement by tracking the activity and feedback engagement trends over time.</h6>
                         <h4 class="chart-title">Lead Engagement Trends</h4>
                         <div style="max-width: 500px; margin: auto;">
                             <canvas id="engagementChart"></canvas>

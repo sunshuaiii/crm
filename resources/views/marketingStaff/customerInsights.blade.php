@@ -21,7 +21,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="row justify-content-center">
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">The top 10 customers by the amount they have spent since they joined the membership.</h6>
+                        <h6 class="section-description-sub">Help in identifying and rewarding loyal customers.</h6>
                         <h4 class="chart-title">Top 10 Customers by Purchase Amount</h4>
                         <table class="table table-sm custom-table table-striped">
                             <thead>
@@ -44,7 +46,9 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">Track the growth of the customer base over time.</h6>
+                        <h6 class="section-description-sub">To show the number of new customers acquired over different periods.</h6>
                         <h4 class="chart-title">Customer Growth Over Time</h4>
                         <div style="max-width: 500px; margin: auto;">
                             <canvas id="customerGrowthChart"></canvas>
@@ -53,13 +57,15 @@
                 </div>
 
                 <div class="row justify-content-center">
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">Distribution of customers based on their RFM scores and customer segments.</h6>
                         <h4 class="chart-title">Customer Distribution by RFM Scores and Segments</h4>
                         <div style="max-width: 450px; margin: auto;">
                             <canvas id="customerDistributionChart"></canvas>
                         </div>
                     </div>
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
+                        <h6 class="section-description">Distribution of all the customer segments.</h6>
                         <h4 class="chart-title">Customer Segment Distribution</h4>
                         <div style="max-width: 400px; margin: auto;">
                             <canvas id="customerSegmentChart"></canvas>
@@ -69,18 +75,21 @@
 
                 <div class="row justify-content-center">
                     <div class='col-md-4 mt-4'>
+                        <h6 class="section-description">Analyze customer churn rates by calculating how many customers have not made any purchases in a certain period (12 months).</h6>
                         <h4 class="chart-title">Customer Churn Analysis</h4>
                         <div style="max-width: 300px; margin: auto;">
                             <canvas id="churnChart"></canvas>
                         </div>
                     </div>
                     <div class='col-md-4 mt-4'>
+                        <h6 class="section-description">Analyze the effectiveness of coupons by visualizing the percentage of redeemed coupons vs. claimed coupons. </h6>
                         <h4 class="chart-title">Coupon Redemption Effectiveness</h4>
                         <div style="max-width: 300px; margin: auto;">
                             <canvas id="couponRedemptionChart"></canvas>
                         </div>
                     </div>
                     <div class='col-md-4 mt-4'>
+                        <h6 class="section-description">Visualize the types of customer service queries.</h6>
                         <h4 class="chart-title">Customer Service Query Types</h4>
                         <div style="max-width: 300px; margin: auto;">
                             <canvas id="interactionChart"></canvas>
@@ -89,7 +98,7 @@
                 </div>
 
                 <!-- <div class="row justify-content-center">
-                    <div class='col-md-6 mt-4'>
+                    <div class='col-md-6 mt-5'>
                         <h4 class="chart-title">Customer Lifetime Value (CLTV) Analysis</h4>
                         <div style="max-width: 500px; margin: auto;">
                             <canvas id="cltvChart"></canvas>

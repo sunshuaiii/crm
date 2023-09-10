@@ -26,20 +26,24 @@
 <body>
     <div class="support-staff-insights">
         <h4 class="chart-title">Ticket Insights</h4>
-        <p>Tickets Assigned: {{ $ticketsAssigned }}</p>
+        <h5>Tickets Assigned: {{ $ticketsAssigned }}</h5>
         <p>New Tickets: {{ $newTickets }}</p>
         <p>Open Tickets: {{ $openTickets }}</p>
         <p>Pending Tickets: {{ $pendingTickets }}</p>
         <p>Solved Tickets: {{ $solvedTickets }}</p>
         <p>Closed Tickets: {{ $closedTickets }}</p>
         <div class="row justify-content-center">
-            <div class='col-md-6 mt-4'>
+            <div class='col-md-6 mt-5'>
+                <h6 class="section-description">Average response time for each query type by all status levels to how the trend of response times over time.</h6>
+                <h6 class="section-description-sub">The response time is the time used in seconds to change the ticket status from “New” to another status.</h6>
                 <h4 class="chart-title">Response Time Analysis</h4>
                 <div style="max-width: 600px; height: 300px; margin: auto;">
                     <canvas id="responseTimeChart"></canvas>
                 </div>
             </div>
-            <div class='col-md-6 mt-4'>
+            <div class='col-md-6 mt-5'>
+                <h6 class="section-description">Average resolution time for each query type by all status levels to show the trend of resolution times over time.</h6>
+                <h6 class="section-description-sub">The resolution time is the time used in seconds to change the ticket status to “Closed”.</h6>
                 <h4 class="chart-title">Resolution Time Analysis</h4>
                 <div style="max-width: 600px; height: 300px; margin: auto;">
                     <canvas id="resolutionTimeChart"></canvas>

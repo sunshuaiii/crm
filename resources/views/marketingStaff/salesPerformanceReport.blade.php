@@ -67,7 +67,7 @@
                     <p>Repeat Customer Rate: {{ number_format($reportDatasets['Customer Analysis']['Repeat Customer Rate'], 2) }}% </p>
                     <p>One-Time Purchase Customer Rate: {{ 100 - number_format($reportDatasets['Customer Analysis']['Repeat Customer Rate'], 2) }}% </p>
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <h6 class="section-description">High-value customers and their contribution to sales. </h6>
                             <h4 class="chart-title">Top 10 High-Value Customers</h4>
                             <table class="table table-bordered custom-table table-sm table-striped">
@@ -94,7 +94,7 @@
 
                         <!-- Repeat Customer Rate Pie Chart -->
 
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <h6 class="section-description">Repeat customer rate and one-time purchase customer rate.</h6>
                             <h4 class="chart-title">Repeat Customer Rate</h4>
                             <div style="max-width: 300px; margin: auto;">
@@ -150,7 +150,7 @@
                     <p>{{ $paymentMethod->payment_method }} (Used {{ $paymentMethod->payment_count }} times)</p>
                     @endforeach
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <h4 class="chart-title">Payment Method Preferences</h4>
                             <div style="max-width: 500px; margin: auto;">
                                 <canvas id="paymentMethodChart"></canvas>

@@ -26,14 +26,15 @@
 <body>
     <div class="marketing-staff-insights">
         <h4 class="chart-title">Lead Insights</h4>
-        <p>Lead Assigned: {{ $leadsAssigned }}</p>
+        <h5>Lead Assigned: {{ $leadsAssigned }}</h5>
         <p>New Leads: {{ $newLeads }}</p>
         <p>Contacted Leads: {{ $contactedLeads }}</p>
         <p>Interested Leads: {{ $interestedLeads }}</p>
         <p>Not Interested Leads: {{ $notInterestedLeads }}</p>
 
         <div class="row justify-content-center">
-            <div class='col-md-6 mt-4'>
+            <div class='col-md-6 mt-5'>
+                <h6 class="section-description">Assigned lead counts for each lead status.</h6>
                 <h4 class="chart-title">Marketing Staff Performance Analysis</h4>
                 <div style="max-width: 600px; margin: auto;">
                     <canvas id="staffPerformanceChart"></canvas>

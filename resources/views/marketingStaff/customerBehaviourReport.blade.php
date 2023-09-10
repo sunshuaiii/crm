@@ -30,7 +30,7 @@
                     <p>Total Customers: {{ $reportDatasets['Overview']['Total Customers'] }} </p>
                     <p>New Customers Joined: {{ $reportDatasets['Overview']['New Customers'] }} </p>
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <h4 class="chart-title">New Customer Joined Timeline</h4>
                             <div style="max-width: 450px; margin: auto;">
                                 <canvas id="newCustomersChart"></canvas>
@@ -44,7 +44,7 @@
                     <h2 class="section-header">Customer Segmentation</h2>
                     <h6 class="section-description">Distribution of all customers among different segments with RFM scores.</h6>
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <h4 class="chart-title">Customer Distribution by RFM Scores and Segments</h4>
                             <div style="max-width: 450px; margin: auto;">
                                 <canvas id="customerDistributionChart"></canvas>
@@ -62,17 +62,17 @@
                     <p>Coupons Redeemed: {{ $reportDatasets['Customer Engagement']['Coupons Redeemed'] }}</p>
                     <h4 class="chart-title">Customer Engagement Timeline</h4>
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <div style="max-width: 400px; margin: auto;">
                                 <canvas id="customerEngagementChart1"></canvas>
                             </div>
                         </div>
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <div style="max-width: 400px; margin: auto;">
                                 <canvas id="customerEngagementChart2"></canvas>
                             </div>
                         </div>
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <div style="max-width: 400px; margin: auto;">
                                 <canvas id="customerEngagementChart3"></canvas>
                             </div>
@@ -85,13 +85,13 @@
                     <h2 class="section-header">Customer Demographics</h2>
                     <h6 class="section-description">Age and gender distribution of customers acquired during the time period.</h6>
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <h4 class="chart-title">Age Distribution Chart</h4>
                             <div style="max-width: 450px; margin: auto;">
                                 <canvas id="ageDistributionChart"></canvas>
                             </div>
                         </div>
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <h4 class="chart-title">Gender Distribution Chart</h4>
                             <div style="max-width: 260px; margin: auto;">
                                 <canvas id="genderDistributionChart"></canvas>
@@ -108,13 +108,13 @@
                     <h6 class="section-description">Identify high-value customers for targeted marketing efforts.</h6>
                     <h6 class="section-description-sub"> High-value customers are those who have made the highest total purchases within the time period.</h6>
                     <div class="row justify-content-center">
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <h4 class="chart-title">CLTV By Customer Segment</h4>
                             <div style="max-width: 450px; margin: auto;">
                                 <canvas id="cltvBySegmentChart"></canvas>
                             </div>
                         </div>
-                        <div class='col-md-6 mt-4'>
+                        <div class='col-md-6 mt-5'>
                             <h4 class="chart-title">Top 10 High-Value Customers</h4>
                             <table class="table table-bordered custom-table table-sm table-striped">
                                 <thead>
