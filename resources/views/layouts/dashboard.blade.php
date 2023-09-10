@@ -63,12 +63,33 @@
 </head>
 
 <body>
-    <div class="sidebar">
+    <div class="sidebar open">
         <div class="logo-details">
-            <i class='fas fa-star icon'></i>
-            <div class="logo_name">CRM</div>
+            @if(Auth::guard('admin')->check())
+            <a href="{{ route('admin.adminHome') }}">
+                <i class='fas fa-star icon'></i>
+            </a>
+            <a href="{{ route('admin.adminHome') }}">
+                <div class="logo_name">CRM</div>
+            </a>
+            @elseif(Auth::guard('marketingStaff')->check())
+            <a href="{{ route('marketingStaff.marketingStaffHome') }}">
+                <i class='fas fa-star icon'></i>
+            </a>
+            <a href="{{ route('marketingStaff.marketingStaffHome') }}">
+                <div class="logo_name">CRM</div>
+            </a>
+            @elseif(Auth::guard('supportStaff')->check())
+            <a href="{{ route('supportStaff.supportStaffHome') }}">
+                <i class='fas fa-star icon'></i>
+            </a>
+            <a href="{{ route('supportStaff.supportStaffHome') }}">
+                <div class="logo_name">CRM</div>
+            </a>
+            @endif
             <i class='bx bx-menu' id="btn"></i>
         </div>
+
         <ul class="nav-list">
             @if(Auth::guard('admin')->check())
             <li>

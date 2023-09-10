@@ -96,25 +96,22 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const toggleButtons = document.querySelectorAll('.toggle-password');
+    $(document).ready(function () {
+        $(".toggle-password").click(function () {
+            // Find the associated input field
+            var inputField = $(this).siblings("input");
+            const icon = this.querySelector('i');
 
-        toggleButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const passwordField = this.parentNode.querySelector('input[id="password"]');
-                const icon = this.querySelector('i');
-                console.log(passwordField.type);
-
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    passwordField.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                }
-            });
+            // Toggle the input field's type attribute between "password" and "text"
+            if (inputField.attr("type") === "password") {
+                inputField.attr("type", "text");
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                inputField.attr("type", "password");
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
         });
     });
 </script>

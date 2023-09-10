@@ -20,7 +20,7 @@
 
             <div class="card mb-5">
                 <div class="card-header">
-                    <i class="fas fa-lock"></i></i> {{ __('Reset Password') }}
+                    <i class="fas fa-lock"></i> {{ __('Reset Password') }}
                 </div>
 
                 <div class="card-body">
@@ -34,8 +34,12 @@
                             </label>
 
                             <div class="col-md-6">
-                                <input id="old_password" type="password" class="form-control @error('old_password') is-invalid @enderror" name="old_password" required>
-
+                                <div class='input-group'>
+                                    <input id="old_password" type="password" class="form-control @error('old_password') is-invalid @enderror" name="old_password" required>
+                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
                                 @error('old_password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -51,13 +55,18 @@
                             </label>
 
                             <div class="col-md-6">
-                                <input id="new_password" type="password" class="form-control @error('new_password') is-invalid @enderror" name="new_password" required>
-
+                                <div class='input-group'>
+                                    <input id="new_password" type="password" class="form-control @error('new_password') is-invalid @enderror" name="new_password" required>
+                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
                                 @error('new_password')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                                 @enderror
+                                <small class="text-muted">Password must be at least 8 characters long.</small>
                             </div>
                         </div>
 
@@ -68,7 +77,12 @@
                             </label>
 
                             <div class="col-md-6">
-                                <input id="new_password_confirmation" type="password" class="form-control" name="new_password_confirmation" required>
+                                <div class='input-group'>
+                                    <input id="new_password_confirmation" type="password" class="form-control" name="new_password_confirmation" required>
+                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -220,6 +234,25 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        $(".toggle-password").click(function() {
+            // Find the associated input field
+            var inputField = $(this).siblings("input");
+            const icon = this.querySelector('i');
+
+            // Toggle the input field's type attribute between "password" and "text"
+            if (inputField.attr("type") === "password") {
+                inputField.attr("type", "text");
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                inputField.attr("type", "password");
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    });
+
     function showConfirmation() {
         var dobField = document.getElementById('dob');
 

@@ -37,7 +37,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            
+
                             <div class="row mb-3">
                                 <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }} *</label>
 
@@ -163,6 +163,7 @@
                                         </span>
                                         @enderror
                                     </div>
+                                    <small class="text-muted">Password must be at least 8 characters long.</small>
                                 </div>
                             </div>
 
@@ -170,7 +171,17 @@
                                 <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }} *</label>
 
                                 <div class="col-md-6">
-                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                    <div class='input-group'>
+                                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                                        <button class="btn btn-outline-secondary toggle-password" type="button">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                        @error('password-confirm')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
 
@@ -183,6 +194,7 @@
                         </div>
 
 
+
                         <div class="text-center mt-3">
                             <p>Already have an account? <a href="{{ route('register.customer') }}">Sign in now!</a></p>
                         </div>
@@ -193,7 +205,6 @@
     </div>
 </div>
 
-<!-- JavaScript for Confirmation Pop-up -->
 <script>
     var currentStep = 1;
 
@@ -248,25 +259,22 @@
         return true;
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const toggleButtons = document.querySelectorAll('.toggle-password');
+    $(document).ready(function() {
+        $(".toggle-password").click(function() {
+            // Find the associated input field
+            var inputField = $(this).siblings("input");
+            const icon = this.querySelector('i');
 
-        toggleButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const passwordField = this.parentNode.querySelector('input[id="password"]');
-                const icon = this.querySelector('i');
-                console.log(passwordField.type);
-
-                if (passwordField.type === 'password') {
-                    passwordField.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    passwordField.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                }
-            });
+            // Toggle the input field's type attribute between "password" and "text"
+            if (inputField.attr("type") === "password") {
+                inputField.attr("type", "text");
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                inputField.attr("type", "password");
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
         });
     });
 </script>

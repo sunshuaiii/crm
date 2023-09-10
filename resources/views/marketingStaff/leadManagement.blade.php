@@ -24,7 +24,6 @@
     </div>
 
     <div class="mt-4">
-        <div id="status-update-message" class="alert alert-success" style="display: none;"></div>
 
         <div class="mb-3">
             <label for="leadStatusFilter" class="form-label">Filter by Status:</label>
@@ -109,6 +108,7 @@
                             </div>
                         </div>
                     </div>
+                    <div id="success-message-{{ $lead->id }}" class="alert alert-success" style="display: none;"></div>
                 </div>
             </div>
             @empty
@@ -169,9 +169,9 @@
                     var updatedLead = response.updatedLead;
 
                     // Show success message with the old and new status
-                    var message = "Status for Lead ID: " + updatedLead.id + " is updated from '" + updatedLead.oldStatus + "' to '" + updatedLead.newStatus + "'";
+                    var message = "Status for Lead ID: " + updatedLead.id + " is updated from '" + updatedLead.oldStatus + "' to '" + updatedLead.newStatus + "'. Please reload to reflect the changes.";
 
-                    $('#status-update-message').text(message).fadeIn();
+                    $('#success-message-' + leadId).text(message).fadeIn();
                 },
                 error: function() {
                     alert('An error occurred while updating the status.');

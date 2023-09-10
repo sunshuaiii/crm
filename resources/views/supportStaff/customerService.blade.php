@@ -135,13 +135,11 @@
                 },
                 success: function(response) {
                     var updatedTicket = response.updatedTicket;
-                    var message = "Status for Ticket ID: " + updatedTicket.id + " is updated from '" + updatedTicket.oldStatus + "' to '" + updatedTicket.newStatus + "'";
+                    var message = "Status for Ticket ID: " + updatedTicket.id + " is updated from '" + updatedTicket.oldStatus + "' to '" + updatedTicket.newStatus + "'. Please reload to reflect the changes.";
 
                     // Show success message below the ticket card
                     $('#success-message-' + ticketId).text(message).fadeIn();
 
-                    // You can also hide the dropdown menu here if needed
-                    // $(this).closest('.dropdown').removeClass('show');
                 },
                 error: function() {
                     alert('An error occurred while updating the status.');

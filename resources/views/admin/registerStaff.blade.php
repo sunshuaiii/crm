@@ -56,13 +56,19 @@
             <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }} *</label>
 
             <div class="col-md-6">
-                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                <div class='input-group'>
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    @error('password')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
+                <small class="text-muted">Password must be at least 8 characters long.</small>
 
-                @error('password')
-                <span class="invalid-feedback" role="alert">
-                    <strong>{{ $message }}</strong>
-                </span>
-                @enderror
             </div>
         </div>
 
@@ -70,7 +76,17 @@
             <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }} *</label>
 
             <div class="col-md-6">
-                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                <div class='input-group'>
+                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    @error('password-confirm')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                </div>
             </div>
         </div>
 
@@ -114,5 +130,24 @@
 
         return true;
     }
+
+    $(document).ready(function() {
+        $(".toggle-password").click(function() {
+            // Find the associated input field
+            var inputField = $(this).siblings("input");
+            const icon = this.querySelector('i');
+
+            // Toggle the input field's type attribute between "password" and "text"
+            if (inputField.attr("type") === "password") {
+                inputField.attr("type", "text");
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                inputField.attr("type", "password");
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    });
 </script>
 @endsection
